@@ -1,12 +1,24 @@
 package com.example.mywallet;
 
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName = "wallets")
 public class Wallet {
-    private String name;
+    @PrimaryKey(autoGenerate = true)
     private int id;
+    private String name;
+
 
     public Wallet(String name, int id) {
         this.name = name;
         this.id = id;
+    }
+
+    @Ignore
+    public Wallet(String name) {
+        this.name = name;
     }
 
     public String getName() {
