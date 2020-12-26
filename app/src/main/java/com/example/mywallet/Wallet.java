@@ -1,11 +1,13 @@
 package com.example.mywallet;
 
+import java.io.Serializable;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "wallets")
-public class Wallet {
+public class Wallet implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
