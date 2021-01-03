@@ -64,32 +64,49 @@ public class MainActivity extends AppCompatActivity {
             public void OnWalletDeleteClick(final int position) {
 
 
+
+
+            }
+        });
+
+
+        pagerAdapter.setOnWalletClickListener(new WalletsPagerAdapter.OnWalletClickListener() {
+            @Override
+            public void OnWalletClick(int position) {
+                List<Wallet> wallets = adapter.getWallets();
+                Wallet currwallet = wallets.get(position);
+                openWallet(currwallet);
+            }
+        });
+
+        pagerAdapter.setOnWalletDeleteClickListener(new WalletsPagerAdapter.OnWalletDeleteClickListener() {
+            @Override
+            public void OnWalletDeleteClick(final int position) {
                 // 1. Instantiate an <code><a href="/reference/android/app/AlertDialog.Builder.html">AlertDialog.Builder</a></code> with its constructor
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
                 // 2. Chain together various setter methods to set the dialog characteristics
                 builder.setMessage("Do you really want to delete the wallet?")
                         .setTitle("Warning")
-                .setCancelable(true)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                      List<Wallet> wallets = adapter.getWallets();
-                      Wallet currwallet = wallets.get(position);
-                      viewModel.deleteWallet(currwallet);
-                    }
-                })
-                .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.cancel();
-                    }
-                });
+                        .setCancelable(true)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                List<Wallet> wallets = adapter.getWallets();
+                                Wallet currwallet = wallets.get(position);
+                                viewModel.deleteWallet(currwallet);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.cancel();
+                            }
+                        });
 
-               // 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
+                // 3. Get the <code><a href="/reference/android/app/AlertDialog.html">AlertDialog</a></code> from <code><a href="/reference/android/app/AlertDialog.Builder.html#create()">create()</a></code>
                 AlertDialog dialog = builder.create();
                 dialog.show();
-
             }
         });
 

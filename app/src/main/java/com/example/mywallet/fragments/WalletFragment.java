@@ -23,8 +23,12 @@ public class WalletFragment extends Fragment {
     private WalletsPagerAdapter.OnWalletClickListener onWalletClickListener;
     private WalletsPagerAdapter.OnWalletDeleteClickListener onWalletDeleteClickListener;
 
-    public WalletFragment(Wallet wallet) {
+    public WalletFragment(Wallet wallet,WalletsPagerAdapter.OnWalletClickListener onWalletClickListener,
+                          WalletsPagerAdapter.OnWalletDeleteClickListener onWalletDeleteClickListener,int adapterPosition) {
         this.wallet = wallet;
+        this.adapterPosition = adapterPosition;
+        this.onWalletClickListener = onWalletClickListener;
+        this.onWalletDeleteClickListener = onWalletDeleteClickListener;
     }
 
     @Override
@@ -38,13 +42,13 @@ public class WalletFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-                TextView itemView =  view.findViewById(R.id.textViewWalletName);
-                itemView.setText(wallet.getName());
+                TextView textViewWalletName =  view.findViewById(R.id.textViewWalletName);
+                textViewWalletName.setText(wallet.getName());
                 Button buttonDelete = view.findViewById(R.id.buttonDelete);
 
 
 
-        itemView.setOnClickListener(new View.OnClickListener() {
+        view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (onWalletClickListener != null){

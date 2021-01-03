@@ -50,7 +50,8 @@ public class WalletsPagerAdapter extends FragmentStateAdapter {
     @Override
     public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
         super.onBindViewHolder(holder, position, payloads);
-        Wallet wallet = wallets.get(position);
+//        Wallet wallet = wallets.get(position);
+
 
 
     }
@@ -95,7 +96,7 @@ public class WalletsPagerAdapter extends FragmentStateAdapter {
     public Fragment createFragment(int position) {
 
         Wallet wallet = wallets.get(position);
-        return new WalletFragment(wallet);
+        return new WalletFragment(wallet,onWalletClickListener,onWalletDeleteClickListener,position);
     }
 
     @Override
