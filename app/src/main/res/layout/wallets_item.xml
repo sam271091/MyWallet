@@ -26,13 +26,14 @@
 
         <Button
             android:id="@+id/buttonDelete"
-            android:layout_width="wrap_content"
+            android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:layout_marginRight="24dp"
             android:layout_marginBottom="40dp"
-            android:text="Delete"
+            android:background="@android:drawable/ic_delete"
             android:onClick="onClickDeleteWallet"
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewWalletName"

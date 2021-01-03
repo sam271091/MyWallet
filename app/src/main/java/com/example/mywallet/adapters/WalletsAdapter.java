@@ -55,14 +55,6 @@ public class WalletsAdapter extends RecyclerView.Adapter<WalletsAdapter.WalletVi
         Wallet wallet = wallets.get(position);
         holder.textViewName.setText(wallet.getName());
 
-
-//        holder.buttonDelete.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Wallet wallet =  wallets.get(position);;
-//                view.getContext().
-//            }
-//        });
     }
 
     @Override
