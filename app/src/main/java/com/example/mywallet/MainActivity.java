@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Wallet> wallets) {
                 adapter.setWallets(wallets);
                 pagerAdapter.setWallets(wallets);
+
             }
         });
 
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         pagerAdapter.setOnWalletClickListener(new WalletsPagerAdapter.OnWalletClickListener() {
             @Override
             public void OnWalletClick(int position) {
-                List<Wallet> wallets = adapter.getWallets();
+                List<Wallet> wallets = pagerAdapter.getWallets();
                 Wallet currwallet = wallets.get(position);
                 openWallet(currwallet);
             }
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                List<Wallet> wallets = adapter.getWallets();
+                                List<Wallet> wallets = pagerAdapter.getWallets();
                                 Wallet currwallet = wallets.get(position);
                                 viewModel.deleteWallet(currwallet);
                             }

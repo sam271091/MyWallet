@@ -16,6 +16,7 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.adapter.FragmentViewHolder;
@@ -50,45 +51,24 @@ public class WalletsPagerAdapter extends FragmentStateAdapter {
     @Override
     public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
         super.onBindViewHolder(holder, position, payloads);
-//        Wallet wallet = wallets.get(position);
+        Wallet wallet = wallets.get(position);
+
+//        String tag = "f" + holder.getItemId();
+//
+//
+//        Fragment fragment =   FragmentManager.findFragmentByTag(tag);
+//
+//        if (fragment != null) {
+//            //manual update fragment
+//        } else {
+//            // fragment might be null, if it`s call of notifyDatasetChanged()
+//            // which is updates whole list, not specific fragment
+//            super.onBindViewHolder(holder, position, payloads);
+//        }
 
 
 
     }
-
-//    class WalletViewHolder extends RecyclerView.ViewHolder{
-//        TextView textViewName;
-//        Button buttonDelete;
-//
-//        public WalletViewHolder(@NonNull View itemView) {
-//            super(itemView);
-//            textViewName = itemView.findViewById(R.id.textViewWalletName);
-//            buttonDelete = itemView.findViewById(R.id.buttonDelete);
-//
-//
-//
-//            itemView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    if (onWalletClickListener != null){
-////                        onWalletClickListener.OnWalletClick(getAdapterPosition());
-////                    }
-//
-//                }
-//            });
-//
-//            buttonDelete.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-////                    if (onWalletDeleteClickListener != null){
-////                        onWalletDeleteClickListener.OnWalletDeleteClick(getAdapterPosition());
-////                    }
-//                }
-//            });
-//        }
-//    }
-
-
 
 
     @NonNull
@@ -106,6 +86,15 @@ public class WalletsPagerAdapter extends FragmentStateAdapter {
 
     public void setWallets(List<Wallet> wallets) {
         this.wallets = wallets;
+        notifyDataSetChanged();
+    }
+
+    public List<Wallet> getWallets(){
+        return wallets;
+    }
+
+    public void clearWallets(){
+        wallets.clear();
         notifyDataSetChanged();
     }
 }

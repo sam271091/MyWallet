@@ -31,12 +31,20 @@ public class WalletFragment extends Fragment {
         this.onWalletDeleteClickListener = onWalletDeleteClickListener;
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        setRetainInstance(true);
+
         return  inflater.inflate(
                 R.layout.wallets_item, container, false);
     }
+
+
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,5 +77,7 @@ public class WalletFragment extends Fragment {
 
 
     }
+
+
 
 }
