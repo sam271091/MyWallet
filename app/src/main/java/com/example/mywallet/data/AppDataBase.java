@@ -2,13 +2,15 @@ package com.example.mywallet.data;
 
 import android.content.Context;
 
+import com.example.mywallet.Counterparty;
+import com.example.mywallet.ValueItems;
 import com.example.mywallet.Wallet;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Wallet.class},version = 1,exportSchema = false)
+@Database(entities = {Wallet.class, Counterparty.class, ValueItems.class},version = 1,exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase database;
     private static final String DB_NAME = "wallets.db";
