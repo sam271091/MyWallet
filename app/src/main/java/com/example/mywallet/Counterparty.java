@@ -1,6 +1,7 @@
 package com.example.mywallet;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "counterparties")
@@ -10,11 +11,14 @@ public class Counterparty {
     private String name;
     private String comment;
 
+
     public Counterparty(int id, String name, String comment) {
         this.id = id;
         this.name = name;
         this.comment = comment;
     }
+
+
 
     public int getId() {
         return id;
