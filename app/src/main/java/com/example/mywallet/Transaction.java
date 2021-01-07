@@ -1,6 +1,7 @@
 package com.example.mywallet;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "transactions")
@@ -14,6 +15,16 @@ public class Transaction {
     private int sum;
 
     public Transaction(int id, Type type, Wallet wallet, ValueItems valueItem, Counterparty counterparty, int sum) {
+        this.id = id;
+        this.type = type;
+        this.wallet = wallet;
+        this.valueItem = valueItem;
+        this.counterparty = counterparty;
+        this.sum = sum;
+    }
+
+    @Ignore
+    public Transaction(Type type, Wallet wallet, ValueItems valueItem, Counterparty counterparty, int sum) {
         this.id = id;
         this.type = type;
         this.wallet = wallet;
