@@ -1,5 +1,6 @@
 package com.example.mywallet.data;
 
+import com.example.mywallet.ValueItem;
 import com.example.mywallet.Wallet;
 
 import java.util.List;
@@ -32,6 +33,29 @@ public interface WalletDao {
 
     @Delete
     void DeleteWallet(Wallet wallet);
+
+    //Value Items
+    @Query(("SELECT*FROM  valueitems"))
+    LiveData<List<ValueItem>> getAllValueItems();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void InsertValueItems(List<ValueItem> valueItem);
+
+    @Insert
+    void insertValueItem(ValueItem valueItem);
+
+    @Update
+    void updateValueItem(ValueItem valueItem);
+
+
+    @Query("DELETE FROM valueitems")
+    void deleteAllValueItems();
+
+    @Delete
+    void DeleteValueItem(ValueItem valueItem);
+
+    //
+
 
 
 }

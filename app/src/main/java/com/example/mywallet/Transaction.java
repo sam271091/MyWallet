@@ -10,11 +10,11 @@ public class Transaction {
     private int id;
     private Type type;
     private Wallet wallet;
-    private ValueItems valueItem;
+    private ValueItem valueItem;
     private Counterparty counterparty;
     private int sum;
 
-    public Transaction(int id, Type type, Wallet wallet, ValueItems valueItem, Counterparty counterparty, int sum) {
+    public Transaction(int id, Type type, Wallet wallet, ValueItem valueItem, Counterparty counterparty, int sum) {
         this.id = id;
         this.type = type;
         this.wallet = wallet;
@@ -24,7 +24,7 @@ public class Transaction {
     }
 
     @Ignore
-    public Transaction(Type type, Wallet wallet, ValueItems valueItem, Counterparty counterparty, int sum) {
+    public Transaction(Type type, Wallet wallet, ValueItem valueItem, Counterparty counterparty, int sum) {
         this.id = id;
         this.type = type;
         this.wallet = wallet;
@@ -57,11 +57,11 @@ public class Transaction {
         this.wallet = wallet;
     }
 
-    public ValueItems getValueItem() {
+    public ValueItem getValueItem() {
         return valueItem;
     }
 
-    public void setValueItem(ValueItems valueItem) {
+    public void setValueItem(ValueItem valueItem) {
         this.valueItem = valueItem;
     }
 

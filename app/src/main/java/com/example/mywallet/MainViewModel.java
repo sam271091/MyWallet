@@ -17,16 +17,19 @@ public class MainViewModel extends AndroidViewModel  {
 
     private static AppDataBase database;
     private LiveData<List<Wallet>> wallets;
+    private LiveData<List<ValueItem>> valueItems;
 
 
     public MainViewModel(@NonNull Application application) {
         super(application);
         database = AppDataBase.getInstance(application);
         wallets = database.walletDao().getAllWallets();
+        valueItems = database.walletDao().getAllValueItems();
     }
 
 
 
+    //Wallets
     public LiveData<List<Wallet>> getWallets() {
         return wallets;
     }
@@ -77,5 +80,62 @@ public class MainViewModel extends AndroidViewModel  {
         }
     }
 
+    //
+
+    //Value Items
+
+
+    public LiveData<List<ValueItem>> getValueItems() {
+        return valueItems;
+    }
+
+    public void deleteAllValueItems(){
+
+    }
+
+    public void insertValueItem(ValueItem valueItem){
+        new insertValueItemTask().execute(valueItem);
+    }
+
+    public void updateValueItem(ValueItem valueItem){
+        new UpdateValueItemTask().execute(valueItem);
+    }
+
+    public void deleteValueItem(ValueItem valueItem){
+        new DeleteValueItemTask().execute(valueItem);
+    }
+
+    public void InsertValueItems(){
+
+    }
+
+
+    private static class insertValueItemTask extends AsyncTask<ValueItem,Void,Void>{
+        @Override
+        protected Void doInBackground(ValueItem... valueItems) {
+            database.walletDao().insertValueItem(valueItems[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateValueItemTask extends AsyncTask<ValueItem,Void,Void>{
+        @Override
+        protected Void doInBackground(ValueItem... valueItems) {
+            database.walletDao().updateValueItem(valueItems[0]);
+            return null;
+        }
+    }
+
+
+    private static class DeleteValueItemTask extends AsyncTask<ValueItem,Void,Void>{
+        @Override
+        protected Void doInBackground(ValueItem... valueItems) {
+            database.walletDao().DeleteValueItem(valueItems[0]);
+            return null;
+        }
+    }
+
+
+    //
 
 }

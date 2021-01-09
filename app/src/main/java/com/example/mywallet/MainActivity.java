@@ -145,5 +145,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void onClickAdd(View view) {
+        onOperationClick(Type.receipt);
+    }
 
+    void onOperationClick(Type type){
+        int pagerPosition = walletViewPager.getCurrentItem();
+        List<Wallet> wallets = adapter.getWallets();
+        Wallet currwallet = wallets.get(pagerPosition);
+
+        Intent intent = new Intent(this,transaction_item.class);
+        intent.putExtra("wallet",currwallet);
+        intent.putExtra("type",type);
+        startActivity(intent);
+    }
+
+    public void onClickMinus(View view) {
+        onOperationClick(Type.expense);
+    }
 }
