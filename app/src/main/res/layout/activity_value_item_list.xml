@@ -25,6 +25,7 @@
         app:layout_constraintHorizontal_bias="0.901"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:backgroundTint="@color/colorPurple"
         app:layout_constraintVertical_bias="0.893"
         android:onClick="onClickAddValueItem"
         app:srcCompat="@android:drawable/ic_input_add" />

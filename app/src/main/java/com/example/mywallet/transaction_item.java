@@ -61,5 +61,10 @@ public class transaction_item extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        if (data != null && data.hasExtra("valueItem")) {
+            ValueItem valueItem = (ValueItem) data.getSerializableExtra("valueItem");
+            textViewValueItem.setText(valueItem.getName().toString());
+        }
     }
 }

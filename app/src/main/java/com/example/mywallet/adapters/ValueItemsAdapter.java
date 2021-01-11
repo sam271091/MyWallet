@@ -18,9 +18,19 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
 
 
     List<ValueItem> valueItems;
+    private OnValueItemClickListener onValueItemClickListener;
+
 
     public ValueItemsAdapter() {
         valueItems = new ArrayList<>();
+    }
+
+    public interface OnValueItemClickListener{
+        void OnValueItemClick(int position);
+    }
+
+    public void setOnValueItemClickListener(OnValueItemClickListener onValueItemClickListener) {
+        this.onValueItemClickListener = onValueItemClickListener;
     }
 
     @NonNull
@@ -48,6 +58,14 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
        public ValueItemViewHolder(@NonNull View itemView) {
            super(itemView);
            textViewValueItemName = itemView.findViewById(R.id.textViewValueItemName);
+           itemView.setOnClickListener(new View.OnClickListener() {
+               @Override
+               public void onClick(View view) {
+                   if (onValueItemClickListener != null){
+                       onValueItemClickListener.OnValueItemClick(getAdapterPosition());
+                   }
+               }
+           });
        }
    }
 

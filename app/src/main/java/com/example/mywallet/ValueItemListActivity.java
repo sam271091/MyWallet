@@ -46,6 +46,18 @@ public class ValueItemListActivity extends AppCompatActivity {
         recyclerViewValueItems.setLayoutManager(manager);
         recyclerViewValueItems.setAdapter(adapter);
 
+
+        adapter.setOnValueItemClickListener(new ValueItemsAdapter.OnValueItemClickListener() {
+            @Override
+            public void OnValueItemClick(int position) {
+                List<ValueItem> valueItems = adapter.getValueItems();
+                Intent intent = new Intent();
+                intent.putExtra("valueItem",  valueItems.get(position));
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+
     }
 
     public void onClickAddValueItem(View view) {
