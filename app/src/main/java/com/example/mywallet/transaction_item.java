@@ -1,10 +1,12 @@
 package com.example.mywallet;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -19,6 +21,9 @@ public class transaction_item extends AppCompatActivity {
     private TextView textViewValueItem;
     private TextView textViewCounterparty;
     private EditText editTextSum;
+    private ValueItem valueItem;
+    private Counterparty counterparty;
+    private double sum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,8 +68,37 @@ public class transaction_item extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (data != null && data.hasExtra("valueItem")) {
-            ValueItem valueItem = (ValueItem) data.getSerializableExtra("valueItem");
+            valueItem = (ValueItem) data.getSerializableExtra("valueItem");
             textViewValueItem.setText(valueItem.getName().toString());
         }
     }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        sum = 0;
+
+        String sumApp = editTextSum.getText().toString().trim();
+       if (!sumApp.equals("")){
+           sum = Double.parseDouble(sumApp);
+       }
+
+
+        outState.putSerializable("valueItem",valueItem);
+        outState.putDouble("sum",sum);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        sum = savedInstanceState.getDouble("sum");
+        valueItem = (ValueItem) savedInstanceState.getSerializable("valueItem");
+
+        textViewValueItem.setText(valueItem.getName());
+        editTextSum.setText(Double.toString(sum));
+    }
+
+
 }
