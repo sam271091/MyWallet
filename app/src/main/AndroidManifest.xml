@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity_value_item"></activity>
+        <activity android:name=".activity_counterparty_item"></activity>
+        <activity android:name=".Counterparties_List" />
+        <activity android:name=".activity_value_item" />
         <activity android:name=".ValueItemListActivity" />
         <activity android:name=".transaction_item" />
         <activity android:name=".Wallet_Item" />

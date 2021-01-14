@@ -60,6 +60,15 @@ public class transaction_item extends AppCompatActivity {
             }
         });
 
+
+        textViewCounterparty.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(),Counterparties_List.class);
+                startActivityForResult(intent,2);
+            }
+        });
+
     }
 
 
@@ -67,9 +76,12 @@ public class transaction_item extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (data != null && data.hasExtra("valueItem")) {
+        if (data != null && data.hasExtra("valueItem" ) && requestCode == 1) {
             valueItem = (ValueItem) data.getSerializableExtra("valueItem");
             textViewValueItem.setText(valueItem.getName().toString());
+        } else if (data != null && data.hasExtra("counterparty" ) && requestCode == 2){
+            counterparty = (Counterparty) data.getSerializableExtra("counterparty");
+            textViewCounterparty.setText(counterparty.getName().toString());
         }
     }
 
@@ -86,6 +98,7 @@ public class transaction_item extends AppCompatActivity {
 
 
         outState.putSerializable("valueItem",valueItem);
+        outState.putSerializable("counterparty",counterparty);
         outState.putDouble("sum",sum);
     }
 
@@ -95,9 +108,9 @@ public class transaction_item extends AppCompatActivity {
 
         sum = savedInstanceState.getDouble("sum");
         valueItem = (ValueItem) savedInstanceState.getSerializable("valueItem");
-
+        counterparty = (Counterparty) savedInstanceState.getSerializable("counterparty");
         textViewValueItem.setText(valueItem.getName());
-        editTextSum.setText(Double.toString(sum));
+        textViewCounterparty.setText(counterparty.getName());
     }
 
 

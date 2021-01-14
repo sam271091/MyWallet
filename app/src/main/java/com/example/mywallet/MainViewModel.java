@@ -18,6 +18,7 @@ public class MainViewModel extends AndroidViewModel  {
     private static AppDataBase database;
     private LiveData<List<Wallet>> wallets;
     private LiveData<List<ValueItem>> valueItems;
+    private LiveData<List<Counterparty>> counterparties;
 
 
     public MainViewModel(@NonNull Application application) {
@@ -25,6 +26,7 @@ public class MainViewModel extends AndroidViewModel  {
         database = AppDataBase.getInstance(application);
         wallets = database.walletDao().getAllWallets();
         valueItems = database.walletDao().getAllValueItems();
+        counterparties = database.walletDao().getAllCounterparties();
     }
 
 
@@ -131,6 +133,65 @@ public class MainViewModel extends AndroidViewModel  {
         @Override
         protected Void doInBackground(ValueItem... valueItems) {
             database.walletDao().DeleteValueItem(valueItems[0]);
+            return null;
+        }
+    }
+
+
+    //
+
+
+
+
+    //Counterparties
+
+
+    public LiveData<List<Counterparty>> getCounterparties() {
+        return counterparties;
+    }
+
+    public void deleteAllCounterparties(){
+
+    }
+
+    public void insertCounterparty(Counterparty counterparty){
+        new insertCounterpartyTask().execute(counterparty);
+    }
+
+    public void updateCounterparty(Counterparty counterparty){
+        new UpdateCounterpartyTask().execute(counterparty);
+    }
+
+    public void deleteCounterparty(Counterparty counterparty){
+        new DeleteCounterpartyTask().execute(counterparty);
+    }
+
+    public void InsertCounterparties(){
+
+    }
+
+
+    private static class insertCounterpartyTask extends AsyncTask<Counterparty,Void,Void>{
+        @Override
+        protected Void doInBackground(Counterparty... counterparties) {
+            database.walletDao().insertCounterparty(counterparties[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateCounterpartyTask extends AsyncTask<Counterparty,Void,Void>{
+        @Override
+        protected Void doInBackground(Counterparty... counterparties) {
+            database.walletDao().updateCounterparty(counterparties[0]);
+            return null;
+        }
+    }
+
+
+    private static class DeleteCounterpartyTask extends AsyncTask<Counterparty,Void,Void>{
+        @Override
+        protected Void doInBackground(Counterparty... counterparties) {
+            database.walletDao().DeleteCounterparty(counterparties[0]);
             return null;
         }
     }

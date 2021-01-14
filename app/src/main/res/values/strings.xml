@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">MyWallet</string>
     <string name="label_delete">Delete</string>
+    <string name="name_string">Name</string>
+    <string name="note_string">Note</string>
+    <string name="save_string">Save</string>
+    <string name="empty_name_warning">Name cannot be empty!</string>
 </resources>

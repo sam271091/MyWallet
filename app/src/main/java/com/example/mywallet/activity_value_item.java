@@ -45,7 +45,7 @@ public class activity_value_item extends AppCompatActivity {
 
             finish();
         } else {
-            Toast.makeText(this, "Name cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.empty_name_warning, Toast.LENGTH_SHORT).show();
         }
 
     }

@@ -1,11 +1,13 @@
 package com.example.mywallet;
 
+import java.io.Serializable;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "counterparties")
-public class Counterparty {
+public class Counterparty implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String name;
@@ -14,6 +16,12 @@ public class Counterparty {
 
     public Counterparty(int id, String name, String comment) {
         this.id = id;
+        this.name = name;
+        this.comment = comment;
+    }
+
+    @Ignore
+    public Counterparty(String name, String comment) {
         this.name = name;
         this.comment = comment;
     }
