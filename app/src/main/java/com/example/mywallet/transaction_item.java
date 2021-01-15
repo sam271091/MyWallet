@@ -12,11 +12,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class transaction_item extends AppCompatActivity {
 
     private Wallet wallet;
     private ImageView imageViewType;
     private Type type;
+    private EditText editTextDate;
     private TextView textViewWallet;
     private TextView textViewValueItem;
     private TextView textViewCounterparty;
@@ -24,13 +28,21 @@ public class transaction_item extends AppCompatActivity {
     private ValueItem valueItem;
     private Counterparty counterparty;
     private double sum;
+    private Date date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_item);
 
+        if (date == null){
+            date = Calendar.getInstance().getTime();
+        }
+
+
+
         imageViewType = findViewById(R.id.imageViewType);
+        editTextDate =  findViewById(R.id.editTextDate);
         textViewWallet = findViewById(R.id.textViewWallet);
         textViewValueItem = findViewById(R.id.textViewValueItem);
         textViewCounterparty = findViewById(R.id.textViewCounterparty);
@@ -69,6 +81,9 @@ public class transaction_item extends AppCompatActivity {
             }
         });
 
+
+        editTextDate.setText(date.toString());
+
     }
 
 
@@ -96,7 +111,7 @@ public class transaction_item extends AppCompatActivity {
            sum = Double.parseDouble(sumApp);
        }
 
-
+        outState.putSerializable("date",date);
         outState.putSerializable("valueItem",valueItem);
         outState.putSerializable("counterparty",counterparty);
         outState.putDouble("sum",sum);
@@ -106,11 +121,20 @@ public class transaction_item extends AppCompatActivity {
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
+        date = (Date) savedInstanceState.getSerializable("date");
+
         sum = savedInstanceState.getDouble("sum");
         valueItem = (ValueItem) savedInstanceState.getSerializable("valueItem");
         counterparty = (Counterparty) savedInstanceState.getSerializable("counterparty");
-        textViewValueItem.setText(valueItem.getName());
-        textViewCounterparty.setText(counterparty.getName());
+        if (valueItem != null) {
+            textViewValueItem.setText(valueItem.getName());
+        }
+
+        if (counterparty != null){
+            textViewCounterparty.setText(counterparty.getName());
+        }
+
+        editTextDate.setText(date.toString());
     }
 
 

@@ -5,4 +5,9 @@
     <string name="note_string">Note</string>
     <string name="save_string">Save</string>
     <string name="empty_name_warning">Name cannot be empty!</string>
+    <string name="wallet_label">Wallet</string>
+    <string name="value_item_label">Value Item</string>
+    <string name="counterparty_label">Counterparty</string>
+    <string name="sum_label">Sum</string>
+    <string name="date_label">Date</string>
 </resources>

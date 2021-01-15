@@ -1,5 +1,7 @@
 package com.example.mywallet;
 
+import java.util.Date;
+
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -8,6 +10,7 @@ import androidx.room.PrimaryKey;
 public class Transaction {
     @PrimaryKey(autoGenerate = true)
     private int id;
+    private Date date;
     private Type type;
     private Wallet wallet;
     private ValueItem valueItem;
