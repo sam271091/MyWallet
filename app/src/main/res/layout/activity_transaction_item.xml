@@ -33,12 +33,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="96dp"
             android:layout_marginLeft="96dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="44dp"
             android:text="@string/wallet_label"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textViewWalletLabel"
-            app:layout_constraintTop_toBottomOf="@+id/editTextDate" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
         <TextView
             android:id="@+id/textViewWalletLabel"
@@ -121,19 +121,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewType" />
 
-        <EditText
-            android:id="@+id/editTextDate"
+        <TextView
+            android:id="@+id/textViewDate"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="96dp"
             android:layout_marginLeft="96dp"
-            android:layout_marginTop="16dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Name"
+            android:layout_marginTop="28dp"
+            android:text="TextView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewType" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
