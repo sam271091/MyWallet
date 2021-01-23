@@ -19,6 +19,7 @@ public class MainViewModel extends AndroidViewModel  {
     private LiveData<List<Wallet>> wallets;
     private LiveData<List<ValueItem>> valueItems;
     private LiveData<List<Counterparty>> counterparties;
+    private LiveData<List<Transaction>> transactions;
 
 
     public MainViewModel(@NonNull Application application) {
@@ -27,6 +28,7 @@ public class MainViewModel extends AndroidViewModel  {
         wallets = database.walletDao().getAllWallets();
         valueItems = database.walletDao().getAllValueItems();
         counterparties = database.walletDao().getAllCounterparties();
+        transactions   = database.walletDao().getAllTransactions();
     }
 
 
@@ -192,6 +194,63 @@ public class MainViewModel extends AndroidViewModel  {
         @Override
         protected Void doInBackground(Counterparty... counterparties) {
             database.walletDao().DeleteCounterparty(counterparties[0]);
+            return null;
+        }
+    }
+
+
+    //
+
+
+    //Transactions
+
+
+    public LiveData<List<Transaction>> getTransactions() {
+        return transactions;
+    }
+
+    public void deleteAllTransactions(){
+
+    }
+
+    public void insertTransaction(Transaction transaction){
+        new insertTransactionTask().execute(transaction);
+    }
+
+    public void updateTransaction(Transaction transaction){
+        new UpdateTransactionTask().execute(transaction);
+    }
+
+    public void deleteTransaction(Transaction transaction){
+        new DeleteTransactionTask().execute(transaction);
+    }
+
+    public void InsertTransactions(){
+
+    }
+
+
+    private static class insertTransactionTask extends AsyncTask<Transaction,Void,Void>{
+        @Override
+        protected Void doInBackground(Transaction... transactions) {
+            database.walletDao().insertTransaction(transactions[0]);
+            return null;
+        }
+    }
+
+    private static class UpdateTransactionTask extends AsyncTask<Transaction,Void,Void>{
+        @Override
+        protected Void doInBackground(Transaction... transactions) {
+            database.walletDao().updateTransaction(transactions[0]);
+            return null;
+        }
+    }
+
+
+    private static class DeleteTransactionTask extends AsyncTask<Transaction,Void,Void>{
+        @Override
+        protected Void doInBackground(Transaction... transactions) {
+            database.walletDao().DeleteTransaction(transactions[0]);
             return null;
         }
     }

@@ -3,12 +3,15 @@ package com.example.mywallet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -20,7 +23,8 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class transaction_item extends AppCompatActivity {
-
+    private Transaction currTransaction;
+    private MainViewModel viewModel;
     private Wallet wallet;
     private ImageView imageViewType;
     private Type type;
@@ -29,10 +33,12 @@ public class transaction_item extends AppCompatActivity {
     private TextView textViewValueItem;
     private TextView textViewCounterparty;
     private EditText editTextSum;
+    private EditText editTextComment;
     private ValueItem valueItem;
     private Counterparty counterparty;
     private double sum;
     private Date date;
+    private String comment;
 
     private DatePicker datePicker;
     private Calendar calendar;
@@ -42,6 +48,8 @@ public class transaction_item extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_item);
+
+        viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
         calendar = Calendar.getInstance();
 
@@ -58,6 +66,7 @@ public class transaction_item extends AppCompatActivity {
         textViewValueItem = findViewById(R.id.textViewValueItem);
         textViewCounterparty = findViewById(R.id.textViewCounterparty);
         editTextSum = findViewById(R.id.editTextSum);
+        editTextComment = findViewById(R.id.editTextComment);
 
         Intent intent = getIntent();
         if (intent.hasExtra("wallet")){
@@ -71,6 +80,9 @@ public class transaction_item extends AppCompatActivity {
                 imageViewType.setImageResource(R.drawable.minus);
             }
 
+        } else if (intent.hasExtra("currTransaction")){
+            currTransaction = (Transaction) intent.getSerializableExtra("currTransaction");
+            FillDataFromTransaction();
         }
 
 
@@ -104,6 +116,69 @@ public class transaction_item extends AppCompatActivity {
             }
         });
 
+
+        editTextSum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                ConvertSum();
+            }
+        });
+
+        editTextComment.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                SetComment();
+            }
+        });
+
+    }
+
+    private void FillDataFromTransaction() {
+        date = currTransaction.getDate();
+        wallet = currTransaction.getWallet();
+        type = currTransaction.getType();
+        valueItem = currTransaction.getValueItem();
+        counterparty = currTransaction.getCounterparty();
+        sum = currTransaction.getSum();
+        comment = currTransaction.getComment();
+
+        setDateValues();
+
+        textViewWallet.setText(wallet.getName().toString());
+
+        if (type == Type.receipt){
+            imageViewType.setImageResource(R.drawable.add);
+        } else {
+            imageViewType.setImageResource(R.drawable.minus);
+        }
+
+        textViewValueItem.setText(valueItem.getName());
+        textViewCounterparty.setText(counterparty.getName());
+        editTextSum.setText(Double.toString(sum));
+        editTextComment.setText(comment);
+
+        showDate();
+
     }
 
     void setDateValues(){
@@ -128,26 +203,40 @@ public class transaction_item extends AppCompatActivity {
         }
     }
 
+
+    void ConvertSum(){
+        sum = 0;
+        String sumApp = editTextSum.getText().toString().trim();
+        if (!sumApp.equals("")){
+            sum = Double.parseDouble(sumApp);
+        }
+    }
+
+    void SetComment(){
+        comment  = editTextComment.getText().toString();
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        sum = 0;
+        ConvertSum();
 
-        String sumApp = editTextSum.getText().toString().trim();
-       if (!sumApp.equals("")){
-           sum = Double.parseDouble(sumApp);
-       }
+        SetComment();
 
         outState.putSerializable("date",date);
         outState.putSerializable("valueItem",valueItem);
         outState.putSerializable("counterparty",counterparty);
         outState.putDouble("sum",sum);
+        outState.putString("comment",comment);
+        outState.putSerializable("currTransaction",currTransaction);
     }
 
     @Override
     protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
+        currTransaction = (Transaction) savedInstanceState.getSerializable("currTransaction");
 
         date = (Date) savedInstanceState.getSerializable("date");
 
@@ -156,6 +245,7 @@ public class transaction_item extends AppCompatActivity {
         sum = savedInstanceState.getDouble("sum");
         valueItem = (ValueItem) savedInstanceState.getSerializable("valueItem");
         counterparty = (Counterparty) savedInstanceState.getSerializable("counterparty");
+        comment = savedInstanceState.getString("comment");
         if (valueItem != null) {
             textViewValueItem.setText(valueItem.getName());
         }
@@ -163,6 +253,9 @@ public class transaction_item extends AppCompatActivity {
         if (counterparty != null){
             textViewCounterparty.setText(counterparty.getName());
         }
+
+        editTextComment.setText(comment);
+
 
 //        textViewDate.setText(date.toString());
 
@@ -216,4 +309,30 @@ public class transaction_item extends AppCompatActivity {
                 .append(month+1).append("/").append(year));
     }
 
+    public void onClickSave(View view) {
+
+        Transaction transaction = new Transaction(type,date,wallet,valueItem,counterparty,sum,comment);
+
+        if (currTransaction == null && sum!=0){
+            viewModel.insertTransaction(transaction);
+            finish();
+        } else if (sum!=0){
+            currTransaction.setDate(date);
+            currTransaction.setWallet(wallet);
+            currTransaction.setValueItem(valueItem);
+            currTransaction.setCounterparty(counterparty);
+            currTransaction.setSum(sum);
+            currTransaction.setComment(comment);
+            viewModel.updateTransaction(currTransaction);
+            finish();
+        }
+        else {
+            Toast.makeText(this, "The transaction sum cannot be empty!", Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+
+    }
 }

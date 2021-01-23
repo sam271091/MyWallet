@@ -57,7 +57,7 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
        TextView textViewValueItemName;
        public ValueItemViewHolder(@NonNull View itemView) {
            super(itemView);
-           textViewValueItemName = itemView.findViewById(R.id.textViewValueItemName);
+           textViewValueItemName = itemView.findViewById(R.id.textViewListDate);
            itemView.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {

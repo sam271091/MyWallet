@@ -10,4 +10,6 @@
     <string name="counterparty_label">Counterparty</string>
     <string name="sum_label">Sum</string>
     <string name="date_label">Date</string>
+    <string name="input_text_hint">Input text</string>
+    <string name="input_sum_hint">Input sum</string>
 </resources>

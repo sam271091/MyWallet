@@ -33,6 +33,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
+    // GSON body parser
+    implementation 'com.google.code.gson:gson:2.8.5'
 
     def lifecycle_version = "2.2.0"
     def arch_version = "2.1.0"

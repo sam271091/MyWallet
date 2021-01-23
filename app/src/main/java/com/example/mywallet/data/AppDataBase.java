@@ -3,21 +3,22 @@ package com.example.mywallet.data;
 import android.content.Context;
 
 import com.example.mywallet.Counterparty;
+import com.example.mywallet.Transaction;
 import com.example.mywallet.ValueItem;
 import com.example.mywallet.Wallet;
-import com.example.mywallet.converters.Converters;
+import com.example.mywallet.converters.DateConverter;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Wallet.class, Counterparty.class, ValueItem.class},version = 1,exportSchema = false)
+@Database(entities = {Wallet.class, Counterparty.class, ValueItem.class, Transaction.class},version = 2,exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase database;
     private static final String DB_NAME = "wallets.db";
     private static final Object LOCK = new Object();
-    @TypeConverters({Converters.class})
+    @TypeConverters({DateConverter.class})
     public static AppDataBase getInstance(Context context){
 
         synchronized (LOCK){

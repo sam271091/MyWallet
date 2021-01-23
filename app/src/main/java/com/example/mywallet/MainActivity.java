@@ -16,13 +16,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
 
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    WalletsAdapter adapter;
+    TransactionsAdapter adapter;
     RecyclerView recyclerViewWallets;
     MainViewModel viewModel;
     ViewPager2 walletViewPager;
@@ -40,35 +41,42 @@ public class MainActivity extends AppCompatActivity {
 
         pagerAdapter = new WalletsPagerAdapter(this);
 
-        adapter = new WalletsAdapter();
+        adapter = new TransactionsAdapter();
 
         viewModel.getWallets().observe(this, new Observer<List<Wallet>>() {
             @Override
             public void onChanged(List<Wallet> wallets) {
-                adapter.setWallets(wallets);
+//                adapter.setWallets(wallets);
                 pagerAdapter.setWallets(wallets);
 
             }
         });
 
-        adapter.setOnWalletClickListener(new WalletsAdapter.OnWalletClickListener() {
+        viewModel.getTransactions().observe(this, new Observer<List<Transaction>>() {
             @Override
-            public void OnWalletClick(int position) {
-                List<Wallet> wallets = adapter.getWallets();
-                Wallet currwallet = wallets.get(position);
-                openWallet(currwallet);
+            public void onChanged(List<Transaction> transactions) {
+                adapter.setTransactions(transactions);
             }
         });
 
-        adapter.setOnWalletDeleteClickListener(new WalletsAdapter.OnWalletDeleteClickListener() {
+        adapter.setOnTransactionClickListener(new TransactionsAdapter.OnTransactionClickListener() {
             @Override
-            public void OnWalletDeleteClick(final int position) {
-
-
-
-
+            public void OnTransactionClick(int position) {
+                List<Transaction> transactions = adapter.getTransactions();
+                Transaction currtransaction = transactions.get(position);
+                OpenTransaction(currtransaction);
             }
         });
+
+//        adapter.setOnWalletDeleteClickListener(new WalletsAdapter.OnWalletDeleteClickListener() {
+//            @Override
+//            public void OnWalletDeleteClick(final int position) {
+//
+//
+//
+//
+//            }
+//        });
 
 
         pagerAdapter.setOnWalletClickListener(new WalletsPagerAdapter.OnWalletClickListener() {
@@ -151,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
     void onOperationClick(Type type){
         int pagerPosition = walletViewPager.getCurrentItem();
-        List<Wallet> wallets = adapter.getWallets();
+        List<Wallet> wallets = pagerAdapter.getWallets();
         Wallet currwallet = wallets.get(pagerPosition);
 
         Intent intent = new Intent(this,transaction_item.class);
@@ -159,6 +167,14 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("type",type);
         startActivity(intent);
     }
+
+
+    void OpenTransaction(Transaction currTransaction){
+        Intent intent = new Intent(this,transaction_item.class);
+        intent.putExtra("currTransaction",currTransaction);
+        startActivity(intent);
+    }
+
 
     public void onClickMinus(View view) {
         onOperationClick(Type.expense);

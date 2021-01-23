@@ -1,6 +1,7 @@
 package com.example.mywallet.data;
 
 import com.example.mywallet.Counterparty;
+import com.example.mywallet.Transaction;
 import com.example.mywallet.ValueItem;
 import com.example.mywallet.Wallet;
 
@@ -59,7 +60,7 @@ public interface WalletDao {
 
 
     //Counterparties
-    @Query(("SELECT*FROM  Counterparties"))
+    @Query("SELECT*FROM  Counterparties")
     LiveData<List<Counterparty>> getAllCounterparties();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -77,6 +78,29 @@ public interface WalletDao {
 
     @Delete
     void DeleteCounterparty(Counterparty counterparty);
+
+    //
+
+
+    //Transactions
+    @Query("SELECT*FROM  transactions")
+    LiveData<List<Transaction>> getAllTransactions();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void InsertTransactions(List<Transaction> transaction);
+
+    @Insert
+    void insertTransaction(Transaction transaction);
+
+    @Update
+    void updateTransaction(Transaction transaction);
+
+
+    @Query("DELETE FROM transactions")
+    void deleteAllTransactions();
+
+    @Delete
+    void DeleteTransaction(Transaction transaction);
 
     //
 
