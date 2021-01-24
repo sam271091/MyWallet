@@ -7,6 +7,7 @@ import com.example.mywallet.data.AppDataBase;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -156,6 +157,7 @@ public class MainViewModel extends AndroidViewModel  {
 
     }
 
+
     public void insertCounterparty(Counterparty counterparty){
         new insertCounterpartyTask().execute(counterparty);
     }
@@ -209,6 +211,19 @@ public class MainViewModel extends AndroidViewModel  {
         return transactions;
     }
 
+    public LiveData<List<Transaction>> getTransactionsByWallet(String wallet){
+        try {
+            transactions = new GetTransactionsByWalletTask().execute(wallet).get();
+            return transactions;
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     public void deleteAllTransactions(){
 
     }
@@ -252,6 +267,13 @@ public class MainViewModel extends AndroidViewModel  {
         protected Void doInBackground(Transaction... transactions) {
             database.walletDao().DeleteTransaction(transactions[0]);
             return null;
+        }
+    }
+
+    private static class GetTransactionsByWalletTask extends AsyncTask<String,Void,LiveData<List<Transaction>>>{
+        @Override
+        protected LiveData<List<Transaction>> doInBackground(String... wallets) {
+            return database.walletDao().getAllTransactionsByWallet(wallets[0]);
         }
     }
 

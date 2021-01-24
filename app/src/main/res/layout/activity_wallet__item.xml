@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners"
         android:text="Save"
+        android:textColor="@color/colorWhite"
         android:onClick="onClickSave"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

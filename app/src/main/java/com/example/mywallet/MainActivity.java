@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
+import com.example.mywallet.converters.WalletConverter;
 
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     MainViewModel viewModel;
     ViewPager2 walletViewPager;
     WalletsPagerAdapter pagerAdapter;
+    Wallet currwallet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,16 +50,20 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Wallet> wallets) {
 //                adapter.setWallets(wallets);
                 pagerAdapter.setWallets(wallets);
+//                int pagerPosition = walletViewPager.getCurrentItem();
+                if (currwallet == null){
+                    setCurrentWallet(0);
+                } else {
+                    setCurrentWallet();
+                }
+
 
             }
         });
 
-        viewModel.getTransactions().observe(this, new Observer<List<Transaction>>() {
-            @Override
-            public void onChanged(List<Transaction> transactions) {
-                adapter.setTransactions(transactions);
-            }
-        });
+
+
+
 
         adapter.setOnTransactionClickListener(new TransactionsAdapter.OnTransactionClickListener() {
             @Override
@@ -130,6 +136,14 @@ public class MainActivity extends AppCompatActivity {
 
         walletViewPager.setAdapter(pagerAdapter);
 
+        walletViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                setCurrentWallet(position);
+
+            }
+        });
 
 
 
@@ -156,6 +170,39 @@ public class MainActivity extends AppCompatActivity {
     public void onClickAdd(View view) {
         onOperationClick(Type.receipt);
     }
+
+
+    void setCurrentWallet(){
+
+
+        setTransactionObserver();
+
+
+    }
+
+     void setCurrentWallet(int pagerPosition){
+//        int pagerPosition = walletViewPager.getCurrentItem();
+        List<Wallet> wallets = pagerAdapter.getWallets();
+        if (wallets.size() != 0){
+             currwallet = wallets.get(pagerPosition);
+         }
+
+
+         setTransactionObserver();
+
+
+    }
+
+    void setTransactionObserver(){
+        viewModel.getTransactionsByWallet(WalletConverter.WalletToString(currwallet)).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                adapter.setTransactions(transactions);
+            }
+        });
+    }
+
+
 
     void onOperationClick(Type type){
         int pagerPosition = walletViewPager.getCurrentItem();

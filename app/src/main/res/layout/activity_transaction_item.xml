@@ -171,6 +171,7 @@
             android:background="@drawable/rounded_corners"
             android:onClick="onClickSave"
             android:text="Save"
+            android:textColor="@color/colorWhite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"

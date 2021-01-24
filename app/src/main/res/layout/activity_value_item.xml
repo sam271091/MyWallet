@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/rounded_corners"
         android:text="@string/save_string"
+        android:textColor="@color/colorWhite"
         android:onClick="onClickValueItemSave"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

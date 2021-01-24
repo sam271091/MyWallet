@@ -27,6 +27,7 @@ tools:context=".activity_counterparty_item">
         android:background="@drawable/rounded_corners"
         android:onClick="onClickValueItemSave"
         android:text="@string/save_string"
+        android:textColor="@color/colorWhite"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

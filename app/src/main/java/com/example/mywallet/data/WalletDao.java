@@ -86,6 +86,10 @@ public interface WalletDao {
     @Query("SELECT*FROM  transactions")
     LiveData<List<Transaction>> getAllTransactions();
 
+
+    @Query("SELECT*FROM  transactions WHERE wallet == :wallet")
+    LiveData<List<Transaction>> getAllTransactionsByWallet(String wallet);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertTransactions(List<Transaction> transaction);
 

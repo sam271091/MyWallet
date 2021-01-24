@@ -12,10 +12,12 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.mywallet.Counterparty;
 import com.example.mywallet.MainViewModel;
 import com.example.mywallet.R;
 import com.example.mywallet.Transaction;
 import com.example.mywallet.Type;
+import com.example.mywallet.ValueItem;
 
 
 import java.util.ArrayList;
@@ -58,8 +60,23 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     public void onBindViewHolder(@NonNull final TransactionViewHolder holder, final int position) {
         Transaction transaction = transactions.get(position);
         holder.textViewListDate.setText(transaction.getDate().toString());
-        holder.textViewListCounterparty.setText(transaction.getCounterparty().getName());
-        holder.textViewListValueItem.setText(transaction.getValueItem().getName());
+
+        Counterparty counterparty = transaction.getCounterparty();
+
+        if (counterparty != null){
+            holder.textViewListCounterparty.setText(counterparty.getName());
+        } else {
+            holder.textViewListCounterparty.setText("-");
+        }
+
+        ValueItem valueItem = transaction.getValueItem();
+
+        if (valueItem != null){
+            holder.textViewListValueItem.setText(valueItem.getName());
+        } else {
+            holder.textViewListValueItem.setText("-");
+        }
+
         holder.textViewListSum.setText(Double.toString(transaction.getSum()));
 
 
