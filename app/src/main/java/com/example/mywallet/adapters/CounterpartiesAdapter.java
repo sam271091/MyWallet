@@ -24,6 +24,7 @@ public class CounterpartiesAdapter extends RecyclerView.Adapter<CounterpartiesAd
 
     public interface OnCounterpartyClickListener{
         void onCounterpartyClick(int position);
+        void OnLongClick(int position);
     }
 
     public void setOnCounterpartyClickListener(OnCounterpartyClickListener onCounterpartyClickListener) {
@@ -66,6 +67,16 @@ public class CounterpartiesAdapter extends RecyclerView.Adapter<CounterpartiesAd
                     if (onCounterpartyClickListener != null){
                         onCounterpartyClickListener.onCounterpartyClick(getAdapterPosition());
                     }
+                }
+            });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    if (onCounterpartyClickListener != null){
+                        onCounterpartyClickListener.OnLongClick(getAdapterPosition());
+                    }
+                    return true;
                 }
             });
         }

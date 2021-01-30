@@ -25,6 +25,8 @@ public class Counterparties_List extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counterparties__list);
 
+        setTitle(getString(R.string.label_counterparties));
+
         recyclerViewCounterparties = findViewById(R.id.RecyclerViewCounterparties);
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
         adapter = new CounterpartiesAdapter();
@@ -51,7 +53,21 @@ public class Counterparties_List extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             }
+
+            @Override
+            public void OnLongClick(int position) {
+                List<Counterparty> counterparties = adapter.getCounterparties();
+                Counterparty counterparty =  counterparties.get(position);
+                OpenCounterparty(counterparty);
+
+            }
         });
+    }
+
+    void OpenCounterparty(Counterparty counterparty){
+        Intent intent = new Intent(this,activity_counterparty_item.class);
+        intent.putExtra("curr_counterparty",counterparty);
+        startActivity(intent);
     }
 
     public void onClickCounterparty(View view) {

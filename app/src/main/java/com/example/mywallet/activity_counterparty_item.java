@@ -1,8 +1,10 @@
 package com.example.mywallet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -20,12 +22,48 @@ public class activity_counterparty_item extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counterparty_item);
 
+        setTitle(getString(R.string.label_counterparty));
+
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
         editTextCounterpartyName = findViewById(R.id.editTextCounterpartyName);
         editTextCounterpartyComment = findViewById(R.id.editTextCounterpartyComment);
 
+        Intent intent = getIntent();
+
+        if (intent.hasExtra("curr_counterparty")){
+            currCounterparty = (Counterparty) intent.getSerializableExtra("curr_counterparty");
+            fillData();
+        }
+
     }
+
+    void fillData(){
+        editTextCounterpartyName.setText(currCounterparty.getName().toString());
+        editTextCounterpartyComment.setText(currCounterparty.getComment());
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("currCounterparty",currCounterparty);
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        currCounterparty = (Counterparty) savedInstanceState.getSerializable("currCounterparty");
+
+        if (currCounterparty != null){
+            fillData();
+        }
+
+    }
+
 
     public void onClickValueItemSave(View view) {
 

@@ -29,6 +29,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCounterparty" />
 
+        <View style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toBottomOf="@id/editTextSum"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <ImageView
             android:id="@+id/imageViewType"
             android:layout_width="wrap_content"
@@ -52,39 +58,53 @@
             app:layout_constraintStart_toStartOf="@+id/textViewWalletLabel"
             app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
 
+        <View style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toBottomOf="@id/textViewWallet"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:id="@+id/textViewWalletLabel"
+            style="@style/LabelStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:text="Wallet"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewDateLabel" />
 
         <TextView
             android:id="@+id/textViewValueItemLabel"
+            style="@style/LabelStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="44dp"
             android:text="@string/value_item_label"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewWalletLabel" />
 
         <TextView
             android:id="@+id/textViewCounterpartyLabel"
+            style="@style/LabelStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
             android:text="@string/counterparty_label"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewValueItemLabel" />
 
         <TextView
             android:id="@+id/textViewSumLabel"
+            style="@style/LabelStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="52dp"
             android:text="@string/sum_label"
+            android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/editTextSum"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -102,6 +122,12 @@
             app:layout_constraintStart_toStartOf="@+id/textViewValueItemLabel"
             app:layout_constraintTop_toBottomOf="@+id/textViewWallet" />
 
+        <View style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toBottomOf="@id/textViewValueItem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <TextView
             android:id="@+id/textViewCounterparty"
             android:layout_width="0dp"
@@ -114,13 +140,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewValueItem" />
 
+        <View style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toBottomOf="@id/textViewCounterparty"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
 
         <TextView
             android:id="@+id/textViewDateLabel"
+            style="@style/LabelStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
             android:text="@string/date_label"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewType" />
 
@@ -137,14 +171,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewType" />
 
+        <View style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toBottomOf="@id/textViewDate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
 
 
         <TextView
             android:id="@+id/textView"
+            style="@style/LabelStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="68dp"
             android:text="@string/note_string"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewSumLabel" />
 
@@ -163,12 +204,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextSum" />
 
+        <View style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintTop_toBottomOf="@id/editTextComment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <Button
             android:id="@+id/buttonSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="65dp"
-            android:background="@drawable/rounded_corners"
+            android:background="@drawable/button_background"
             android:onClick="onClickSave"
             android:text="Save"
             android:textColor="@color/colorWhite"

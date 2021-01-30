@@ -12,4 +12,16 @@
     <string name="date_label">Date</string>
     <string name="input_text_hint">Input text</string>
     <string name="input_sum_hint">Input sum</string>
+    <string name="warning_no_wallet_for_transaction">No wallet available for operation</string>
+    <string name="question_delete_wallet">Do you really want to delete the wallet?</string>
+    <string name="warning_title">Warning</string>
+    <string name="answer_yes">Yes</string>
+    <string name="answer_no">No</string>
+    <string name="warning_empty_sum">The transaction sum cannot be empty!</string>
+    <string name="label_counterparties">Counterparties</string>
+    <string name="label_counterparty">Counterparty</string>
+    <string name="label_value_item">Value item</string>
+    <string name="label_value_items">Value items</string>
+    <string name="label_Transaction">Transaction</string>
+    <string name="label_current_balance">Current balance</string>
 </resources>

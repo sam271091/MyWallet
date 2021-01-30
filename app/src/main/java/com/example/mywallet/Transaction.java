@@ -30,9 +30,18 @@ public class Transaction implements Serializable {
     @TypeConverters(value = CounterpartyConverter.class)
     private Counterparty counterparty;
     private double sum;
+    private double turnoversum;
     private String comment;
 
-    public Transaction(int id,Date date, Type type, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum,String comment) {
+    public double getTurnoversum() {
+        return turnoversum;
+    }
+
+    public void setTurnoversum(double turnoversum) {
+        this.turnoversum = turnoversum;
+    }
+
+    public Transaction(int id, Date date, Type type, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum,double turnoversum, String comment) {
         this.id = id;
         this.date = date;
         this.type = type;
@@ -40,11 +49,12 @@ public class Transaction implements Serializable {
         this.valueItem = valueItem;
         this.counterparty = counterparty;
         this.sum = sum;
+        this.turnoversum = turnoversum;
         this.comment = comment;
     }
 
     @Ignore
-    public Transaction(Type type,Date date, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum,String comment) {
+    public Transaction(Type type,Date date, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum, double turnoversum, String comment) {
         this.id = id;
         this.date = date;
         this.type = type;
@@ -52,6 +62,7 @@ public class Transaction implements Serializable {
         this.valueItem = valueItem;
         this.counterparty = counterparty;
         this.sum = sum;
+        this.turnoversum = turnoversum;
         this.comment = comment;
     }
 

@@ -60,6 +60,27 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public Double getCurrentBalance(String wallet){
+
+        try {
+            return new getCurrentBalanceTask().execute(wallet).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static class getCurrentBalanceTask extends AsyncTask<String,Void,Double>{
+        @Override
+        protected Double doInBackground(String... wallets) {
+            return database.walletDao().getCurrentBalance(wallets[0]);
+        }
+    }
+
+
     private static class insertWalletTask extends AsyncTask<Wallet,Void,Void>{
         @Override
         protected Void doInBackground(Wallet... wallets) {

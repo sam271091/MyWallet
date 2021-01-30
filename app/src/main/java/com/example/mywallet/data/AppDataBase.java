@@ -13,7 +13,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-@Database(entities = {Wallet.class, Counterparty.class, ValueItem.class, Transaction.class},version = 2,exportSchema = false)
+@Database(entities = {Wallet.class, Counterparty.class, ValueItem.class, Transaction.class},version = 1,exportSchema = false)
 public abstract class AppDataBase extends RoomDatabase {
     private static AppDataBase database;
     private static final String DB_NAME = "wallets.db";

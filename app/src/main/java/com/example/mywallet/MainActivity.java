@@ -21,6 +21,7 @@ import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
 import com.example.mywallet.converters.WalletConverter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,11 +31,16 @@ public class MainActivity extends AppCompatActivity {
     ViewPager2 walletViewPager;
     WalletsPagerAdapter pagerAdapter;
     Wallet currwallet;
+    List<Wallet> walletsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        setTitle("My wallet");
+
+        walletsList = new ArrayList<>();
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
@@ -50,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Wallet> wallets) {
 //                adapter.setWallets(wallets);
                 pagerAdapter.setWallets(wallets);
+                walletsList.clear();
+                walletsList .addAll(wallets);
 //                int pagerPosition = walletViewPager.getCurrentItem();
                 if (currwallet == null){
                     setCurrentWallet(0);
@@ -101,10 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
 
                 // 2. Chain together various setter methods to set the dialog characteristics
-                builder.setMessage("Do you really want to delete the wallet?")
-                        .setTitle("Warning")
+                builder.setMessage(R.string.question_delete_wallet)
+                        .setTitle(R.string.warning_title)
                         .setCancelable(true)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.answer_yes, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 List<Wallet> wallets = pagerAdapter.getWallets();
@@ -112,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
                                 viewModel.deleteWallet(currwallet);
                             }
                         })
-                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        .setNegativeButton(R.string.answer_no, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 dialogInterface.cancel();
@@ -198,6 +206,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Transaction> transactions) {
                 adapter.setTransactions(transactions);
+                pagerAdapter.setWallets(walletsList);
             }
         });
     }
@@ -207,12 +216,19 @@ public class MainActivity extends AppCompatActivity {
     void onOperationClick(Type type){
         int pagerPosition = walletViewPager.getCurrentItem();
         List<Wallet> wallets = pagerAdapter.getWallets();
-        Wallet currwallet = wallets.get(pagerPosition);
 
-        Intent intent = new Intent(this,transaction_item.class);
-        intent.putExtra("wallet",currwallet);
-        intent.putExtra("type",type);
-        startActivity(intent);
+       if (wallets.size() != 0){
+           Wallet currwallet = wallets.get(pagerPosition);
+
+           Intent intent = new Intent(this,transaction_item.class);
+           intent.putExtra("wallet",currwallet);
+           intent.putExtra("type",type);
+           startActivity(intent);
+       } else {
+           Toast.makeText(this, R.string.warning_no_wallet_for_transaction, Toast.LENGTH_SHORT).show();
+       }
+
+
     }
 
 

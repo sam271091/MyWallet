@@ -83,11 +83,11 @@ public interface WalletDao {
 
 
     //Transactions
-    @Query("SELECT*FROM  transactions")
+    @Query("SELECT*FROM  transactions Order by date")
     LiveData<List<Transaction>> getAllTransactions();
 
 
-    @Query("SELECT*FROM  transactions WHERE wallet == :wallet")
+    @Query("SELECT*FROM  transactions WHERE wallet == :wallet Order by date")
     LiveData<List<Transaction>> getAllTransactionsByWallet(String wallet);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -109,5 +109,7 @@ public interface WalletDao {
     //
 
 
+    @Query("SELECT  Sum(turnoversum) FROM  transactions WHERE wallet == :wallet Group by wallet Order by date")
+    Double getCurrentBalance(String wallet);
 
 }

@@ -27,6 +27,8 @@ public class ValueItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_item_list);
 
+        setTitle(getString(R.string.label_value_items));
+
         recyclerViewValueItems = findViewById(R.id.recyclerViewValueItems);
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
@@ -56,9 +58,23 @@ public class ValueItemListActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
                 finish();
             }
+
+            @Override
+            public void OnLongClick(int position) {
+                List<ValueItem> valueItems = adapter.getValueItems();
+                ValueItem valueItem = valueItems.get(position);
+                OpenValueItem(valueItem);
+            }
         });
 
     }
+
+    void OpenValueItem(ValueItem valueItem){
+        Intent intent = new Intent(this,activity_value_item.class);
+        intent.putExtra("curr_valueItem",valueItem);
+        startActivity(intent);
+    }
+
 
     public void onClickAddValueItem(View view) {
         Intent intent = new Intent(this,activity_value_item.class);

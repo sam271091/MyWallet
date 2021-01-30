@@ -27,6 +27,7 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
 
     public interface OnValueItemClickListener{
         void OnValueItemClick(int position);
+        void OnLongClick(int position);
     }
 
     public void setOnValueItemClickListener(OnValueItemClickListener onValueItemClickListener) {
@@ -64,6 +65,16 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
                    if (onValueItemClickListener != null){
                        onValueItemClickListener.OnValueItemClick(getAdapterPosition());
                    }
+               }
+           });
+
+           itemView.setOnLongClickListener(new View.OnLongClickListener() {
+               @Override
+               public boolean onLongClick(View view) {
+                   if (onValueItemClickListener != null){
+                       onValueItemClickListener.OnLongClick(getAdapterPosition());
+                   }
+                   return true;
                }
            });
        }

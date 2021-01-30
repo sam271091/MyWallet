@@ -1,8 +1,10 @@
 package com.example.mywallet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -19,14 +21,49 @@ public class activity_value_item extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_item);
 
+        setTitle(getString(R.string.label_value_item));
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
         editTextValueItemName = findViewById(R.id.editTextValueItemName);
 
 
+        Intent intent = getIntent();
+        if (intent.hasExtra("curr_valueItem")){
+            currValueItem = (ValueItem) intent.getSerializableExtra("curr_valueItem");
+            fillData();
+
+        }
+
     }
 
+
+
+    void fillData(){
+        editTextValueItemName.setText(currValueItem.getName().toString());
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putSerializable("currValueItem",currValueItem);
+
+    }
+
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        currValueItem = (ValueItem) savedInstanceState.getSerializable("currValueItem");
+
+        if (currValueItem != null){
+            fillData();
+        }
+
+    }
 
     public void onClickValueItemSave(View view) {
 

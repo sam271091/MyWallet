@@ -37,6 +37,7 @@ public class transaction_item extends AppCompatActivity {
     private ValueItem valueItem;
     private Counterparty counterparty;
     private double sum;
+    private double turnover;
     private Date date;
     private String comment;
 
@@ -44,10 +45,15 @@ public class transaction_item extends AppCompatActivity {
     private Calendar calendar;
     private int year, month, day;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transaction_item);
+
+        setTitle(getString(R.string.label_Transaction));
+
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
@@ -172,8 +178,13 @@ public class transaction_item extends AppCompatActivity {
             imageViewType.setImageResource(R.drawable.minus);
         }
 
-        textViewValueItem.setText(valueItem.getName());
-        textViewCounterparty.setText(counterparty.getName());
+        if (valueItem != null){
+            textViewValueItem.setText(valueItem.getName());
+        }
+        if (counterparty != null) {
+            textViewCounterparty.setText(counterparty.getName());
+        }
+
         editTextSum.setText(Double.toString(sum));
         editTextComment.setText(comment);
 
@@ -311,7 +322,15 @@ public class transaction_item extends AppCompatActivity {
 
     public void onClickSave(View view) {
 
-        Transaction transaction = new Transaction(type,date,wallet,valueItem,counterparty,sum,comment);
+        turnover = 0;
+
+        if (type == Type.expense){
+            turnover = -sum;
+        } else {
+            turnover = sum;
+        }
+
+        Transaction transaction = new Transaction(type,date,wallet,valueItem,counterparty,sum,turnover,comment);
 
         if (currTransaction == null && sum!=0){
             viewModel.insertTransaction(transaction);
@@ -322,12 +341,13 @@ public class transaction_item extends AppCompatActivity {
             currTransaction.setValueItem(valueItem);
             currTransaction.setCounterparty(counterparty);
             currTransaction.setSum(sum);
+            currTransaction.setTurnoversum(turnover);
             currTransaction.setComment(comment);
             viewModel.updateTransaction(currTransaction);
             finish();
         }
         else {
-            Toast.makeText(this, "The transaction sum cannot be empty!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.warning_empty_sum, Toast.LENGTH_SHORT).show();
         }
 
 
