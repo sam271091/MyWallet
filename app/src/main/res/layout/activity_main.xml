@@ -16,8 +16,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/guideline5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="5dp"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floatingActionButton"
@@ -90,6 +89,20 @@
         app:layout_constraintVertical_bias="0.46"
         android:onClick="onClickMinus"
         app:srcCompat="@drawable/minus" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/imageAnalytics"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/colorWhite"
+        android:onClick="onClickAnalytics"
+        app:layout_constraintBottom_toTopOf="@+id/guideline6"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonMinus"
+        app:layout_constraintHorizontal_bias="0.522"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonAdd"
+        app:layout_constraintTop_toTopOf="@+id/guideline5"
+        app:layout_constraintVertical_bias="0.505"
+        app:srcCompat="@drawable/analytics" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

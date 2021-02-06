@@ -112,4 +112,12 @@ public interface WalletDao {
     @Query("SELECT  Sum(turnoversum) FROM  transactions WHERE wallet == :wallet Group by wallet Order by date")
     Double getCurrentBalance(String wallet);
 
+
+//    @Query("SELECT  null as id,wallet,counterparty,date,sum,turnoversum FROM  transactions WHERE wallet == :wallet Group by wallet,counterparty Order by counterparty,date")
+@Query("SELECT  null as id,wallet,counterparty,null as date,null as sum,null as turnoversum FROM  transactions WHERE wallet == :wallet Group by wallet,counterparty Order by counterparty,date")
+    List<Transaction> getDataByWallet(String wallet);
+
+
+    @Query("SELECT  null as id,wallet,counterparty,date,sum,turnoversum FROM  transactions WHERE wallet == :wallet and counterparty == :counterparty Group by wallet,counterparty Order by counterparty,date")
+    List<Transaction> getDataByWalletAndCounterparty(String wallet,String counterparty);
 }

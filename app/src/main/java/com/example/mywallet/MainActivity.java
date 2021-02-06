@@ -242,4 +242,10 @@ public class MainActivity extends AppCompatActivity {
     public void onClickMinus(View view) {
         onOperationClick(Type.expense);
     }
+
+    public void onClickAnalytics(View view) {
+        Intent intent = new Intent(this,activity_Charts.class);
+        intent.putExtra("currWallet",currwallet);
+        startActivity(intent);
+    }
 }

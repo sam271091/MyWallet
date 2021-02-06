@@ -73,6 +73,53 @@ public class MainViewModel extends AndroidViewModel  {
         return null;
     }
 
+
+
+    public List<Transaction> getDataByWallet(String wallet){
+
+        try {
+            return new getDataByWalletTask().execute(wallet).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public List<Transaction> getDataByWalletAndCounterparty(String wallet,String counterparty){
+
+        try {
+            return new getDataByWalletAndCounterpartyTask().execute(wallet,counterparty).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    private static class getDataByWalletAndCounterpartyTask extends AsyncTask<String,Void,List<Transaction>>{
+        @Override
+        protected List<Transaction> doInBackground(String... strings) {
+            return database.walletDao().getDataByWalletAndCounterparty(strings[0],strings[1]);
+        }
+    }
+
+
+    private static class getDataByWalletTask extends AsyncTask<String,Void,List<Transaction>>{
+        @Override
+        protected List<Transaction> doInBackground(String... wallets) {
+            return database.walletDao().getDataByWallet(wallets[0]);
+        }
+    }
+
+
+
+
     private static class getCurrentBalanceTask extends AsyncTask<String,Void,Double>{
         @Override
         protected Double doInBackground(String... wallets) {
