@@ -102,6 +102,30 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+
+    public List<Transaction> getDataByWalletAndType(String wallet,String type){
+
+        try {
+            return new getDataByWalletAndTypeTask().execute(wallet,type).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    private static class getDataByWalletAndTypeTask extends AsyncTask<String,Void,List<Transaction>>{
+        @Override
+        protected List<Transaction> doInBackground(String... strings) {
+            return database.walletDao().getDataByWalletAndType(strings[0],strings[1]);
+        }
+    }
+
+
+
+
     private static class getDataByWalletAndCounterpartyTask extends AsyncTask<String,Void,List<Transaction>>{
         @Override
         protected List<Transaction> doInBackground(String... strings) {
