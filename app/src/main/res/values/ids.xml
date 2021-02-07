@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="floatingActionButtonNext" type="id">@+id/floatingActionButtonNext</item>
+    <item name="textViewPeriod" type="id">@+id/textViewPeriod</item>
+    <item name="floatingActionButtonPrev" type="id">@+id/floatingActionButtonPrev</item>
+    <item name="linearLayout" type="id">@+id/linearLayout</item>
+</resources>

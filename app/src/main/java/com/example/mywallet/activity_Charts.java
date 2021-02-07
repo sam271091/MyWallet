@@ -24,6 +24,7 @@ import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class activity_Charts extends AppCompatActivity {
@@ -134,4 +135,15 @@ public class activity_Charts extends AppCompatActivity {
 
 
     }
+
+
+    public static Date getCurrentDatePlusMonth(int month)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.MONTH, month);
+        Date newDate = calendar.getTime();
+        return newDate;
+    }
+
 }
