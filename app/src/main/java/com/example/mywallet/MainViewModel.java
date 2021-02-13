@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import com.example.mywallet.data.AppDataBase;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -103,10 +104,15 @@ public class MainViewModel extends AndroidViewModel  {
 
 
 
-    public List<Transaction> getDataByWalletAndType(String wallet,String type){
+    public List<Transaction> getDataByWalletAndType(String wallet, String type, Long from,Long to){
 
         try {
-            return new getDataByWalletAndTypeTask().execute(wallet,type).get();
+            getDataByWalletAndTypeTask classObject = new getDataByWalletAndTypeTask();
+            classObject.setWallet(wallet);
+            classObject.setType(type);
+            classObject.setFrom(from);
+            classObject.setTo(to);
+            return classObject.execute().get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -116,10 +122,34 @@ public class MainViewModel extends AndroidViewModel  {
         return null;
     }
 
-    private static class getDataByWalletAndTypeTask extends AsyncTask<String,Void,List<Transaction>>{
+
+
+
+    private static class getDataByWalletAndTypeTask extends AsyncTask<Void,Void,List<Transaction>>{
+        private String wallet;
+        private String type;
+        private Long from;
+        private Long to;
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public void setFrom(Long from) {
+            this.from = from;
+        }
+
+        public void setTo(Long to) {
+            this.to = to;
+        }
+
         @Override
-        protected List<Transaction> doInBackground(String... strings) {
-            return database.walletDao().getDataByWalletAndType(strings[0],strings[1]);
+        protected List<Transaction> doInBackground(Void... voids) {
+            return database.walletDao().getDataByWalletAndType(wallet,type,from,to);
         }
     }
 

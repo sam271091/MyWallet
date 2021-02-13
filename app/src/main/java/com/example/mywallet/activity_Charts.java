@@ -7,8 +7,11 @@ import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.mywallet.converters.CounterpartyConverter;
+import com.example.mywallet.converters.DateConverter;
 import com.example.mywallet.converters.TypeConverter;
 import com.example.mywallet.converters.WalletConverter;
 import com.github.mikephil.charting.charts.BarChart;
@@ -22,6 +25,8 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -35,11 +40,16 @@ public class activity_Charts extends AppCompatActivity {
     private Wallet wallet;
     private List<Transaction> transactionsCp;
     private Calendar calendar;
+    private Date dateOfReport;
+    private TextView periodLabel;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__charts);
+
+        periodLabel = findViewById(R.id.textViewPeriod);
 
         calendar = Calendar.getInstance();
 
@@ -47,7 +57,9 @@ public class activity_Charts extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
+        dateOfReport = getStartOfTheMonth(calendar.getTime());
 
+        setDatePresentation();
 
         Intent intent = getIntent();
 
@@ -57,17 +69,28 @@ public class activity_Charts extends AppCompatActivity {
             }
         }
 
+
+        createChart();
+
+
+
+
+    }
+
+
+
+    void createChart(){
         List<PieEntry> entries = new ArrayList<>();
 
-        transactionsCp = viewModel.getDataByWalletAndType(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(Type.receipt));//viewModel.getDataByWallet(WalletConverter.WalletToString(wallet));
+        transactionsCp = viewModel.getDataByWalletAndType(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(Type.receipt), DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));//viewModel.getDataByWallet(WalletConverter.WalletToString(wallet));
 //
 //
 //        List<IBarDataSet> dataSets = new ArrayList<>();
 //
 //
 //
-       for ( Transaction transactionCp : transactionsCp){
-           Counterparty counterparty = transactionCp.getCounterparty();
+        for ( Transaction transactionCp : transactionsCp){
+            Counterparty counterparty = transactionCp.getCounterparty();
 //
 
 //
@@ -82,15 +105,15 @@ public class activity_Charts extends AppCompatActivity {
 //
 //           }
 //
-           String LegengLabel = "none";
+            String LegengLabel = "none";
 
-           if (counterparty != null){
-               LegengLabel = counterparty.getName();
-           }
+            if (counterparty != null){
+                LegengLabel = counterparty.getName();
+            }
 //
 
 
-             entries.add(new PieEntry((float) transactionCp.getSum(), LegengLabel));
+            entries.add(new PieEntry((float) transactionCp.getSum(), LegengLabel));
 
 //           BarDataSet barDataSet = new BarDataSet(Results,LegengLabel);
 //           barDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
@@ -100,7 +123,7 @@ public class activity_Charts extends AppCompatActivity {
 //
 //           dataSets.add(barDataSet);
 //
-       }
+        }
 //
 //
 //
@@ -130,20 +153,65 @@ public class activity_Charts extends AppCompatActivity {
         PieData data = new PieData(set);
         pieChart.setData(data);
         pieChart.getDescription().setEnabled(false);
-        pieChart.animate();
-
-
-
+        pieChart.notifyDataSetChanged();
+        pieChart.invalidate();
     }
 
 
-    public static Date getCurrentDatePlusMonth(int month)
+
+    private Date getStartOfTheMonth(Date date){
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        Date newDate = calendar.getTime();
+
+        return newDate;
+    }
+
+
+    private Date getEndOfTheMonth(Date date){
+
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
+
+    private void setDatePresentation(){
+        DateFormat df = new SimpleDateFormat("MMMM yyyy");
+        String date = df.format(dateOfReport);
+
+        periodLabel.setText(date.toString());
+    }
+
+
+    private  Date getCurrentDatePlusMonth(int month)
     {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Date());
+
+        calendar.setTime(dateOfReport);
         calendar.add(Calendar.MONTH, month);
         Date newDate = calendar.getTime();
         return newDate;
     }
 
+
+
+
+
+    public void onClickNext(View view) {
+        dateOfReport = getStartOfTheMonth(getCurrentDatePlusMonth(1));
+        setDatePresentation();
+        createChart();
+    }
+
+    public void onClickPrev(View view) {
+        dateOfReport = getStartOfTheMonth(getCurrentDatePlusMonth(-1));
+        setDatePresentation();
+        createChart();
+    }
 }

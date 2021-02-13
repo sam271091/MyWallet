@@ -5,6 +5,7 @@ import com.example.mywallet.Transaction;
 import com.example.mywallet.ValueItem;
 import com.example.mywallet.Wallet;
 
+import java.util.Date;
 import java.util.List;
 
 import androidx.lifecycle.LiveData;
@@ -121,6 +122,6 @@ public interface WalletDao {
     @Query("SELECT  null as id,wallet,counterparty,date,sum,turnoversum FROM  transactions WHERE wallet == :wallet and counterparty == :counterparty Group by wallet,counterparty Order by counterparty,date")
     List<Transaction> getDataByWalletAndCounterparty(String wallet,String counterparty);
 
-    @Query("SELECT  null as id,wallet,type,counterparty,null as date,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet and type == :type Group by wallet,counterparty,type Order by counterparty,date")
-    List<Transaction> getDataByWalletAndType(String wallet,String type);
+    @Query("SELECT  null as id,wallet,type,counterparty,date,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet and type == :type and date >= :from AND date <= :to Group by wallet,counterparty,type Order by counterparty,date")
+    List<Transaction> getDataByWalletAndType(String wallet, String type, Long from,Long to);
 }
