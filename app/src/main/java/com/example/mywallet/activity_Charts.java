@@ -243,7 +243,7 @@ public class activity_Charts extends AppCompatActivity {
 
 
     private void setDatePresentation(){
-        DateFormat df = new SimpleDateFormat("MMMM yyyy");
+        DateFormat df = new SimpleDateFormat("LLLL yyyy");
         String date = df.format(dateOfReport);
 
         periodLabel.setText(date.toString());
