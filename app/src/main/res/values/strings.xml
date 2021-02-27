@@ -24,4 +24,8 @@
     <string name="label_value_items">Value items</string>
     <string name="label_Transaction">Transaction</string>
     <string name="label_current_balance">Current balance</string>
+    <string name="receipts_label">Receipts</string>
+    <string name="expense_Label">Expense</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

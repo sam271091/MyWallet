@@ -1,8 +1,10 @@
 package com.example.mywallet;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.mywallet.adapters.FragmentsPagerAdapter;
 import com.example.mywallet.converters.CounterpartyConverter;
 import com.example.mywallet.converters.DateConverter;
 import com.example.mywallet.converters.TypeConverter;
@@ -24,6 +27,8 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,6 +47,12 @@ public class activity_Charts extends AppCompatActivity {
     private Calendar calendar;
     private Date dateOfReport;
     private TextView periodLabel;
+    private TabLayout tabLayoutFragmentChooser;
+    private TabItem  receiptsTab;
+    private TabItem  expenseTab;
+    private ViewPager2 chartsViewPager;
+    private  FragmentsPagerAdapter fragmentsPagerAdapter;
+    private int currentPos;
 
 
     @Override
@@ -49,11 +60,18 @@ public class activity_Charts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__charts);
 
+        currentPos = 0;
+
+        tabLayoutFragmentChooser = findViewById(R.id.tabLayoutFragmentChooser);
+        receiptsTab = findViewById(R.id.receiptsTab);
+        expenseTab  = findViewById(R.id.expenseTab);
+        chartsViewPager = findViewById(R.id.chartsViewPager);
+
         periodLabel = findViewById(R.id.textViewPeriod);
 
         calendar = Calendar.getInstance();
 
-        pieChart = findViewById(R.id.barChart);
+//        pieChart = findViewById(R.id.barChart);
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
 
@@ -69,6 +87,37 @@ public class activity_Charts extends AppCompatActivity {
             }
         }
 
+        fragmentsPagerAdapter = new FragmentsPagerAdapter(this,tabLayoutFragmentChooser.getTabCount());
+
+
+
+        chartsViewPager.setAdapter(fragmentsPagerAdapter);
+
+
+
+
+       tabLayoutFragmentChooser.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+           @Override
+           public void onTabSelected(TabLayout.Tab tab) {
+               currentPos = tab.getPosition();
+               chartsViewPager.setCurrentItem(currentPos);
+               createChart();
+           }
+
+           @Override
+           public void onTabUnselected(TabLayout.Tab tab) {
+
+           }
+
+           @Override
+           public void onTabReselected(TabLayout.Tab tab) {
+
+           }
+       });
+
+
+
+
 
         createChart();
 
@@ -79,10 +128,19 @@ public class activity_Charts extends AppCompatActivity {
 
 
 
+
     void createChart(){
+
+        Type type = Type.receipt;
+        if (currentPos == 0){
+             type = Type.receipt;
+        } else if (currentPos==1){
+             type = Type.expense;
+        }
+
         List<PieEntry> entries = new ArrayList<>();
 
-        transactionsCp = viewModel.getDataByWalletAndType(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(Type.receipt), DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));//viewModel.getDataByWallet(WalletConverter.WalletToString(wallet));
+        transactionsCp = viewModel.getDataByWalletAndType(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(type), DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));//viewModel.getDataByWallet(WalletConverter.WalletToString(wallet));
 //
 //
 //        List<IBarDataSet> dataSets = new ArrayList<>();
@@ -146,15 +204,17 @@ public class activity_Charts extends AppCompatActivity {
 //        entries.add(new PieEntry(26.7f, "Yellow"));
 //        entries.add(new PieEntry(24.0f, "Red"));
 //        entries.add(new PieEntry(30.8f, "Blue"));
-        PieDataSet set = new PieDataSet(entries, "Receipts");
+        PieDataSet set = new PieDataSet(entries, "");
         set.setColors(ColorTemplate.COLORFUL_COLORS);
         set.setValueTextColor(Color.BLACK);
         set.setValueTextSize(16f);
         PieData data = new PieData(set);
-        pieChart.setData(data);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.notifyDataSetChanged();
-        pieChart.invalidate();
+//        pieChart.setData(data);
+//        pieChart.getDescription().setEnabled(false);
+//        pieChart.notifyDataSetChanged();
+//        pieChart.invalidate();
+
+        fragmentsPagerAdapter.setData(data);
     }
 
 
