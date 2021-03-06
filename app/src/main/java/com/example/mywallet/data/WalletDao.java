@@ -107,6 +107,11 @@ public interface WalletDao {
     @Delete
     void DeleteTransaction(Transaction transaction);
 
+
+    @Query("DELETE  FROM  transactions WHERE wallet == :wallet")
+    void deleteTransactionByWallet(String wallet);
+
+
     //
 
 

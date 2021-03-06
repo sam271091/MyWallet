@@ -1,5 +1,6 @@
 package com.example.mywallet.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,6 +91,7 @@ public class WalletFragment extends Fragment {
             }
         });
 
+        view.setBackgroundColor(Color.TRANSPARENT);
 
     }
 

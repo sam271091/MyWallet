@@ -35,7 +35,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class activity_Charts extends AppCompatActivity {
 
@@ -48,11 +50,12 @@ public class activity_Charts extends AppCompatActivity {
     private Date dateOfReport;
     private TextView periodLabel;
     private TabLayout tabLayoutFragmentChooser;
-    private TabItem  receiptsTab;
-    private TabItem  expenseTab;
+    private TabLayout.Tab receiptsTab;
+    private TabLayout.Tab  expenseTab;
     private ViewPager2 chartsViewPager;
     private  FragmentsPagerAdapter fragmentsPagerAdapter;
     private int currentPos;
+//    private HashMap<Integer,Object> TabItemsMap = new HashMap<>();
 
 
     @Override
@@ -63,8 +66,14 @@ public class activity_Charts extends AppCompatActivity {
         currentPos = 0;
 
         tabLayoutFragmentChooser = findViewById(R.id.tabLayoutFragmentChooser);
-        receiptsTab = findViewById(R.id.receiptsTab);
-        expenseTab  = findViewById(R.id.expenseTab);
+//        receiptsTab = tabLayoutFragmentChooser.getTabAt(0);//findViewById(R.id.receiptsTab);
+//        expenseTab  = tabLayoutFragmentChooser.getTabAt(1);
+
+//        TabItemsMap.put(0,receiptsTab);
+//        TabItemsMap.put(1,expenseTab);
+
+
+
         chartsViewPager = findViewById(R.id.chartsViewPager);
 
         periodLabel = findViewById(R.id.textViewPeriod);
@@ -91,9 +100,24 @@ public class activity_Charts extends AppCompatActivity {
 
 
 
+
+
+
+
+
         chartsViewPager.setAdapter(fragmentsPagerAdapter);
 
 
+        chartsViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                currentPos = position;
+
+                tabLayoutFragmentChooser.selectTab(tabLayoutFragmentChooser.getTabAt(currentPos));
+                createChart();
+            }
+        });
 
 
        tabLayoutFragmentChooser.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -101,7 +125,7 @@ public class activity_Charts extends AppCompatActivity {
            public void onTabSelected(TabLayout.Tab tab) {
                currentPos = tab.getPosition();
                chartsViewPager.setCurrentItem(currentPos);
-               createChart();
+//               createChart();
            }
 
            @Override
@@ -114,6 +138,10 @@ public class activity_Charts extends AppCompatActivity {
 
            }
        });
+
+
+
+
 
 
 

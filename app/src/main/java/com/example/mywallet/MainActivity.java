@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     Wallet currwallet;
     List<Wallet> walletsList;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -117,7 +118,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 List<Wallet> wallets = pagerAdapter.getWallets();
                                 Wallet currwallet = wallets.get(position);
+                                viewModel.deleteTransactionsByWallet(WalletConverter.WalletToString(currwallet));
                                 viewModel.deleteWallet(currwallet);
+
                             }
                         })
                         .setNegativeButton(R.string.answer_no, new DialogInterface.OnClickListener() {
@@ -149,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 setCurrentWallet(position);
+                pagerAdapter.notifyDataSetChanged();
 
             }
         });
@@ -205,8 +209,21 @@ public class MainActivity extends AppCompatActivity {
         viewModel.getTransactionsByWallet(WalletConverter.WalletToString(currwallet)).observe(this, new Observer<List<Transaction>>() {
             @Override
             public void onChanged(List<Transaction> transactions) {
-                adapter.setTransactions(transactions);
-                pagerAdapter.setWallets(walletsList);
+                boolean updateTransactions = true;
+
+                if (transactions.size() > 0){
+                    if (transactions.get(0).getWallet().getId() != currwallet.getId()){
+                        updateTransactions = false;
+                    }
+                }
+
+
+                if (updateTransactions) {
+                    adapter.setTransactions(transactions);
+                    pagerAdapter.setWallets(walletsList);
+//                pagerAdapter.notifyDataSetChanged();
+                }
+
             }
         });
     }

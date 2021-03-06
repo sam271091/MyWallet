@@ -125,6 +125,9 @@ public class MainViewModel extends AndroidViewModel  {
 
 
 
+
+
+
     private static class getDataByWalletAndTypeTask extends AsyncTask<Void,Void,List<Transaction>>{
         private String wallet;
         private String type;
@@ -350,6 +353,11 @@ public class MainViewModel extends AndroidViewModel  {
 
     }
 
+
+    public void deleteTransactionsByWallet(String wallet){
+        new DeleteTransactionsByWalletTask().execute(wallet);
+    }
+
     public void insertTransaction(Transaction transaction){
         new insertTransactionTask().execute(transaction);
     }
@@ -396,6 +404,14 @@ public class MainViewModel extends AndroidViewModel  {
         @Override
         protected LiveData<List<Transaction>> doInBackground(String... wallets) {
             return database.walletDao().getAllTransactionsByWallet(wallets[0]);
+        }
+    }
+
+    private static class DeleteTransactionsByWalletTask extends AsyncTask<String,Void,LiveData<List<Transaction>>>{
+        @Override
+        protected LiveData<List<Transaction>> doInBackground(String... strings) {
+            database.walletDao().deleteTransactionByWallet(strings[0]);
+            return null;
         }
     }
 

@@ -19,10 +19,13 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
      private int numOfTabs;
      private PieData data;
 
+
     public FragmentsPagerAdapter(@NonNull FragmentActivity fragmentActivity, int numOfTabs) {
         super(fragmentActivity);
         this.numOfTabs = numOfTabs;
     }
+
+
 
     @Override
     public void onBindViewHolder(@NonNull FragmentViewHolder holder, int position, @NonNull List<Object> payloads) {
