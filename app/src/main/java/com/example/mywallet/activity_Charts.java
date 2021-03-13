@@ -63,6 +63,8 @@ public class activity_Charts extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__charts);
 
+        setTitle(getString(R.string.MainLabel));
+
         currentPos = 0;
 
         tabLayoutFragmentChooser = findViewById(R.id.tabLayoutFragmentChooser);

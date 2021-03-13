@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setTitle("My wallet");
+        setTitle(getString(R.string.MainLabel));
 
         walletsList = new ArrayList<>();
 
