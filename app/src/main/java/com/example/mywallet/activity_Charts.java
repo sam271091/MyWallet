@@ -125,7 +125,7 @@ public class activity_Charts extends AppCompatActivity {
            public void onTabSelected(TabLayout.Tab tab) {
                currentPos = tab.getPosition();
                chartsViewPager.setCurrentItem(currentPos);
-//               createChart();
+
            }
 
            @Override
@@ -159,11 +159,86 @@ public class activity_Charts extends AppCompatActivity {
 
     void createChart(){
 
+        if (currentPos == 0 || currentPos==1){
+            createPieChart();
+        } else if (currentPos==2){
+            createBarChart();
+        }
+
+
+    }
+
+
+    void createBarChart(){
+
+
+
+
+
+        transactionsCp = viewModel.getDataByWalletGroupType(WalletConverter.WalletToString(wallet),  DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));
+//
+//
+//        List<IBarDataSet> dataSets = new ArrayList<>();
+//
+        ArrayList<BarEntry> Results = new ArrayList<>();
+//
+        for ( Transaction transactionCp : transactionsCp){
+//
+//
+
+//
+
+
+//           List<Transaction> transactions = viewModel.getDataByWalletAndCounterparty(WalletConverter.WalletToString(wallet), CounterpartyConverter.CounterpartyToString(counterparty));
+//
+//           for ( Transaction transaction : transactions) {
+//               calendar.setTime(transactionCp.getDate());
+//               int month = calendar.get(Calendar.MONTH) + 1;
+               Results.add(new BarEntry(1, (float) transactionCp.getTurnoversum()));
+//
+//           }
+//
+//
+
+
+
+
+//           dataSets.add(barDataSet);
+//
+        }
+//
+//
+//
+        BarDataSet barDataSet = new BarDataSet(Results," ");
+        barDataSet.setColors(new int[] { R.color.Red, R.color.Green},getApplicationContext());
+        barDataSet.setValueTextColor(Color.BLACK);
+        barDataSet.setValueTextSize(16f);
+//
+//
+        BarData barData = new BarData(barDataSet);
+
+
+
+
+        fragmentsPagerAdapter.setBarData(barData);
+
+
+
+
+
+
+    }
+
+
+
+
+    void createPieChart(){
+
         Type type = Type.receipt;
         if (currentPos == 0){
-             type = Type.receipt;
+            type = Type.receipt;
         } else if (currentPos==1){
-             type = Type.expense;
+            type = Type.expense;
         }
 
         List<PieEntry> entries = new ArrayList<>();
@@ -242,9 +317,8 @@ public class activity_Charts extends AppCompatActivity {
 //        pieChart.notifyDataSetChanged();
 //        pieChart.invalidate();
 
-        fragmentsPagerAdapter.setData(data);
+        fragmentsPagerAdapter.setPieData(data);
     }
-
 
 
     private Date getStartOfTheMonth(Date date){

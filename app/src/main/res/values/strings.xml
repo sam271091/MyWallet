@@ -25,7 +25,8 @@
     <string name="label_Transaction">Transaction</string>
     <string name="label_current_balance">Current balance</string>
     <string name="receipts_label">Receipts</string>
-    <string name="expense_Label">Expense</string>
+    <string name="expense_Label">Expenses</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="turnover_Label">turnover</string>
 </resources>

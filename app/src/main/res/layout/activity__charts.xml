@@ -78,6 +78,12 @@
             android:id="@+id/expenseTab"
             android:text="@string/expense_Label" />
 
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/turnoverTab"
+            android:text="@string/turnover_Label" />
+
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
