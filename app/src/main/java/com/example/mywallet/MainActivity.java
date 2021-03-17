@@ -41,6 +41,12 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.MainLabel));
 
+
+        Intent intent = new Intent(this, SplashActivity.class);
+        startActivity(intent);
+
+
+
         walletsList = new ArrayList<>();
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
