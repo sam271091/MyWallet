@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mywallet.converters.WalletConverter;
+
 public class Wallet_Item extends AppCompatActivity {
 
     private MainViewModel viewModel;
@@ -43,8 +45,10 @@ public class Wallet_Item extends AppCompatActivity {
 
                viewModel.insertWallet(newWallet);
            } else if (! currWallet.getName().equals(name)){
+               Wallet oldWallet = currWallet;
                currWallet.setName(name);
                viewModel.updateWallet(currWallet);
+               viewModel.updateTransactionsByWallet(WalletConverter.WalletToString(oldWallet),WalletConverter.WalletToString(currWallet));
            }
 
 

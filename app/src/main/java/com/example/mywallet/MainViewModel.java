@@ -417,6 +417,14 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public void updateTransactionsByWallet(String wallet,String newWallet){
+        updateTransactionsByWalletTask classObject = new updateTransactionsByWalletTask();
+        classObject.setWallet(wallet);
+        classObject.setNewWallet(newWallet);
+        classObject.execute();
+    }
+
+
     private static class insertTransactionTask extends AsyncTask<Transaction,Void,Void>{
         @Override
         protected Void doInBackground(Transaction... transactions) {
@@ -453,6 +461,25 @@ public class MainViewModel extends AndroidViewModel  {
         @Override
         protected LiveData<List<Transaction>> doInBackground(String... strings) {
             database.walletDao().deleteTransactionByWallet(strings[0]);
+            return null;
+        }
+    }
+
+    private static class updateTransactionsByWalletTask extends AsyncTask<Void,Void,Void>{
+        private String wallet;
+        private String newWallet;
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
+        }
+
+        public void setNewWallet(String newWallet) {
+            this.newWallet = newWallet;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.walletDao().updateTransactionsByWallet(wallet,newWallet);
             return null;
         }
     }

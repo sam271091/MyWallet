@@ -132,4 +132,7 @@ public interface WalletDao {
 
     @Query("SELECT  null as id,date,wallet,type,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet  and date >= :from AND date <= :to Group by wallet,type ")
     List<Transaction> getDataByWalletGroupType(String wallet,  Long from,Long to);
+
+    @Query("UPDATE transactions SET wallet = :newWallet WHERE wallet == :wallet")
+    void updateTransactionsByWallet(String wallet,String newWallet);
 }
