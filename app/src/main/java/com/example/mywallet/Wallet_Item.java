@@ -45,10 +45,11 @@ public class Wallet_Item extends AppCompatActivity {
 
                viewModel.insertWallet(newWallet);
            } else if (! currWallet.getName().equals(name)){
-               Wallet oldWallet = currWallet;
+               String oldWallet = WalletConverter.WalletToString(currWallet);
                currWallet.setName(name);
+               viewModel.updateTransactionsByWallet(oldWallet,WalletConverter.WalletToString(currWallet));
                viewModel.updateWallet(currWallet);
-               viewModel.updateTransactionsByWallet(WalletConverter.WalletToString(oldWallet),WalletConverter.WalletToString(currWallet));
+
            }
 
 
