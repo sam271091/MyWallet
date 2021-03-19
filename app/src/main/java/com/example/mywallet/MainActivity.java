@@ -65,12 +65,15 @@ public class MainActivity extends AppCompatActivity {
                 pagerAdapter.setWallets(wallets);
                 walletsList.clear();
                 walletsList .addAll(wallets);
-//                int pagerPosition = walletViewPager.getCurrentItem();
-                if (currwallet == null){
-                    setCurrentWallet(0);
-                } else {
-                    setCurrentWallet();
-                }
+                int pagerPosition = walletViewPager.getCurrentItem();
+
+                setCurrentWallet(pagerPosition);
+
+//                if (currwallet == null){
+//                    setCurrentWallet(0);
+//                } else {
+//                    setCurrentWallet();
+//                }
 
 
             }
@@ -202,7 +205,12 @@ public class MainActivity extends AppCompatActivity {
 //        int pagerPosition = walletViewPager.getCurrentItem();
         List<Wallet> wallets = pagerAdapter.getWallets();
         if (wallets.size() != 0){
-             currwallet = wallets.get(pagerPosition);
+            if (wallets.size() <= pagerPosition){
+                currwallet = wallets.get(pagerPosition-1);
+            } else {
+                currwallet = wallets.get(pagerPosition);
+            }
+
          }
 
 
