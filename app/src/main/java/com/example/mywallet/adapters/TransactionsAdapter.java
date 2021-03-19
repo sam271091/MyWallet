@@ -20,6 +20,8 @@ import com.example.mywallet.Type;
 import com.example.mywallet.ValueItem;
 
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +61,11 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
     @Override
     public void onBindViewHolder(@NonNull final TransactionViewHolder holder, final int position) {
         Transaction transaction = transactions.get(position);
-        holder.textViewListDate.setText(transaction.getDate().toString());
+
+        DateFormat df = new SimpleDateFormat("dd MMMM yyyy k:m:s");
+        String date = df.format(transaction.getDate());
+
+        holder.textViewListDate.setText(date.toString());
 
         Counterparty counterparty = transaction.getCounterparty();
 
