@@ -1,20 +1,31 @@
 package com.example.mywallet;
 
-import java.io.Serializable;
+import com.example.mywallet.converters.UUIDConverter;
 
+import java.io.Serializable;
+import java.util.UUID;
+
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 @Entity(tableName = "counterparties")
 public class Counterparty implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @TypeConverters(value = UUIDConverter.class)
+    @NonNull
+    private UUID id;
     private String name;
     private String comment;
 
+    public Counterparty() {
+        this.id = UUID.randomUUID();
+    }
 
-    public Counterparty(int id, String name, String comment) {
+    @Ignore
+    public Counterparty(UUID id, String name, String comment) {
         this.id = id;
         this.name = name;
         this.comment = comment;
@@ -22,17 +33,18 @@ public class Counterparty implements Serializable {
 
     @Ignore
     public Counterparty(String name, String comment) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.comment = comment;
     }
 
 
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

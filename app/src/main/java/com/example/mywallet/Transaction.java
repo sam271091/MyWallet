@@ -3,12 +3,15 @@ package com.example.mywallet;
 import com.example.mywallet.converters.CounterpartyConverter;
 import com.example.mywallet.converters.DateConverter;
 import com.example.mywallet.converters.TypeConverter;
+import com.example.mywallet.converters.UUIDConverter;
 import com.example.mywallet.converters.ValueItemConverter;
 import com.example.mywallet.converters.WalletConverter;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.UUID;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -17,8 +20,10 @@ import androidx.room.TypeConverters;
 @Entity(tableName = "transactions")
 
 public class Transaction implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+    @PrimaryKey
+    @TypeConverters(value = UUIDConverter.class)
+    @NonNull
+    private UUID id;
     @TypeConverters(value = DateConverter.class)
     private Date date;
     @TypeConverters(value = TypeConverter.class)
@@ -33,6 +38,11 @@ public class Transaction implements Serializable {
     private double turnoversum;
     private String comment;
 
+
+    public Transaction() {
+        this.id = UUID.randomUUID();
+    }
+
     public double getTurnoversum() {
         return turnoversum;
     }
@@ -41,7 +51,8 @@ public class Transaction implements Serializable {
         this.turnoversum = turnoversum;
     }
 
-    public Transaction(int id, Date date, Type type, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum,double turnoversum, String comment) {
+    @Ignore
+    public Transaction(UUID id, Date date, Type type, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum, double turnoversum, String comment) {
         this.id = id;
         this.date = date;
         this.type = type;
@@ -55,7 +66,7 @@ public class Transaction implements Serializable {
 
     @Ignore
     public Transaction(Type type,Date date, Wallet wallet, ValueItem valueItem, Counterparty counterparty, double sum, double turnoversum, String comment) {
-        this.id = id;
+        this.id = UUID.randomUUID();
         this.date = date;
         this.type = type;
         this.wallet = wallet;
@@ -68,11 +79,11 @@ public class Transaction implements Serializable {
 
 
 
-    public int getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

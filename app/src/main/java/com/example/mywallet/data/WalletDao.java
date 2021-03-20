@@ -127,10 +127,10 @@ public interface WalletDao {
     @Query("SELECT  null as id,wallet,counterparty,date,sum,turnoversum FROM  transactions WHERE wallet == :wallet and counterparty == :counterparty Group by wallet,counterparty Order by counterparty,date")
     List<Transaction> getDataByWalletAndCounterparty(String wallet,String counterparty);
 
-    @Query("SELECT  null as id,wallet,type,counterparty,date,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet and type == :type and date >= :from AND date <= :to Group by wallet,counterparty,type Order by counterparty,date")
+    @Query("SELECT  '' as id,wallet,type,counterparty,date,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet and type == :type and date >= :from AND date <= :to Group by wallet,counterparty,type Order by counterparty,date")
     List<Transaction> getDataByWalletAndType(String wallet, String type, Long from,Long to);
 
-    @Query("SELECT  null as id,date,wallet,type,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet  and date >= :from AND date <= :to Group by wallet,type ")
+    @Query("SELECT  '' as id,date,wallet,type,Sum(sum) as sum,Sum(turnoversum) as turnoversum FROM  transactions WHERE wallet == :wallet  and date >= :from AND date <= :to Group by wallet,type ")
     List<Transaction> getDataByWalletGroupType(String wallet,  Long from,Long to);
 
     @Query("UPDATE transactions SET wallet = :newWallet WHERE wallet == :wallet")

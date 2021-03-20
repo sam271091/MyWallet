@@ -226,7 +226,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean updateTransactions = true;
 
                 if (transactions.size() > 0){
-                    if (transactions.get(0).getWallet().getId() != currwallet.getId()){
+                    if (!transactions.get(0).getWallet().getId().equals(currwallet.getId())){
                         updateTransactions = false;
                     }
                 }
