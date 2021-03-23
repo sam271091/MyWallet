@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 
 import com.example.mywallet.R;
+import com.example.mywallet.Transaction;
 import com.example.mywallet.fragments.BarChartFragment;
 import com.example.mywallet.fragments.receiptsFragment;
 import com.github.mikephil.charting.charts.BarChart;
@@ -11,6 +12,7 @@ import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.PieData;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -21,12 +23,14 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.adapter.FragmentViewHolder;
 import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class FragmentsPagerAdapter extends FragmentStateAdapter {
      private int numOfTabs;
      private PieData pieData;
     private BarData barData;
+    private ArrayList tableData;
 
 
     public FragmentsPagerAdapter(@NonNull FragmentActivity fragmentActivity, int numOfTabs) {
@@ -48,7 +52,8 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
             if (pieChart != null){
                 createPieChart(pieChart);
 
-                final TableView<String[]> tableView = (TableView<String[]>) holder.itemView.findViewById(R.id.tableView);;
+//                final TableView<String[]> tableView = (TableView<String[]>) holder.itemView.findViewById(R.id.tableView);
+                final TableView tableView = (TableView) holder.itemView.findViewById(R.id.tableView);
 
                 createTable(tableView,holder.itemView.getContext());
 
@@ -89,6 +94,11 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
         notifyDataSetChanged();
     }
 
+
+    public void setTableData(ArrayList tableData) {
+        this.tableData = tableData;
+    }
+
     private void createPieChart(PieChart pieChart){
 
         pieChart.setData(pieData);
@@ -113,6 +123,6 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
         String[] Columns={"ID","Name","Propellant","Destination"};
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(context,Columns));
-//        tb.setDataAdapter(new SimpleTableDataAdapter(context, spaceProbes));
+        tableView.setDataAdapter(new SimpleTableDataAdapter(context, tableData));
     }
 }

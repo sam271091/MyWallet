@@ -328,6 +328,24 @@ public class activity_Charts extends AppCompatActivity {
 //        pieChart.invalidate();
 
         fragmentsPagerAdapter.setPieData(data);
+
+        createTable(type);
+    }
+
+
+
+    void createTable(Type type){
+        ArrayList tableData = new ArrayList<>();
+
+        List<Transaction> transactionsVI = viewModel.getDataByWalletAndType(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(type), DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));
+//
+        for ( Transaction transactionVi : transactionsVI){
+
+//            tableData.add();
+        }
+
+        fragmentsPagerAdapter.setTableData(tableData);
+//
     }
 
 
