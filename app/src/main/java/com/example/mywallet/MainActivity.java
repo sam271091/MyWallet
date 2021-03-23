@@ -1,5 +1,6 @@
 package com.example.mywallet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -8,6 +9,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.CompositePageTransformer;
+import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.DialogInterface;
@@ -154,7 +157,27 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
         walletViewPager.setAdapter(pagerAdapter);
+
+        walletViewPager.setClipToPadding(false);
+        walletViewPager.setClipChildren(false);
+        walletViewPager.setOffscreenPageLimit(3);
+        walletViewPager.getChildAt(0).setOverScrollMode(RecyclerView.OVER_SCROLL_NEVER);
+
+
+        CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
+        compositePageTransformer.addTransformer(new MarginPageTransformer(60));
+        compositePageTransformer.addTransformer(new ViewPager2.PageTransformer() {
+            @Override
+            public void transformPage(@NonNull View page, float position) {
+                Float r = 1 - Math.abs(position);
+                page.setScaleY(0.95f + r*0.05f);
+            }
+        });
+
+        walletViewPager.setPageTransformer(compositePageTransformer);
+
 
         walletViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override

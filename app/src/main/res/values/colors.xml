@@ -13,5 +13,6 @@
     <color name="Black">#000000</color>
     <color name="orange_color">#FFA500</color>
     <color name="lightGrey_color">#696969</color>
+    <color name="background_color">#f5f5f5</color>
 
 </resources>
