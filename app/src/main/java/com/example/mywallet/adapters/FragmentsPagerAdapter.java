@@ -1,5 +1,8 @@
 package com.example.mywallet.adapters;
 
+import android.content.Context;
+import android.graphics.Color;
+
 import com.example.mywallet.R;
 import com.example.mywallet.fragments.BarChartFragment;
 import com.example.mywallet.fragments.receiptsFragment;
@@ -17,6 +20,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.adapter.FragmentViewHolder;
+import de.codecrafters.tableview.TableView;
+import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
 
 public class FragmentsPagerAdapter extends FragmentStateAdapter {
      private int numOfTabs;
@@ -26,6 +31,8 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
     public FragmentsPagerAdapter(@NonNull FragmentActivity fragmentActivity, int numOfTabs) {
         super(fragmentActivity);
+        pieData = new PieData();
+        barData = new BarData();
         this.numOfTabs = numOfTabs;
     }
 
@@ -40,6 +47,11 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
             if (pieChart != null){
                 createPieChart(pieChart);
+
+                final TableView<String[]> tableView = (TableView<String[]>) holder.itemView.findViewById(R.id.tableView);;
+
+                createTable(tableView,holder.itemView.getContext());
+
             }
         } else if (position == 2){
             BarChart barChart = holder.itemView.findViewById(R.id.barChart);
@@ -91,5 +103,16 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
         barChart.setData(barData);
         barChart.getDescription().setText("");
         barChart.animateY(2000);
+    }
+
+
+    public void createTable(TableView tableView, Context context){
+        tableView.setColumnCount(4);
+
+        tableView.setHeaderBackgroundColor(Color.parseColor("#2ecc71"));
+
+        String[] Columns={"ID","Name","Propellant","Destination"};
+        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(context,Columns));
+//        tb.setDataAdapter(new SimpleTableDataAdapter(context, spaceProbes));
     }
 }

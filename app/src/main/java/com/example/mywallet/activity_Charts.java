@@ -147,9 +147,9 @@ public class activity_Charts extends AppCompatActivity {
 
 
 
+        tabLayoutFragmentChooser.selectTab(tabLayoutFragmentChooser.getTabAt(currentPos));
 
-
-        createChart();
+//        createChart();
 
 
 
@@ -157,7 +157,15 @@ public class activity_Charts extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
 
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+    }
 
     void createChart(){
 
