@@ -5,7 +5,9 @@
 
     <gradient
         android:startColor="@color/Gainsboro"
-        android:endColor="#819FF7"
-        android:angle="360" />
+        android:centerColor="#D02F49"
+        android:endColor="#9B27B6"
+        android:angle="360"
+        android:type="linear"/>
 
 </shape>
