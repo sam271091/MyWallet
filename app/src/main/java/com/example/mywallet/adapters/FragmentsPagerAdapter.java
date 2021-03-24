@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.adapter.FragmentViewHolder;
+import de.codecrafters.tableview.TableDataAdapter;
 import de.codecrafters.tableview.TableView;
 import de.codecrafters.tableview.toolkit.SimpleTableDataAdapter;
 import de.codecrafters.tableview.toolkit.SimpleTableHeaderAdapter;
@@ -30,7 +31,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
      private int numOfTabs;
      private PieData pieData;
     private BarData barData;
-    private ArrayList tableData;
+    private List<String[]> tableData;
 
 
     public FragmentsPagerAdapter(@NonNull FragmentActivity fragmentActivity, int numOfTabs) {
@@ -52,8 +53,8 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
             if (pieChart != null){
                 createPieChart(pieChart);
 
-//                final TableView<String[]> tableView = (TableView<String[]>) holder.itemView.findViewById(R.id.tableView);
-                final TableView tableView = (TableView) holder.itemView.findViewById(R.id.tableView);
+                final TableView<String[]> tableView = (TableView<String[]>) holder.itemView.findViewById(R.id.tableView);
+//                final TableView tableView = (TableView) holder.itemView.findViewById(R.id.tableView);
 
                 createTable(tableView,holder.itemView.getContext());
 
@@ -95,7 +96,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
     }
 
 
-    public void setTableData(ArrayList tableData) {
+    public void setTableData(List<String[]> tableData) {
         this.tableData = tableData;
     }
 
@@ -117,12 +118,17 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
 
     public void createTable(TableView tableView, Context context){
-        tableView.setColumnCount(4);
+
+
+        tableView.setColumnCount(2);
 
         tableView.setHeaderBackgroundColor(Color.parseColor("#2ecc71"));
 
-        String[] Columns={"ID","Name","Propellant","Destination"};
+        String[] Columns={"Value Item","Sum"};
+
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(context,Columns));
-        tableView.setDataAdapter(new SimpleTableDataAdapter(context, tableData));
+        TableDataAdapter tableDataAdapter = new SimpleTableDataAdapter(context, tableData);
+        tableView.setDataAdapter(tableDataAdapter);
+//        tableView.setDataAdapter(adapter);
     }
 }

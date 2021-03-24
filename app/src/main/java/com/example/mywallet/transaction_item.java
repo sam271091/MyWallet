@@ -355,4 +355,14 @@ public class transaction_item extends AppCompatActivity {
 
 
     }
+
+    public void onClickDeleteValueItem(View view) {
+        valueItem = null;
+        textViewValueItem.setText("");
+    }
+
+    public void onClickDeleteCounterparty(View view) {
+        counterparty = null;
+        textViewCounterparty.setText("");
+    }
 }

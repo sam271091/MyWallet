@@ -335,16 +335,31 @@ public class activity_Charts extends AppCompatActivity {
 
 
     void createTable(Type type){
-        ArrayList tableData = new ArrayList<>();
 
-        List<Transaction> transactionsVI = viewModel.getDataByWalletAndType(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(type), DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));
+
+        List<Transaction> transactionsVI = viewModel.getDataByWalletAndType_ValueItems(WalletConverter.WalletToString(wallet), TypeConverter.TypeToString(type), DateConverter.dateToTimestamp(dateOfReport),DateConverter.dateToTimestamp(getEndOfTheMonth(dateOfReport)));
 //
+        List<String[]> list = new ArrayList<>();
+
+
+
         for ( Transaction transactionVi : transactionsVI){
 
-//            tableData.add();
+            String [] records = new String[2];
+
+               if (transactionVi.getValueItem() == null){
+                   records[0] = "None";
+            } else {
+                   records[0] =  transactionVi.getValueItem().getName();
+               }
+
+               records[1] = Double.toString(transactionVi.getSum());
+            list.add(records);
+
+
         }
 
-        fragmentsPagerAdapter.setTableData(tableData);
+        fragmentsPagerAdapter.setTableData(list);
 //
     }
 
