@@ -124,7 +124,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
         tableView.setHeaderBackgroundColor(Color.parseColor("#2ecc71"));
 
-        String[] Columns={"Value Item","Sum"};
+        String[] Columns={context.getString(R.string.value_item_label),context.getString(R.string.sum_label)};
 
         tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(context,Columns));
         TableDataAdapter tableDataAdapter = new SimpleTableDataAdapter(context, tableData);
