@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         setTitle(getString(R.string.MainLabel));
 
 
-        Intent intent = new Intent(this, SplashActivity.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, SplashActivity.class);
+//        startActivity(intent);
 
 
 

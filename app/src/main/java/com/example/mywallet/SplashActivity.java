@@ -18,11 +18,12 @@ public class SplashActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        Intent intent = new Intent(this,MainActivity.class);
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-
+                startActivity(intent);
                 finish();
             }
         }, 3500);
