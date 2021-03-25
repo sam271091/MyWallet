@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mywallet.converters.ValueItemConverter;
+import com.example.mywallet.converters.WalletConverter;
+
 public class activity_value_item extends AppCompatActivity {
 
     private MainViewModel viewModel;
@@ -75,7 +78,9 @@ public class activity_value_item extends AppCompatActivity {
 
                 viewModel.insertValueItem(newValueItem);
             } else if (! currValueItem.getName().equals(name)){
+                String oldValueItem = ValueItemConverter.ValueItemToString(currValueItem);
                 currValueItem.setName(name);
+                viewModel.updateTransactionsByValueItem(oldValueItem,ValueItemConverter.ValueItemToString(currValueItem));
                 viewModel.updateValueItem(currValueItem);
             }
 

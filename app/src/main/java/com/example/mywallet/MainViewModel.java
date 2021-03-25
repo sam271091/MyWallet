@@ -472,6 +472,22 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public void updateTransactionsByValueItem(String valueItem,String newValueItem){
+        updateTransactionsByValueItemTask classObject = new updateTransactionsByValueItemTask();
+        classObject.setValueItem(valueItem);
+        classObject.setNewValueItem(newValueItem);
+        classObject.execute();
+    }
+
+
+    public void updateTransactionsByCounterparty(String counterparty,String newCounterparty){
+        updateTransactionsByCounterpartyTask classObject = new updateTransactionsByCounterpartyTask();
+        classObject.setCounterparty(counterparty);
+        classObject.setNewCounterparty(newCounterparty);
+        classObject.execute();
+    }
+
+
     private static class insertTransactionTask extends AsyncTask<Transaction,Void,Void>{
         @Override
         protected Void doInBackground(Transaction... transactions) {
@@ -531,6 +547,48 @@ public class MainViewModel extends AndroidViewModel  {
         }
     }
 
+
+
+    private static class updateTransactionsByValueItemTask extends AsyncTask<Void,Void,Void>{
+        private String valueItem;
+        private String newValueItem;
+
+
+        public void setValueItem(String valueItem) {
+            this.valueItem = valueItem;
+        }
+
+        public void setNewValueItem(String newValueItem) {
+            this.newValueItem = newValueItem;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.walletDao().updateTransactionsByValueItem(valueItem,newValueItem);
+            return null;
+        }
+    }
+
+
+    private static class updateTransactionsByCounterpartyTask extends AsyncTask<Void,Void,Void>{
+        private String counterparty;
+        private String newCounterparty;
+
+
+        public void setCounterparty(String counterparty) {
+            this.counterparty = counterparty;
+        }
+
+        public void setNewCounterparty(String newCounterparty) {
+            this.newCounterparty = newCounterparty;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            database.walletDao().updateTransactionsByCounterparty(counterparty,newCounterparty);
+            return null;
+        }
+    }
 
     //
 

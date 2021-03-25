@@ -140,4 +140,10 @@ public interface WalletDao {
 
     @Query("UPDATE transactions SET wallet = :newWallet WHERE wallet == :wallet")
     void updateTransactionsByWallet(String wallet,String newWallet);
+
+    @Query("UPDATE transactions SET valueItem = :newValueItem WHERE valueItem == :valueItem")
+    void updateTransactionsByValueItem(String valueItem,String newValueItem);
+
+    @Query("UPDATE transactions SET counterparty = :newCounterparty WHERE counterparty == :counterparty")
+    void updateTransactionsByCounterparty(String counterparty,String newCounterparty);
 }

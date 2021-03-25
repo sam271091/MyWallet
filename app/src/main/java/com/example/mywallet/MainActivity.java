@@ -23,6 +23,7 @@ import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
 import com.example.mywallet.converters.WalletConverter;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +70,11 @@ public class MainActivity extends AppCompatActivity {
                 walletsList.clear();
                 walletsList .addAll(wallets);
                 int pagerPosition = walletViewPager.getCurrentItem();
+
+//                Gson gson = new Gson();
+//                String json = gson.toJson(walletsList);
+
+
 
                 setCurrentWallet(pagerPosition);
 
@@ -247,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(List<Transaction> transactions) {
                 boolean updateTransactions = true;
+
+
 
                 if (transactions.size() > 0){
                     if (!transactions.get(0).getWallet().getId().equals(currwallet.getId())){

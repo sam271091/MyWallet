@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mywallet.converters.CounterpartyConverter;
+import com.example.mywallet.converters.WalletConverter;
+
 public class activity_counterparty_item extends AppCompatActivity {
     private MainViewModel viewModel;
     private EditText editTextCounterpartyName;
@@ -76,7 +79,9 @@ public class activity_counterparty_item extends AppCompatActivity {
 
                 viewModel.insertCounterparty(newCounterparty);
             } else if (! currCounterparty.getName().equals(name)){
+                String oldCounterparty = CounterpartyConverter.CounterpartyToString(currCounterparty);
                 currCounterparty.setName(name);
+                viewModel.updateTransactionsByCounterparty(oldCounterparty,CounterpartyConverter.CounterpartyToString(currCounterparty));
                 viewModel.updateCounterparty(currCounterparty);
             }
             finish();
