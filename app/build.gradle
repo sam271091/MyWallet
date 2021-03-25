@@ -82,6 +82,9 @@ dependencies {
 
     implementation 'de.codecrafters.tableview:tableview:2.8.0'
 
+    // GSON body parser
+    implementation 'com.google.code.gson:gson:2.8.5'
+
 
 
 
