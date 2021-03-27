@@ -1,6 +1,7 @@
 package com.example.mywallet;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
@@ -13,9 +14,14 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,20 +29,42 @@ import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
 import com.example.mywallet.converters.WalletConverter;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.drive.CreateFileActivityOptions;
+import com.google.android.gms.drive.Drive;
+import com.google.android.gms.drive.DriveClient;
+import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveResourceClient;
+import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    TransactionsAdapter adapter;
-    RecyclerView recyclerViewWallets;
-    MainViewModel viewModel;
-    ViewPager2 walletViewPager;
-    WalletsPagerAdapter pagerAdapter;
-    Wallet currwallet;
-    List<Wallet> walletsList;
+    private  TransactionsAdapter adapter;
+    private  RecyclerView recyclerViewWallets;
+    private MainViewModel viewModel;
+    private ViewPager2 walletViewPager;
+    private WalletsPagerAdapter pagerAdapter;
+    private Wallet currwallet;
+    private List<Wallet> walletsList;
+    private static final int REQUEST_CODE_SIGN_IN = 0;
+    private static final int REQUEST_CODE_CREATOR = 2;
 
+    private DriveClient mDriveClient;
+    private DriveResourceClient mDriveResourceClient;
+
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +73,9 @@ public class MainActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.MainLabel));
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        signIn();
 //        Intent intent = new Intent(this, SplashActivity.class);
 //        startActivity(intent);
 
@@ -71,9 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 walletsList .addAll(wallets);
                 int pagerPosition = walletViewPager.getCurrentItem();
 
-//                Gson gson = new Gson();
-//                String json = gson.toJson(walletsList);
+                Gson gson = new Gson();
+                String json = gson.toJson(walletsList);
 
+                generateData("MyWalletdata.txt",json);
 
 
                 setCurrentWallet(pagerPosition);
@@ -197,7 +228,154 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+//        GoogleSignInClient mGoogleSignInClient = buildGoogleSignInClient();
+//
+//        Intent intent = mGoogleSignInClient.getSignInIntent();
+//
+//        startActivity(intent);
 
+
+    }
+
+
+    private void signIn() {
+//        Log.i(TAG, "Start sign in");
+        GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
+        startActivityForResult(GoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    }
+
+    private GoogleSignInClient buildGoogleSignInClient() {
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestScopes(Drive.SCOPE_FILE)
+                        .build();
+        return GoogleSignIn.getClient(this, signInOptions);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQUEST_CODE_SIGN_IN:
+//                Log.i(TAG, "Sign in request code");
+                // Called after user is signed in.
+                if (resultCode == RESULT_OK) {
+//                    Log.i(TAG, "Signed in successfully.");
+                    // Use the last signed in account here since it already have a Drive scope.
+                    mDriveClient = Drive.getDriveClient(this, GoogleSignIn.getLastSignedInAccount(this));
+                    // Build a drive resource client.
+                    mDriveResourceClient =
+                            Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this));
+//                    // Start camera.
+//                    startActivityForResult(
+//                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+
+                    preferences.edit().putString("mDriveClient",mDriveClient.toString()).apply();
+
+                }
+                break;
+//            case REQUEST_CODE_CREATOR:
+//                Log.i(TAG, "creator request code");
+//                // Called after a file is saved to Drive.
+//                if (resultCode == RESULT_OK) {
+//                    Log.i(TAG, "Image successfully saved.");
+//                    mBitmapToSave = null;
+//                    // Just start the camera again for another photo.
+//                    startActivityForResult(
+//                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+//                }
+//                break;
+//            case REQUEST_CODE_CREATOR:
+//                Log.i(TAG, "creator request code");
+//                // Called after a file is saved to Drive.
+//                if (resultCode == RESULT_OK) {
+//                    Log.i(TAG, "Image successfully saved.");
+//                    mBitmapToSave = null;
+//                    // Just start the camera again for another photo.
+//                    startActivityForResult(
+//                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+//                }
+//                break;
+        }
+    }
+
+    private void saveFileToDrive(OutputStreamWriter file) {
+        // Start by creating a new contents, and setting a callback.
+//        Log.i(TAG, "Creating new contents.");
+//        final Bitmap image = mBitmapToSave;
+
+        mDriveResourceClient
+                .createContents()
+                .continueWithTask(
+                        task -> createFileIntentSender(task.getResult(), file))
+                .addOnFailureListener(
+                        e -> Log.w("Fail", "Failed to create new contents.", e));
+    }
+
+    private Task<Void> createFileIntentSender(DriveContents driveContents, OutputStreamWriter file) {
+//        Log.i(TAG, "New contents created.");
+        // Get an output stream for the contents.
+//        OutputStream outputStream = driveContents.getOutputStream();
+        // Write the bitmap data from it.
+//        ByteArrayOutputStream bitmapStream = new ByteArrayOutputStream();
+//        image.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream);
+
+//        try {
+//            outputStream.write(File);
+//        } catch (IOException e) {
+////            Log.w(TAG, "Unable to write file contents.", e);
+//        }
+
+        // Create the initial metadata - MIME type and title.
+        // Note that the user will be able to change the title later.
+        MetadataChangeSet metadataChangeSet =
+                new MetadataChangeSet.Builder()
+                        .setMimeType("text/json")
+                        .setTitle("MyWalletData.json")
+                        .build();
+        // Set up options to configure and display the create file activity.
+        CreateFileActivityOptions createFileActivityOptions =
+                new CreateFileActivityOptions.Builder()
+                        .setInitialMetadata(metadataChangeSet)
+                        .setInitialDriveContents(driveContents)
+                        .build();
+
+        return mDriveClient
+                .newCreateFileActivityIntentSender(createFileActivityOptions)
+                .continueWith(
+                        task -> {
+                            startIntentSenderForResult(task.getResult(), REQUEST_CODE_CREATOR, null, 0, 0, 0);
+                            return null;
+                        });
+    }
+
+    public void generateData( String sFileName, String sBody) {
+        try {
+//            File root = new File(Environment.getExternalStorageDirectory(), "MyWalletData");
+//            if (!root.exists()) {
+//                root.mkdirs();
+//            }
+//            File gpxfile = new File(root, sFileName);
+//            FileWriter writer = new FileWriter(gpxfile,true);
+//            writer.append(sBody);
+//            writer.flush();
+//            writer.close();
+
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput(sFileName, Context.MODE_PRIVATE));
+            outputStreamWriter.write(sBody);
+            outputStreamWriter.close();
+
+            if (mDriveClient != null){
+                saveFileToDrive(outputStreamWriter);
+            }
+
+
+//            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void onClickCreateWallet(View view) {
