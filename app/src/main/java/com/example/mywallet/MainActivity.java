@@ -17,6 +17,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
@@ -47,6 +48,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -104,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
                 Gson gson = new Gson();
                 String json = gson.toJson(walletsList);
 
-                generateData("MyWalletdata.txt",json);
+                generateData("MyWalletdata.json",json);
 
 
                 setCurrentWallet(pagerPosition);
@@ -301,20 +303,59 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void saveFileToDrive(OutputStreamWriter file) {
+    private void saveFileToDrive(String fileName,String sBody ) {
         // Start by creating a new contents, and setting a callback.
 //        Log.i(TAG, "Creating new contents.");
 //        final Bitmap image = mBitmapToSave;
 
-        mDriveResourceClient
-                .createContents()
-                .continueWithTask(
-                        task -> createFileIntentSender(task.getResult(), file))
-                .addOnFailureListener(
-                        e -> Log.w("Fail", "Failed to create new contents.", e));
+//        mDriveResourceClient
+//                .createContents()
+//                .continueWithTask(
+//                        task -> createFileIntentSender(task.getResult(), file))
+//                .addOnFailureListener(
+//                        e -> Log.w("Fail", "Failed to create new contents.", e));
+
+        Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
+        createContentsTask
+                .continueWithTask(task -> {
+                    DriveContents contents = task.getResult();
+                    OutputStream outputStream = contents.getOutputStream();
+                    try (Writer writer = new OutputStreamWriter(outputStream)) {
+                        writer.write(sBody);
+                    }
+
+                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                            .setTitle(fileName)
+                            .setMimeType("text/json")
+                            .setStarred(true)
+                            .build();
+
+                    CreateFileActivityOptions createOptions =
+                            new CreateFileActivityOptions.Builder()
+                                    .setInitialDriveContents(contents)
+                                    .setInitialMetadata(changeSet)
+                                    .build();
+                    return mDriveClient.newCreateFileActivityIntentSender(createOptions);
+                })
+                .addOnSuccessListener(this,
+                        intentSender -> {
+                            try {
+                                startIntentSenderForResult(
+                                        intentSender, 2, null, 0, 0, 0);
+                            } catch (IntentSender.SendIntentException e) {
+//                                Log.e(TAG, "Unable to create file", e);
+//                                showMessage(getString(R.string.file_create_error));
+                                finish();
+                            }
+                        })
+                .addOnFailureListener(this, e -> {
+//                    Log.e(TAG, "Unable to create file", e);
+//                    showMessage(getString(R.string.file_create_error));
+                    finish();
+                });
     }
 
-    private Task<Void> createFileIntentSender(DriveContents driveContents, OutputStreamWriter file) {
+    private Task<Void> createFileIntentSender(DriveContents driveContents, OutputStreamWriter outputStream) {
 //        Log.i(TAG, "New contents created.");
         // Get an output stream for the contents.
 //        OutputStream outputStream = driveContents.getOutputStream();
@@ -332,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
         // Note that the user will be able to change the title later.
         MetadataChangeSet metadataChangeSet =
                 new MetadataChangeSet.Builder()
-                        .setMimeType("text/json")
+                        .setMimeType("text/plain")
                         .setTitle("MyWalletData.json")
                         .build();
         // Set up options to configure and display the create file activity.
@@ -352,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateData( String sFileName, String sBody) {
-        try {
+//        try {
 //            File root = new File(Environment.getExternalStorageDirectory(), "MyWalletData");
 //            if (!root.exists()) {
 //                root.mkdirs();
@@ -363,19 +404,23 @@ public class MainActivity extends AppCompatActivity {
 //            writer.flush();
 //            writer.close();
 
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput(sFileName, Context.MODE_PRIVATE));
-            outputStreamWriter.write(sBody);
-            outputStreamWriter.close();
+//            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(this.openFileOutput(sFileName, Context.MODE_PRIVATE));
+//            outputStreamWriter.write(sBody);
+//            outputStreamWriter.close();
+
+
+
+//
 
             if (mDriveClient != null){
-                saveFileToDrive(outputStreamWriter);
+                saveFileToDrive(sFileName,sBody);
             }
 
 
 //            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
     }
 
     public void onClickCreateWallet(View view) {
