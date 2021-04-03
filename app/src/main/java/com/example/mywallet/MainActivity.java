@@ -37,9 +37,11 @@ import com.google.android.gms.drive.CreateFileActivityOptions;
 import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveContents;
+import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -52,7 +54,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  {
     private  TransactionsAdapter adapter;
     private  RecyclerView recyclerViewWallets;
     private MainViewModel viewModel;
@@ -304,17 +306,43 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void saveFileToDrive(String fileName,String sBody ) {
-        // Start by creating a new contents, and setting a callback.
-//        Log.i(TAG, "Creating new contents.");
-//        final Bitmap image = mBitmapToSave;
 
-//        mDriveResourceClient
-//                .createContents()
-//                .continueWithTask(
-//                        task -> createFileIntentSender(task.getResult(), file))
-//                .addOnFailureListener(
-//                        e -> Log.w("Fail", "Failed to create new contents.", e));
+        final Task<DriveFolder> rootFolderTask = mDriveResourceClient.getRootFolder();
+        final Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
+        Tasks.whenAll(rootFolderTask, createContentsTask)
+                .continueWithTask(task -> {
+                    DriveFolder parent = rootFolderTask.getResult();
+                    DriveContents contents = createContentsTask.getResult();
+                    OutputStream outputStream = contents.getOutputStream();
+                    try (Writer writer = new OutputStreamWriter(outputStream)) {
+                        writer.write(sBody);
+                    }
 
+                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+                            .setTitle(fileName)
+                            .setMimeType("text/json")
+                            .setStarred(true)
+                            .build();
+
+                    return mDriveResourceClient.createFile(parent, changeSet, contents);
+                })
+                .addOnSuccessListener(this,
+                        driveFile -> {
+//                            showMessage(getString(R.string.file_created,
+//                                    driveFile.getDriveId().encodeToString()));
+//                            finish();
+                        })
+                .addOnFailureListener(this, e -> {
+//                    Log.e(TAG, "Unable to create file", e);
+//                    showMessage(getString(R.string.file_create_error));
+                    finish();
+                });
+
+    }
+
+
+
+    private void saveFileToDriveDialog(String fileName,String sBody){
         Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
         createContentsTask
                 .continueWithTask(task -> {
@@ -412,9 +440,9 @@ public class MainActivity extends AppCompatActivity {
 
 //
 
-            if (mDriveClient != null){
-                saveFileToDrive(sFileName,sBody);
-            }
+        if (mDriveClient != null){
+            saveFileToDrive(sFileName,sBody);
+        }
 
 
 //            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
@@ -453,7 +481,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-     void setCurrentWallet(int pagerPosition){
+    void setCurrentWallet(int pagerPosition){
 //        int pagerPosition = walletViewPager.getCurrentItem();
         List<Wallet> wallets = pagerAdapter.getWallets();
         if (wallets.size() != 0){
@@ -463,10 +491,10 @@ public class MainActivity extends AppCompatActivity {
                 currwallet = wallets.get(pagerPosition);
             }
 
-         }
+        }
 
 
-         setTransactionObserver();
+        setTransactionObserver();
 
 
     }
@@ -502,16 +530,16 @@ public class MainActivity extends AppCompatActivity {
         int pagerPosition = walletViewPager.getCurrentItem();
         List<Wallet> wallets = pagerAdapter.getWallets();
 
-       if (wallets.size() != 0){
-           Wallet currwallet = wallets.get(pagerPosition);
+        if (wallets.size() != 0){
+            Wallet currwallet = wallets.get(pagerPosition);
 
-           Intent intent = new Intent(this,transaction_item.class);
-           intent.putExtra("wallet",currwallet);
-           intent.putExtra("type",type);
-           startActivity(intent);
-       } else {
-           Toast.makeText(this, R.string.warning_no_wallet_for_transaction, Toast.LENGTH_SHORT).show();
-       }
+            Intent intent = new Intent(this,transaction_item.class);
+            intent.putExtra("wallet",currwallet);
+            intent.putExtra("type",type);
+            startActivity(intent);
+        } else {
+            Toast.makeText(this, R.string.warning_no_wallet_for_transaction, Toast.LENGTH_SHORT).show();
+        }
 
 
     }
