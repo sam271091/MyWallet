@@ -2,8 +2,11 @@ package com.example.mywallet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -23,7 +26,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.mywallet.adapters.TransactionsAdapter;
@@ -42,6 +47,7 @@ import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.MetadataChangeSet;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -54,7 +60,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private  TransactionsAdapter adapter;
     private  RecyclerView recyclerViewWallets;
     private MainViewModel viewModel;
@@ -70,10 +76,38 @@ public class MainActivity extends AppCompatActivity  {
 
     private SharedPreferences preferences;
 
+    private Toolbar toolbar;
+
+    private DrawerLayout drawerLayout;
+    private NavigationView navigationView;
+    private  TextView UserEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
+
+        drawerLayout = findViewById(R.id.drawer_layout);
+        navigationView = findViewById(R.id.nav_view);
+
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(
+                this,
+                drawerLayout,
+                toolbar,
+                R.string.openNavDrawer,
+                R.string.closeNavDrawer
+        );
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        actionBarDrawerToggle.syncState();
+        navigationView.setNavigationItemSelectedListener(this);
+
+         UserEmail = navigationView.getHeaderView(0).findViewById(R.id.textViewEmail);
+
+
 
         setTitle(getString(R.string.MainLabel));
 
@@ -275,6 +309,8 @@ public class MainActivity extends AppCompatActivity  {
 //                    // Start camera.
 //                    startActivityForResult(
 //                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+
+                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
 
                     preferences.edit().putString("mDriveClient",mDriveClient.toString()).apply();
 
@@ -560,5 +596,15 @@ public class MainActivity extends AppCompatActivity  {
         Intent intent = new Intent(this,activity_Charts.class);
         intent.putExtra("currWallet",currwallet);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }

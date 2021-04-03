@@ -32,4 +32,7 @@
     <string name="turnover_Label">turnover</string>
     <string name="data_on_counterparties_for_the_period">Data on counterparties for the period</string>
     <string name="data_on_value_items_for_the_period">Data on value items for the period</string>
+
+    <string name="openNavDrawer">Navigation Drawer Open</string>
+    <string name="closeNavDrawer">Navigation Drawer Close</string>
 </resources>
