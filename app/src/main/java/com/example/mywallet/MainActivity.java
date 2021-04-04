@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private NavigationView navigationView;
     private  TextView UserEmail;
+    private  TextView UserName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +106,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
 
-         UserEmail = navigationView.getHeaderView(0).findViewById(R.id.textViewEmail);
+        UserName = navigationView.getHeaderView(0).findViewById(R.id.textViewUserName);
+        UserEmail = navigationView.getHeaderView(0).findViewById(R.id.textViewEmail);
 
 
 
@@ -310,7 +312,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    startActivityForResult(
 //                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
 
-                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
+                    UserName.setText("");
+                    UserEmail.setText("");
+//
+//                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
+
+                    if (mDriveClient != null){
+                      if (GoogleSignIn.getLastSignedInAccount(this) != null){
+                          UserName.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
+//                          UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
+                      }
+
+                    }
+
+
+
 
                     preferences.edit().putString("mDriveClient",mDriveClient.toString()).apply();
 
