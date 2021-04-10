@@ -35,4 +35,6 @@
 
     <string name="openNavDrawer">Navigation Drawer Open</string>
     <string name="closeNavDrawer">Navigation Drawer Close</string>
+    <string name="sign_out_Button">Sign out</string>
+    <string name="sign_in_Button">Sign in</string>
 </resources>

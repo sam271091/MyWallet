@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".transaction_item"
-    android:background="@color/background_color">
+    android:layout_height="match_parent"
+    android:background="@color/background_color"
+    tools:context=".transaction_item">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ConstraintLayout"
@@ -13,7 +13,20 @@
         android:layout_height="match_parent">
 
 
-
+        <Button
+            android:id="@+id/buttonSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            android:background="@drawable/button_background"
+            android:onClick="onClickSave"
+            android:text="Save"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextComment" />
 
         <EditText
             android:id="@+id/editTextSum"
@@ -30,11 +43,44 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewCounterparty" />
 
-        <View style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintTop_toBottomOf="@id/editTextSum"
+        <EditText
+            android:id="@+id/editTextComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="96dp"
+            android:layout_marginLeft="96dp"
+            android:layout_marginTop="36dp"
+            android:ems="10"
+            android:hint="@string/input_text_hint"
+            android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextSum" />
+
+        <ImageButton
+            android:id="@+id/imageButton_Delete_ValueItem"
+            android:layout_width="24dp"
+            android:layout_height="21dp"
+            android:background="@color/background_color"
+            android:onClick="onClickDeleteValueItem"
+            app:layout_constraintBottom_toBottomOf="@+id/view2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            app:layout_constraintVertical_bias="0.928"
+            app:srcCompat="@android:drawable/ic_delete" />
+
+        <ImageButton
+            android:id="@+id/imageButton_Delete_Counterparty"
+            android:layout_width="24dp"
+            android:layout_height="21dp"
+            android:background="@color/background_color"
+            android:onClick="onClickDeleteCounterparty"
+            app:layout_constraintBottom_toBottomOf="@+id/view3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/view2"
+            app:layout_constraintVertical_bias="0.94"
+            app:srcCompat="@android:drawable/ic_delete" />
 
         <ImageView
             android:id="@+id/imageViewType"
@@ -58,14 +104,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/textViewWalletLabel"
             app:layout_constraintTop_toBottomOf="@+id/textViewDate" />
-
-        <View
-            android:id="@+id/view"
-            style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewWallet" />
 
         <TextView
             android:id="@+id/textViewWalletLabel"
@@ -124,14 +162,6 @@
             app:layout_constraintStart_toStartOf="@+id/textViewValueItemLabel"
             app:layout_constraintTop_toBottomOf="@+id/textViewWallet" />
 
-        <View
-            android:id="@+id/view2"
-            style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewValueItem" />
-
         <TextView
             android:id="@+id/textViewCounterparty"
             android:layout_width="0dp"
@@ -142,14 +172,6 @@
             app:layout_constraintEnd_toStartOf="@+id/imageButton_Delete_Counterparty"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewValueItem" />
-
-        <View
-            android:id="@+id/view3"
-            style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textViewCounterparty" />
 
 
         <TextView
@@ -176,13 +198,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewType" />
 
-        <View style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintTop_toBottomOf="@id/textViewDate"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-
         <TextView
             android:id="@+id/textViewUserName"
             style="@style/LabelStyle"
@@ -194,65 +209,51 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewSumLabel" />
 
-        <EditText
-            android:id="@+id/editTextComment"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginLeft="96dp"
-            android:layout_marginTop="36dp"
-            android:ems="10"
-            android:hint="@string/input_text_hint"
-            android:inputType="textPersonName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextSum" />
 
-        <View style="@style/BorderStyle"
+        <View
+            style="@style/BorderStyle"
             android:layout_margin="4dp"
-            app:layout_constraintTop_toBottomOf="@id/editTextComment"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
-
-        <Button
-            android:id="@+id/buttonSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
-            android:background="@drawable/button_background"
-            android:onClick="onClickSave"
-            android:text="Save"
-            android:textColor="@color/colorWhite"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextComment" />
+            app:layout_constraintTop_toBottomOf="@id/editTextSum" />
 
-        <ImageButton
-            android:id="@+id/imageButton_Delete_ValueItem"
-            android:layout_width="24dp"
-            android:layout_height="21dp"
-            android:background="@color/background_color"
-            android:onClick="onClickDeleteValueItem"
-            app:layout_constraintBottom_toBottomOf="@+id/view2"
+        <View
+            android:id="@+id/view"
+            style="@style/BorderStyle"
+            android:layout_margin="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            app:layout_constraintVertical_bias="0.928"
-            app:srcCompat="@android:drawable/ic_delete" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewWallet" />
 
-        <ImageButton
-            android:id="@+id/imageButton_Delete_Counterparty"
-            android:layout_width="24dp"
-            android:layout_height="21dp"
-            android:onClick="onClickDeleteCounterparty"
-            android:background="@color/background_color"
-            app:layout_constraintBottom_toBottomOf="@+id/view3"
+        <View
+            android:id="@+id/view2"
+            style="@style/BorderStyle"
+            android:layout_margin="4dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
-            app:layout_constraintVertical_bias="0.94"
-            app:srcCompat="@android:drawable/ic_delete"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewValueItem" />
+
+        <View
+            android:id="@+id/view3"
+            style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewCounterparty" />
+
+        <View
+            style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/textViewDate" />
+
+        <View
+            style="@style/BorderStyle"
+            android:layout_margin="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editTextComment" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

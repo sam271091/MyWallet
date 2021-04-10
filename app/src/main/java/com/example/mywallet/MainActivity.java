@@ -28,6 +28,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,10 +47,12 @@ import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -82,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private  TextView UserEmail;
     private  TextView UserName;
+    private ImageView imageView_UserPhoto;
+    private Button buttonSignOut;
+    private Button buttonSignIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,8 +115,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         UserName = navigationView.getHeaderView(0).findViewById(R.id.textViewUserName);
         UserEmail = navigationView.getHeaderView(0).findViewById(R.id.textViewEmail);
+        imageView_UserPhoto = navigationView.getHeaderView(0).findViewById(R.id.imageView_UserPhoto);
 
+        buttonSignOut = navigationView.getHeaderView(0).findViewById(R.id.buttonSignOut);
 
+        buttonSignIn = navigationView.getHeaderView(0).findViewById(R.id.buttonSignIn);
 
         setTitle(getString(R.string.MainLabel));
 
@@ -274,7 +284,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //        startActivity(intent);
 
+        buttonSignOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
+                GoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        setUserInfo();
+                        buttonSignIn.setVisibility(View.VISIBLE);
+                        buttonSignOut.setVisibility(View.GONE);
+                    }
+                });
+            }
+        });
 
+
+        buttonSignIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signIn();
+            }
+        });
     }
 
 
@@ -288,8 +319,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         GoogleSignInOptions signInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestScopes(Drive.SCOPE_FILE)
+                        .requestEmail()
                         .build();
         return GoogleSignIn.getClient(this, signInOptions);
+    }
+
+
+    private void setUserInfo(){
+        UserName.setText("");
+        UserEmail.setText("");
+        imageView_UserPhoto.setImageResource(R.drawable.user_image);
+//
+//                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
+
+        if (mDriveClient != null){
+            if (GoogleSignIn.getLastSignedInAccount(this) != null){
+                UserName.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
+
+                buttonSignIn.setVisibility(View.GONE);
+                buttonSignOut.setVisibility(View.VISIBLE);
+
+                if (GoogleSignIn.getLastSignedInAccount(this).getEmail() != null){
+                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
+                }
+
+                if (GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl() != null){
+                    Picasso.get().load(GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl()).into(imageView_UserPhoto);
+                }
+
+            }
+
+        }
     }
 
 
@@ -312,18 +372,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                    startActivityForResult(
 //                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
 
-                    UserName.setText("");
-                    UserEmail.setText("");
-//
-//                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
-
-                    if (mDriveClient != null){
-                      if (GoogleSignIn.getLastSignedInAccount(this) != null){
-                          UserName.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
-//                          UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
-                      }
-
-                    }
+                  setUserInfo();
 
 
 
