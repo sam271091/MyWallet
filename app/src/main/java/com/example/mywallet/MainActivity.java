@@ -324,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         GoogleSignInOptions signInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                         .requestScopes(Drive.SCOPE_FILE)
-                        .requestEmail()
+//                        .requestEmail()
                         .build();
         return GoogleSignIn.getClient(this, signInOptions);
     }
@@ -440,8 +440,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         })
                 .addOnFailureListener(this, e -> {
 //                    Log.e(TAG, "Unable to create file", e);
-//                    showMessage(getString(R.string.file_create_error));
-                    finish();
+                    Toast.makeText(this, "Unable to create file", Toast.LENGTH_SHORT).show();;
+//                    finish();
                 });
 
     }
@@ -673,16 +673,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int id = item.getItemId();
 
-        switch (id){
-            case  R.id.item_backup:
-                Gson gson = new Gson();
-                String json = gson.toJson(walletsList);
-                generateData("MyWalletdata.json",json);
-               break;
+        if (id == R.id.item_backup ){
+            Gson gson = new Gson();
+            String json = gson.toJson(walletsList);
+            generateData("MyWalletdata.json",json);
         }
 
+//        switch (id){
+//            case  R.id.item_backup:
+//                Gson gson = new Gson();
+//                String json = gson.toJson(walletsList);
+//                generateData("MyWalletdata.json",json);
+//                break;
+//        }
 
-        return false;
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
