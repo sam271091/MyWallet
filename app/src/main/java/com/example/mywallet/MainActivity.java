@@ -306,6 +306,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 signIn();
             }
         });
+
+
+        buttonSignIn.setVisibility(View.VISIBLE);
+        buttonSignOut.setVisibility(View.GONE);
+
     }
 
 
@@ -665,6 +670,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        int id = item.getItemId();
+
+        switch (id){
+            case  R.id.item_backup:
+                Gson gson = new Gson();
+                String json = gson.toJson(walletsList);
+                generateData("MyWalletdata.json",json);
+               break;
+        }
+
+
         return false;
     }
 

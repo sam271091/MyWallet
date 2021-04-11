@@ -9,7 +9,9 @@
 
     <item android:title="APP">
         <menu>
-
+            <item android:title="Backup"
+                android:id="@+id/item_backup"
+                android:icon="@drawable/ic_baseline_backup_24" />
         </menu>
     </item>
 
