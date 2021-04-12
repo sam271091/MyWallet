@@ -673,19 +673,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         int id = item.getItemId();
 
-        if (id == R.id.item_backup ){
-            Gson gson = new Gson();
-            String json = gson.toJson(walletsList);
-            generateData("MyWalletdata.json",json);
-        }
-
-//        switch (id){
-//            case  R.id.item_backup:
-//                Gson gson = new Gson();
-//                String json = gson.toJson(walletsList);
-//                generateData("MyWalletdata.json",json);
-//                break;
+//        if (id == R.id.item_backup ){
+//            Gson gson = new Gson();
+//            String json = gson.toJson(walletsList);
+//            generateData("MyWalletdata.json",json);
 //        }
+
+        switch (id){
+            case  R.id.item_backup:
+                Gson gson = new Gson();
+                String json = gson.toJson(walletsList);
+                generateData("MyWalletdata.json",json);
+                break;
+            case R.id.item_counterparties :
+                Intent intent = new Intent(this,Counterparties_List.class);
+                intent.putExtra("notForResult",true);
+                startActivity(intent);
+        }
 
 
         return super.onOptionsItemSelected(item);

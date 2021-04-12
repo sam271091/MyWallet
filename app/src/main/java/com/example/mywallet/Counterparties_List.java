@@ -19,6 +19,7 @@ public class Counterparties_List extends AppCompatActivity {
     private RecyclerView recyclerViewCounterparties;
     CounterpartiesAdapter adapter;
     MainViewModel viewModel;
+    boolean notForResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +40,13 @@ public class Counterparties_List extends AppCompatActivity {
         });
 
 
+        Intent intent = getIntent();
+        if (intent != null){
+            if (intent.hasExtra("notForResult")){
+                notForResult = true;
+            }
+        }
+
         LinearLayoutManager manager = new LinearLayoutManager(this);
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewCounterparties.setLayoutManager(manager);
@@ -48,10 +56,15 @@ public class Counterparties_List extends AppCompatActivity {
             @Override
             public void onCounterpartyClick(int position) {
                 List<Counterparty> counterparties = adapter.getCounterparties();
-                Intent intent = new Intent();
-                intent.putExtra("counterparty",counterparties.get(position));
-                setResult(RESULT_OK, intent);
-                finish();
+                if (notForResult == false) {
+                    Intent intent = new Intent();
+                    intent.putExtra("counterparty",counterparties.get(position));
+                    setResult(RESULT_OK, intent);
+                    finish();
+                } else {
+                    OpenCounterparty(counterparties.get(position));
+                }
+
             }
 
             @Override

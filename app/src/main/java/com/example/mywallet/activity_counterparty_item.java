@@ -78,9 +78,10 @@ public class activity_counterparty_item extends AppCompatActivity {
                 Counterparty newCounterparty = new Counterparty(name,comment);
 
                 viewModel.insertCounterparty(newCounterparty);
-            } else if (! currCounterparty.getName().equals(name)){
+            } else if (! currCounterparty.getName().equals(name) || ! currCounterparty.getComment().equals(comment)){
                 String oldCounterparty = CounterpartyConverter.CounterpartyToString(currCounterparty);
                 currCounterparty.setName(name);
+                currCounterparty.setComment(comment);
                 viewModel.updateTransactionsByCounterparty(oldCounterparty,CounterpartyConverter.CounterpartyToString(currCounterparty));
                 viewModel.updateCounterparty(currCounterparty);
             }
