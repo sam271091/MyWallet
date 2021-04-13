@@ -3,15 +3,15 @@
 
     <item android:title="STORAGAE">
         <menu>
-
+            <item android:title="Backup"
+                android:id="@+id/item_backup"
+                android:icon="@drawable/ic_baseline_backup_24" />
         </menu>
     </item>
 
     <item android:title="APP">
         <menu>
-            <item android:title="Backup"
-                android:id="@+id/item_backup"
-                android:icon="@drawable/ic_baseline_backup_24" />
+
             <item android:title="Counterparties"
                 android:id="@+id/item_counterparties"
                 android:icon="@drawable/people_icon" />
