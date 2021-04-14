@@ -93,7 +93,8 @@
                     android:onClick="onClickCreateWallet"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@android:drawable/ic_input_add" />
+                    app:srcCompat="@android:drawable/ic_input_add"
+                    app:tint="@null"/>
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/imageButtonAdd"
@@ -105,6 +106,7 @@
                     app:layout_constraintEnd_toStartOf="@+id/guideline2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/guideline5"
+                    app:tint="@null"
                     app:srcCompat="@drawable/add" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -119,6 +121,7 @@
                     app:layout_constraintStart_toStartOf="@+id/guideline2"
                     app:layout_constraintTop_toTopOf="@+id/guideline5"
                     app:layout_constraintVertical_bias="0.46"
+                    app:tint="@null"
                     app:srcCompat="@drawable/minus" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -133,6 +136,7 @@
                     app:layout_constraintStart_toEndOf="@+id/imageButtonAdd"
                     app:layout_constraintTop_toTopOf="@+id/guideline5"
                     app:layout_constraintVertical_bias="0.505"
+                    app:tint="@null"
                     app:srcCompat="@drawable/analytics" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
