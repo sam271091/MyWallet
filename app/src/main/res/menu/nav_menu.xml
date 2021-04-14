@@ -15,6 +15,10 @@
             <item android:title="Counterparties"
                 android:id="@+id/item_counterparties"
                 android:icon="@drawable/people_icon" />
+
+            <item android:title="Value items"
+                android:id="@+id/item_value_items"
+                android:icon="@drawable/items_icon" />
         </menu>
     </item>
 

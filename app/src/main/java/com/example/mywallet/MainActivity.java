@@ -238,6 +238,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         recyclerViewWallets = findViewById(R.id.RecyclerViewWallets);
         LinearLayoutManager manager = new LinearLayoutManager(this);
+
+//        GridLayoutManager manager = new GridLayoutManager(this,2);
+
         manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerViewWallets.setLayoutManager(manager);
         recyclerViewWallets.setAdapter(adapter);
@@ -689,6 +692,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = new Intent(this,Counterparties_List.class);
                 intent.putExtra("notForResult",true);
                 startActivity(intent);
+                break;
+            case R.id.item_value_items :
+                Intent intent_VI = new Intent(this,ValueItemListActivity.class);
+                intent_VI.putExtra("notForResult",true);
+                startActivity(intent_VI);
+                break;
         }
 
 

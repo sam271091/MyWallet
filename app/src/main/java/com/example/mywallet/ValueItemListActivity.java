@@ -19,6 +19,7 @@ public class ValueItemListActivity extends AppCompatActivity {
     private RecyclerView recyclerViewValueItems;
     ValueItemsAdapter adapter;
     MainViewModel viewModel;
+    boolean notForResult;
 
 
 
@@ -49,14 +50,26 @@ public class ValueItemListActivity extends AppCompatActivity {
         recyclerViewValueItems.setAdapter(adapter);
 
 
+        Intent intent = getIntent();
+        if (intent != null){
+            if (intent.hasExtra("notForResult")){
+                notForResult = true;
+            }
+        }
+
+
         adapter.setOnValueItemClickListener(new ValueItemsAdapter.OnValueItemClickListener() {
             @Override
             public void OnValueItemClick(int position) {
                 List<ValueItem> valueItems = adapter.getValueItems();
+                if (notForResult == false) {
                 Intent intent = new Intent();
                 intent.putExtra("valueItem",  valueItems.get(position));
                 setResult(RESULT_OK, intent);
                 finish();
+                } else {
+                    OpenValueItem(valueItems.get(position));
+                }
             }
 
             @Override
