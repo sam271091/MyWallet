@@ -76,6 +76,7 @@ public class MainViewModel extends AndroidViewModel  {
 
 
 
+
     public List<Transaction> getDataByWallet(String wallet){
 
         try {
@@ -161,6 +162,26 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public Wallet getWalletbyId(String id){
+
+        try {
+            return  new getWalletbyIdTask().execute(id).get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    private static class getWalletbyIdTask extends AsyncTask<String,Void,Wallet>{
+        @Override
+        protected Wallet doInBackground(String... strings) {
+            return database.walletDao().getWalletbyId((strings[0]));
+        }
+    }
 
 
 
@@ -244,8 +265,6 @@ public class MainViewModel extends AndroidViewModel  {
             return  database.walletDao().getDataByWalletGroupType(wallet,from,to);
         }
     }
-
-
 
 
     private static class getDataByWalletAndCounterpartyTask extends AsyncTask<String,Void,List<Transaction>>{

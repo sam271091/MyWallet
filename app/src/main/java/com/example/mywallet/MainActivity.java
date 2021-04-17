@@ -38,10 +38,12 @@ import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
 import com.example.mywallet.converters.WalletConverter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.drive.CreateFileActivityOptions;
-import com.google.android.gms.drive.Drive;
+//import com.google.android.gms.drive.Drive;
 import com.google.android.gms.drive.DriveClient;
 import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
@@ -51,6 +53,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.navigation.NavigationView;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.json.gson.GsonFactory;
+import com.google.api.services.drive.DriveScopes;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
@@ -62,7 +68,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import com.google.api.services.drive.Drive;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private  TransactionsAdapter adapter;
@@ -89,6 +97,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView imageView_UserPhoto;
     private Button buttonSignOut;
     private Button buttonSignIn;
+
+    private DriveServiceHelper mDriveServiceHelper;
+
+    private GoogleSignInAccount currentGoogleAccount;
+
+    GoogleSignInClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        Intent intent = new Intent(this, SplashActivity.class);
 //        startActivity(intent);
 
+//        requestSignIn();
 
 
         walletsList = new ArrayList<>();
@@ -290,8 +305,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buttonSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
-                GoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+
+//                GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
+//                GoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+                   client.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         setUserInfo();
@@ -317,19 +334,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
+    private void requestSignIn() {
+//        Log.d(TAG, "Requesting sign-in");
+
+        GoogleSignInOptions signInOptions =
+                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestEmail()
+                        .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
+                        .build();
+         client = GoogleSignIn.getClient(this, signInOptions);
+
+        // The result of the sign-in Intent is handled in onActivityResult.
+        startActivityForResult(client.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+    }
+
+
     private void signIn() {
 //        Log.i(TAG, "Start sign in");
-        GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
-        startActivityForResult(GoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+//        GoogleSignInClient GoogleSignInClient = buildGoogleSignInClient();
+//        startActivityForResult(GoogleSignInClient.getSignInIntent(), REQUEST_CODE_SIGN_IN);
+        requestSignIn();
     }
 
     private GoogleSignInClient buildGoogleSignInClient() {
-        GoogleSignInOptions signInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestScopes(Drive.SCOPE_FILE)
+//        GoogleSignInOptions signInOptions =
+//                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                        .requestScopes(Drive.SCOPE_FILE)
 //                        .requestEmail()
-                        .build();
-        return GoogleSignIn.getClient(this, signInOptions);
+//                        .build();
+//        return GoogleSignIn.getClient(this, signInOptions);
+
+        return null;
     }
 
 
@@ -340,19 +376,40 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //
 //                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
 
-        if (mDriveClient != null){
+
+
+//        if (mDriveClient != null){
+//            if (GoogleSignIn.getLastSignedInAccount(this) != null){
+//                UserName.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
+//
+//                buttonSignIn.setVisibility(View.GONE);
+//                buttonSignOut.setVisibility(View.VISIBLE);
+//
+//                if (GoogleSignIn.getLastSignedInAccount(this).getEmail() != null){
+//                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
+//                }
+//
+//                if (GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl() != null){
+//                    Picasso.get().load(GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl()).into(imageView_UserPhoto);
+//                }
+//
+//            }
+//
+//        }
+
+        if (currentGoogleAccount != null){
             if (GoogleSignIn.getLastSignedInAccount(this) != null){
-                UserName.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
+                UserName.setText(currentGoogleAccount.getDisplayName().toString());
 
                 buttonSignIn.setVisibility(View.GONE);
                 buttonSignOut.setVisibility(View.VISIBLE);
 
                 if (GoogleSignIn.getLastSignedInAccount(this).getEmail() != null){
-                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
+                    UserEmail.setText(currentGoogleAccount.getEmail().toString());
                 }
 
                 if (GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl() != null){
-                    Picasso.get().load(GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl()).into(imageView_UserPhoto);
+                    Picasso.get().load(currentGoogleAccount.getPhotoUrl()).into(imageView_UserPhoto);
                 }
 
             }
@@ -369,23 +426,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case REQUEST_CODE_SIGN_IN:
 //                Log.i(TAG, "Sign in request code");
                 // Called after user is signed in.
-                if (resultCode == RESULT_OK) {
-//                    Log.i(TAG, "Signed in successfully.");
-                    // Use the last signed in account here since it already have a Drive scope.
-                    mDriveClient = Drive.getDriveClient(this, GoogleSignIn.getLastSignedInAccount(this));
-                    // Build a drive resource client.
-                    mDriveResourceClient =
-                            Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this));
-//                    // Start camera.
-//                    startActivityForResult(
-//                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+                if (resultCode == RESULT_OK && data != null ) {
+////                    Log.i(TAG, "Signed in successfully.");
+//                    // Use the last signed in account here since it already have a Drive scope.
+//                    mDriveClient = Drive.getDriveClient(this, GoogleSignIn.getLastSignedInAccount(this));
+//                    // Build a drive resource client.
+//                    mDriveResourceClient =
+//                            Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this));
+////                    // Start camera.
+////                    startActivityForResult(
+////                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+
+                    handleSignInResult(data);
 
                   setUserInfo();
 
 
 
 
-                    preferences.edit().putString("mDriveClient",mDriveClient.toString()).apply();
+//                    preferences.edit().putString("mDriveClient",mDriveClient.toString()).apply();
 
                 }
                 break;
@@ -413,6 +472,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                break;
         }
     }
+
+
+
+    private void handleSignInResult(Intent result) {
+        GoogleSignIn.getSignedInAccountFromIntent(result)
+                .addOnSuccessListener(googleAccount -> {
+//                    Log.d(TAG, "Signed in as " + googleAccount.getEmail());
+
+                    // Use the authenticated account to sign in to the Drive service.
+                    GoogleAccountCredential credential =
+                            GoogleAccountCredential.usingOAuth2(
+                                    this, Collections.singleton(DriveScopes.DRIVE_FILE));
+                    credential.setSelectedAccount(googleAccount.getAccount());
+                    com.google.api.services.drive.Drive googleDriveService =
+                            new com.google.api.services.drive.Drive.Builder(
+                                    AndroidHttp.newCompatibleTransport(),
+                                    new GsonFactory(),
+                                    credential)
+                                    .setApplicationName("Drive API Migration")
+                                    .build();
+
+                    currentGoogleAccount = googleAccount;
+
+                    setUserInfo();
+                    // The DriveServiceHelper encapsulates all REST API and SAF functionality.
+                    // Its instantiation is required before handling any onClick actions.
+                    mDriveServiceHelper = new DriveServiceHelper(googleDriveService);
+                })
+                .addOnFailureListener(exception ->
+//                        Log.e("TAG", "Unable to sign in.", exception)
+                                Toast.makeText(this, "Unable to sign in", Toast.LENGTH_SHORT).show()
+                );
+    }
+
+
 
     private void saveFileToDrive(String fileName,String sBody ) {
 

@@ -37,6 +37,9 @@ public interface WalletDao {
     @Delete
     void DeleteWallet(Wallet wallet);
 
+    @Query("SELECT * FROM wallets where id == :id")
+    Wallet getWalletbyId(String id);
+
     //Value Items
     @Query(("SELECT*FROM  valueitems"))
     LiveData<List<ValueItem>> getAllValueItems();

@@ -21,6 +21,7 @@ public class Wallet implements Serializable {
 
 
 
+
     public Wallet() {
         this.id = UUID.randomUUID();
     }
@@ -52,4 +53,7 @@ public class Wallet implements Serializable {
     public void setId(UUID id) {
         this.id = id;
     }
+
+
+
 }
