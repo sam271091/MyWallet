@@ -102,7 +102,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private GoogleSignInAccount currentGoogleAccount;
 
-    GoogleSignInClient client;
+    private GoogleSignInClient client;
+    private String mOpenFileId;
+
+    private String fileName = "MyWalletdata.json";
+    private String fileContents;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -168,6 +172,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Gson gson = new Gson();
                 String json = gson.toJson(walletsList);
+
+
+                fileContents = json;
 
                 generateData("MyWalletdata.json",json);
 
@@ -510,40 +517,104 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void saveFileToDrive(String fileName,String sBody ) {
 
-        final Task<DriveFolder> rootFolderTask = mDriveResourceClient.getRootFolder();
-        final Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
-        Tasks.whenAll(rootFolderTask, createContentsTask)
-                .continueWithTask(task -> {
-                    DriveFolder parent = rootFolderTask.getResult();
-                    DriveContents contents = createContentsTask.getResult();
-                    OutputStream outputStream = contents.getOutputStream();
-                    try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        writer.write(sBody);
-                    }
+//        final Task<DriveFolder> rootFolderTask = mDriveResourceClient.getRootFolder();
+//        final Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
+//        Tasks.whenAll(rootFolderTask, createContentsTask)
+//                .continueWithTask(task -> {
+//                    DriveFolder parent = rootFolderTask.getResult();
+//                    DriveContents contents = createContentsTask.getResult();
+//                    OutputStream outputStream = contents.getOutputStream();
+//                    try (Writer writer = new OutputStreamWriter(outputStream)) {
+//                        writer.write(sBody);
+//                    }
+//
+//                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
+//                            .setTitle(fileName)
+//                            .setMimeType("text/json")
+//                            .setStarred(true)
+//                            .build();
+//
+//                    return mDriveResourceClient.createFile(parent, changeSet, contents);
+//                })
+//                .addOnSuccessListener(this,
+//                        driveFile -> {
+////                            showMessage(getString(R.string.file_created,
+////                                    driveFile.getDriveId().encodeToString()));
+////                            finish();
+//                        })
+//                .addOnFailureListener(this, e -> {
+////                    Log.e(TAG, "Unable to create file", e);
+//                    Toast.makeText(this, "Unable to create file", Toast.LENGTH_SHORT).show();;
+////                    finish();
+//                });
 
-                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(fileName)
-                            .setMimeType("text/json")
-                            .setStarred(true)
-                            .build();
-
-                    return mDriveResourceClient.createFile(parent, changeSet, contents);
-                })
-                .addOnSuccessListener(this,
-                        driveFile -> {
-//                            showMessage(getString(R.string.file_created,
-//                                    driveFile.getDriveId().encodeToString()));
-//                            finish();
-                        })
-                .addOnFailureListener(this, e -> {
-//                    Log.e(TAG, "Unable to create file", e);
-                    Toast.makeText(this, "Unable to create file", Toast.LENGTH_SHORT).show();;
-//                    finish();
-                });
+        createFile();
+        saveFile();
 
     }
 
 
+    private void createFile() {
+        if (mDriveServiceHelper != null) {
+//            Log.d(TAG, "Creating a file.");
+
+            mDriveServiceHelper.createFile()
+                    .addOnSuccessListener(fileId -> readFile(fileId))
+                    .addOnFailureListener(exception ->
+                            Log.e("TAG", "Couldn't create file.", exception));
+        }
+    }
+
+
+    /**
+     * Retrieves the title and content of a file identified by {@code fileId} and populates the UI.
+     */
+    private void readFile(String fileId) {
+        if (mDriveServiceHelper != null) {
+//            Log.d(TAG, "Reading file " + fileId);
+
+            mDriveServiceHelper.readFile(fileId)
+                    .addOnSuccessListener(nameAndContent -> {
+                        String name = nameAndContent.first;
+                        String content = nameAndContent.second;
+
+//                        mFileTitleEditText.setText(name);
+//                        mDocContentEditText.setText(content);
+
+                        setReadWriteMode(fileId);
+                    })
+                    .addOnFailureListener(exception ->
+                            Log.e("TAG", "Couldn't read file.", exception));
+        }
+    }
+
+
+
+    /**
+     * Saves the currently opened file created via {@link #createFile()} if one exists.
+     */
+    private void saveFile() {
+        if (mDriveServiceHelper != null && mOpenFileId != null) {
+//            Log.d(TAG, "Saving " + mOpenFileId);
+
+//            String fileName = mFileTitleEditText.getText().toString();
+//            String fileContent = mDocContentEditText.getText().toString();
+
+            mDriveServiceHelper.saveFile(mOpenFileId, fileName, fileContents)
+                    .addOnFailureListener(exception ->
+                            Log.e("TAG", "Unable to save file via REST.", exception));
+        }
+    }
+
+
+    /**
+     * Updates the UI to read/write mode on the document identified by {@code fileId}.
+     */
+    private void setReadWriteMode(String fileId) {
+//        mFileTitleEditText.setEnabled(true);
+//        mDocContentEditText.setEnabled(true);
+        mOpenFileId = fileId;
+    }
 
     private void saveFileToDriveDialog(String fileName,String sBody){
         Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
@@ -643,10 +714,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //
 
-        if (mDriveClient != null){
+//        if (mDriveClient != null){
+//            saveFileToDrive(sFileName,sBody);
+//        }
+
+        if (currentGoogleAccount != null){
             saveFileToDrive(sFileName,sBody);
         }
-
 
 //            Toast.makeText(this, "Saved", Toast.LENGTH_SHORT).show();
 //        } catch (IOException e) {
