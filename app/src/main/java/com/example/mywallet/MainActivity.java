@@ -69,6 +69,7 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import com.google.api.services.drive.Drive;
 
@@ -170,13 +171,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 walletsList .addAll(wallets);
                 int pagerPosition = walletViewPager.getCurrentItem();
 
-                Gson gson = new Gson();
-                String json = gson.toJson(walletsList);
-
-
-                fileContents = json;
-
-                generateData("MyWalletdata.json",json);
+//                Gson gson = new Gson();
+//                String json = gson.toJson(walletsList);
+//
+//
+//                fileContents = json;
+//
+//                generateData("MyWalletdata.json",json);
 
 
                 setCurrentWallet(pagerPosition);
@@ -549,7 +550,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                });
 
         createFile();
-        saveFile();
+//        saveFile();
 
     }
 
@@ -561,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mDriveServiceHelper.createFile()
                     .addOnSuccessListener(fileId -> readFile(fileId))
                     .addOnFailureListener(exception ->
-                            Log.e("TAG", "Couldn't create file.", exception));
+                            Toast.makeText(this, "Couldn't create file.", Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -582,9 +583,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        mDocContentEditText.setText(content);
 
                         setReadWriteMode(fileId);
+
+                        saveFile();
                     })
                     .addOnFailureListener(exception ->
-                            Log.e("TAG", "Couldn't read file.", exception));
+                            Toast.makeText(this, "Couldn't read file.", Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -601,8 +604,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            String fileContent = mDocContentEditText.getText().toString();
 
             mDriveServiceHelper.saveFile(mOpenFileId, fileName, fileContents)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(MainActivity.this, "File upload success!", Toast.LENGTH_SHORT).show();
+                        }
+                    })
                     .addOnFailureListener(exception ->
-                            Log.e("TAG", "Unable to save file via REST.", exception));
+                            Toast.makeText(this, "Unable to save file via REST.", Toast.LENGTH_SHORT).show());
         }
     }
 
@@ -852,8 +861,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (id){
             case  R.id.item_backup:
+
+                HashMap<String,Object> map = new HashMap<>();
+                map.put("wallets",walletsList);
+                map.put("valueItems",viewModel.getAllValueItems());
+                map.put("counterparties",viewModel.getAllCounterparties());
+                map.put("transactions",viewModel.getAllTransactions());
+
+
+
                 Gson gson = new Gson();
-                String json = gson.toJson(walletsList);
+                String json = gson.toJson(map);
+
+                fileContents = json;
+
                 generateData("MyWalletdata.json",json);
                 break;
             case R.id.item_counterparties :

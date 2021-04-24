@@ -28,10 +28,11 @@ public class MainViewModel extends AndroidViewModel  {
         super(application);
         database = AppDataBase.getInstance(application);
         wallets = database.walletDao().getAllWallets();
-        valueItems = database.walletDao().getAllValueItems();
-        counterparties = database.walletDao().getAllCounterparties();
-        transactions   = database.walletDao().getAllTransactions();
+        valueItems = database.walletDao().getValueItems();
+        counterparties = database.walletDao().getCounterparties();
+        transactions   = database.walletDao().getTransactions();
     }
+
 
 
 
@@ -327,6 +328,18 @@ public class MainViewModel extends AndroidViewModel  {
         return valueItems;
     }
 
+
+    public List<ValueItem> getAllValueItems() {
+        try {
+            return new GetAllValueItemsTask().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void deleteAllValueItems(){
 
     }
@@ -345,6 +358,14 @@ public class MainViewModel extends AndroidViewModel  {
 
     public void InsertValueItems(){
 
+    }
+
+
+    public static class GetAllValueItemsTask extends AsyncTask<Void,Void,List<ValueItem>>{
+        @Override
+        protected List<ValueItem> doInBackground(Void... voids) {
+            return database.walletDao().getAllValueItems();
+        }
     }
 
 
@@ -407,6 +428,25 @@ public class MainViewModel extends AndroidViewModel  {
 
     }
 
+    public List<Counterparty> getAllCounterparties(){
+        try {
+            return new  getAllCounterpartiesTask().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    private static class getAllCounterpartiesTask extends AsyncTask<Void,Void,List<Counterparty>>{
+        @Override
+        protected List<Counterparty> doInBackground(Void... voids) {
+            return database.walletDao().getAllCounterparties();
+        }
+    }
 
     private static class insertCounterpartyTask extends AsyncTask<Counterparty,Void,Void>{
         @Override
@@ -504,6 +544,27 @@ public class MainViewModel extends AndroidViewModel  {
         classObject.setCounterparty(counterparty);
         classObject.setNewCounterparty(newCounterparty);
         classObject.execute();
+    }
+
+
+    public List<Transaction> getAllTransactions (){
+        try {
+            return new getAllTransactionsTask().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+
+    private static class getAllTransactionsTask extends AsyncTask<Void,Void,List<Transaction>>{
+        @Override
+        protected List<Transaction> doInBackground(Void... voids) {
+            return database.walletDao().getAllTransactions();
+        }
     }
 
 

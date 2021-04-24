@@ -42,7 +42,12 @@ public interface WalletDao {
 
     //Value Items
     @Query(("SELECT*FROM  valueitems"))
-    LiveData<List<ValueItem>> getAllValueItems();
+    LiveData<List<ValueItem>> getValueItems();
+
+
+    @Query(("SELECT*FROM  valueitems"))
+    List<ValueItem> getAllValueItems ();
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertValueItems(List<ValueItem> valueItem);
@@ -65,7 +70,10 @@ public interface WalletDao {
 
     //Counterparties
     @Query("SELECT*FROM  Counterparties")
-    LiveData<List<Counterparty>> getAllCounterparties();
+    LiveData<List<Counterparty>> getCounterparties();
+
+    @Query("SELECT*FROM  Counterparties")
+    List<Counterparty> getAllCounterparties();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertCounterparties(List<Counterparty> Counterparty);
@@ -88,7 +96,10 @@ public interface WalletDao {
 
     //Transactions
     @Query("SELECT*FROM  transactions Order by date")
-    LiveData<List<Transaction>> getAllTransactions();
+    LiveData<List<Transaction>> getTransactions();
+
+    @Query("SELECT*FROM  transactions Order by date")
+    List<Transaction> getAllTransactions();
 
 
     @Query("SELECT*FROM  transactions WHERE wallet == :wallet Order by date")
