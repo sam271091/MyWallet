@@ -572,7 +572,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      @Override
                      public void onSuccess(String s) {
                          folderId = s;
-                         createFile();
+                        if (folderId != null){
+                            createFile();
+                        } else {
+                            createFolder();
+                        }
+
                      }
 
                  }
@@ -580,7 +585,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                  .addOnFailureListener(new OnFailureListener() {
                      @Override
                      public void onFailure(@NonNull Exception e) {
-                         createFolder();
+                         Toast.makeText(MainActivity.this, R.string.folder_creation_fail, Toast.LENGTH_SHORT).show();
                      }
                  });
     }
