@@ -57,12 +57,45 @@ public class DriveServiceHelper {
     /**
      * Creates a text file in the user's My Drive folder and returns its file ID.
      */
-    public Task<String> createFile() {
+    public Task<String> createFile(String folderID) {
         return Tasks.call(mExecutor, () -> {
             File metadata = new File()
-                    .setParents(Collections.singletonList("root"))
+                    .setParents(Collections.singletonList(folderID))
                     .setMimeType("text/plain")
                     .setName("Untitled file");
+
+            File googleFile = mDriveService.files().create(metadata).execute();
+            if (googleFile == null) {
+                throw new IOException("Null result when requesting file creation.");
+            }
+
+            return googleFile.getId();
+        });
+    }
+
+    public Task<String> findFolder() {
+        return Tasks.call(mExecutor, () -> {
+            String pageToken = null;
+            FileList result = mDriveService.files().list()
+                    .setQ("mimeType='application/vnd.google-apps.folder'")
+                    .setSpaces("drive")
+                    .setFields("nextPageToken, files(id, name)")
+                    .setPageToken(pageToken)
+                    .execute();
+            for (File file : result.getFiles()) {
+//                System.out.printf("Found file: %s (%s)\n",
+//                        file.getName(), file.getId());
+                return  file.getId();
+            }
+            return null;
+        });
+    }
+
+    public Task<String> createFolder() {
+        return Tasks.call(mExecutor, () -> {
+            File metadata = new File()
+                    .setMimeType("application/vnd.google-apps.folder")
+                    .setName("MyWallet");
 
             File googleFile = mDriveService.files().create(metadata).execute();
             if (googleFile == null) {

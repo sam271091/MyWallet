@@ -49,6 +49,7 @@ import com.google.android.gms.drive.DriveContents;
 import com.google.android.gms.drive.DriveFolder;
 import com.google.android.gms.drive.DriveResourceClient;
 import com.google.android.gms.drive.MetadataChangeSet;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
@@ -67,8 +68,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import com.google.api.services.drive.Drive;
@@ -109,6 +114,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private String fileName = "MyWalletdata.json";
     private String fileContents;
 
+    private Calendar calendar;
+
+    private String folderId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         buttonSignIn = navigationView.getHeaderView(0).findViewById(R.id.buttonSignIn);
 
         setTitle(getString(R.string.MainLabel));
+
+        calendar = Calendar.getInstance();
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -549,21 +560,78 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 ////                    finish();
 //                });
 
-        createFile();
+        createData();
 //        saveFile();
 
     }
 
 
+    private void findFolder(){
+         mDriveServiceHelper.findFolder()
+                 .addOnSuccessListener(new OnSuccessListener<String>() {
+                     @Override
+                     public void onSuccess(String s) {
+                         folderId = s;
+                         createFile();
+                     }
+
+                 }
+                 )
+                 .addOnFailureListener(new OnFailureListener() {
+                     @Override
+                     public void onFailure(@NonNull Exception e) {
+                         createFolder();
+                     }
+                 });
+    }
+
+    private void createData() {
+        if (mDriveServiceHelper != null) {
+            findFolder();
+
+//            if (folderId==null){
+//                createFolder();
+//            }
+//
+//            if (folderId!= null) {
+//                createFile();
+//            }
+
+        }
+
+    }
+
+    private void createFolder(){
+        mDriveServiceHelper.createFolder()
+                .addOnSuccessListener(new OnSuccessListener<String>() {
+                    @Override
+                    public void onSuccess(String s) {
+                        folderId = s;
+                        createFile();
+                    }
+                });
+    }
+
     private void createFile() {
         if (mDriveServiceHelper != null) {
 //            Log.d(TAG, "Creating a file.");
 
-            mDriveServiceHelper.createFile()
+
+            mDriveServiceHelper.createFile(folderId)
                     .addOnSuccessListener(fileId -> readFile(fileId))
-                    .addOnFailureListener(exception ->
-                            Toast.makeText(this, "Couldn't create file.", Toast.LENGTH_SHORT).show());
+                                    .addOnFailureListener(exception ->
+                    Toast.makeText(this, "Couldn't create file.", Toast.LENGTH_SHORT).show());
         }
+
+//            mDriveServiceHelper.createFolder()
+//                    .addOnSuccessListener(new OnSuccessListener<String>() {
+//                        @Override
+//                        public void onSuccess(String s) {
+//
+//                    });
+
+
+//        }
     }
 
 
@@ -603,7 +671,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            String fileName = mFileTitleEditText.getText().toString();
 //            String fileContent = mDocContentEditText.getText().toString();
 
-            mDriveServiceHelper.saveFile(mOpenFileId, fileName, fileContents)
+            Date currDate = calendar.getTime();
+
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String date = df.format(currDate);
+
+            mDriveServiceHelper.saveFile(mOpenFileId, fileName + " " + date.toString(), fileContents)
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
