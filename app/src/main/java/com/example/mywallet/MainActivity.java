@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private List<Wallet> walletsList;
     private static final int REQUEST_CODE_SIGN_IN = 0;
     private static final int REQUEST_CODE_CREATOR = 2;
+    private static final int REQUEST_CODE_OPEN_DOCUMENT = 2;
 
     private DriveClient mDriveClient;
     private DriveResourceClient mDriveResourceClient;
@@ -526,6 +527,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    private void openFilePicker() {
+        if (mDriveServiceHelper != null) {
+//            Log.d(TAG, "Opening file picker.");
+
+            Intent pickerIntent = mDriveServiceHelper.createFilePickerIntent();
+
+            // The result of the SAF Intent is handled in onActivityResult.
+            startActivityForResult(pickerIntent, REQUEST_CODE_OPEN_DOCUMENT);
+        }
+    }
+
+
 
     private void saveFileToDrive(String fileName,String sBody ) {
 
@@ -591,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void createData() {
-        if (mDriveServiceHelper != null) {
+        if (GoogleSignIn.getLastSignedInAccount(this) != null) {
             findFolder();
 
 //            if (folderId==null){
