@@ -6,6 +6,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
@@ -26,13 +27,16 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.mywallet.adapters.FilesSelectorAdapter;
 import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
@@ -53,16 +57,17 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.DriveScopes;
+import com.google.api.services.drive.model.File;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -939,6 +944,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
 
+
+    private void getFiles(){
+
+
+        mDriveServiceHelper.getFiles()
+                .addOnSuccessListener(new OnSuccessListener<ArrayList<File>>() {
+                    @Override
+                    public void onSuccess(ArrayList<File> files) {
+
+                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                                MainActivity.this,R.style.BottomSheetDialogTheme);
+
+                        View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                                .inflate(R.layout.activity__drive_file_selector,
+                                        (CardView)findViewById(R.id.bottomSheetContainer)
+                                );
+
+                        RecyclerView filesListRecyclerView = bottomSheetView.findViewById(R.id.filesListRecyclerView);
+
+                        FilesSelectorAdapter filesSelectorAdapter = new FilesSelectorAdapter();
+
+                        filesSelectorAdapter.setFiles(files);
+
+
+                        LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
+                        manager.setOrientation(LinearLayoutManager.VERTICAL);
+                        filesListRecyclerView.setLayoutManager(manager);
+                        filesListRecyclerView.setAdapter(filesSelectorAdapter);
+
+
+                        bottomSheetDialog.setContentView(bottomSheetView);
+                        bottomSheetDialog.show();
+
+                    }
+                });
+    }
+
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
@@ -978,6 +1021,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 intent_VI.putExtra("notForResult",true);
                 startActivity(intent_VI);
                 break;
+            case R.id.item_restore :
+                getFiles();
         }
 
 

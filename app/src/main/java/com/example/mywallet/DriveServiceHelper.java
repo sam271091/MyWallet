@@ -36,6 +36,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -72,6 +73,34 @@ public class DriveServiceHelper {
             return googleFile.getId();
         });
     }
+
+
+    public Task<ArrayList<File>> getFiles() {
+        return Tasks.call(mExecutor, () -> {
+
+            ArrayList<File> filesArray = new ArrayList<>();
+
+            String pageToken = null;
+            FileList result = mDriveService.files().list()
+                    .setQ("mimeType != 'application/vnd.google-apps.folder'")
+                    .setSpaces("drive")
+                    .setFields("nextPageToken, files(id, name,size)")
+                    .setPageToken(pageToken)
+                    .execute();
+            for (File file : result.getFiles()) {
+//                System.out.printf("Found file: %s (%s)\n",
+//                        file.getName(), file.getId());
+                filesArray.add(file);
+
+            }
+
+            return  filesArray;
+
+//            return null;
+        });
+    }
+
+
 
     public Task<String> findFolder() {
         return Tasks.call(mExecutor, () -> {
