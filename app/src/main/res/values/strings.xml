@@ -38,4 +38,6 @@
     <string name="sign_out_Button">Sign out</string>
     <string name="sign_in_Button">Sign in</string>
     <string name="folder_creation_fail">Failed to create folder</string>
+    <string name="totalReceipts_Label">Total receipts</string>
+    <string name="total_Expenses_Label">Total Expenses</string>
 </resources>

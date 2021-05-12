@@ -133,6 +133,10 @@ public interface WalletDao {
     Double getCurrentBalance(String wallet);
 
 
+    @Query("SELECT  Sum(sum)  FROM  transactions WHERE wallet == :wallet and type == :type Group by wallet Order by date")
+    Double getTotalByType(String wallet,String type);
+
+
     @Query("SELECT  null as id,wallet,counterparty,date,sum,turnoversum FROM  transactions WHERE wallet == :wallet Group by wallet,counterparty Order by counterparty,date")
 //@Query("SELECT  null as id,wallet,counterparty,null as date,null as sum,null as turnoversum FROM  transactions WHERE wallet == :wallet Group by wallet,counterparty Order by counterparty,date")
     List<Transaction> getDataByWallet(String wallet);

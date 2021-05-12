@@ -76,6 +76,22 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public Double getTotalByType(String wallet, String type){
+
+        try {
+            getTotalByTypeTask classObject = new getTotalByTypeTask();
+            classObject.setWallet(wallet);
+            classObject.setType(type);
+            return classObject.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
 
     public List<Transaction> getDataByWallet(String wallet){
@@ -290,6 +306,24 @@ public class MainViewModel extends AndroidViewModel  {
         @Override
         protected Double doInBackground(String... wallets) {
             return database.walletDao().getCurrentBalance(wallets[0]);
+        }
+    }
+
+    private static class getTotalByTypeTask extends AsyncTask<Void,Void,Double>{
+        private String wallet;
+        private String type;
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        @Override
+        protected Double doInBackground(Void... voids) {
+            return database.walletDao().getTotalByType(wallet,type);
         }
     }
 
