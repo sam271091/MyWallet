@@ -26,37 +26,81 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextComment" />
+            app:layout_constraintTop_toBottomOf="@+id/TILeditTextComment" />
 
-        <EditText
-            android:id="@+id/editTextSum"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TILeditTextSum"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginLeft="96dp"
-            android:layout_marginTop="40dp"
-            android:ems="10"
+            android:layout_marginTop="52dp"
             android:hint="@string/input_sum_hint"
-            android:inputType="numberDecimal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCounterparty" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewCounterparty">
 
-        <EditText
-            android:id="@+id/editTextComment"
+            <EditText
+                android:id="@+id/editTextSum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal" />
+            <!--                        <EditText-->
+            <!--                            android:id="@+id/editTextSum"-->
+            <!--                            android:layout_width="0dp"-->
+            <!--                            android:layout_height="wrap_content"-->
+            <!--                            android:layout_marginStart="96dp"-->
+            <!--                            android:layout_marginLeft="96dp"-->
+            <!--                            android:layout_marginTop="40dp"-->
+            <!--                            android:ems="10"-->
+            <!--                            android:hint="@string/input_sum_hint"-->
+            <!--                            android:inputType="numberDecimal"-->
+            <!--                            app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                            app:layout_constraintHorizontal_bias="0.0"-->
+            <!--                            app:layout_constraintStart_toStartOf="parent"-->
+            <!--                            app:layout_constraintTop_toBottomOf="@+id/textViewCounterparty"-->
+            <!--                            />-->
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TILeditTextComment"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="96dp"
-            android:layout_marginLeft="96dp"
-            android:layout_marginTop="36dp"
-            android:ems="10"
+            android:layout_marginTop="52dp"
             android:hint="@string/input_text_hint"
-            android:inputType="textPersonName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editTextSum" />
+            app:layout_constraintTop_toBottomOf="@+id/TILeditTextSum">
+
+            <EditText
+                android:id="@+id/editTextComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textLongMessage|textMultiLine" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+
+<!--        <EditText-->
+<!--            android:id="@+id/editTextComment"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="96dp"-->
+<!--            android:layout_marginLeft="96dp"-->
+<!--            android:layout_marginTop="60dp"-->
+<!--            android:ems="10"-->
+<!--            android:hint="@string/input_text_hint"-->
+<!--            android:inputType="textPersonName"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/TILeditTextSum" />-->
 
         <ImageButton
             android:id="@+id/imageButton_Delete_ValueItem"
@@ -64,11 +108,12 @@
             android:layout_height="21dp"
             android:background="@color/background_color"
             android:onClick="onClickDeleteValueItem"
-            app:layout_constraintBottom_toBottomOf="@+id/view2"
+            app:layout_constraintStart_toEndOf="@+id/textViewValueItem"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view"
-            app:layout_constraintVertical_bias="0.928"
-            app:srcCompat="@android:drawable/ic_delete" />
+            app:layout_constraintBottom_toTopOf="@+id/textViewCounterparty"
+            app:layout_constraintTop_toBottomOf="@+id/textViewWallet"
+            app:srcCompat="@android:drawable/ic_delete"
+            tools:layout_editor_absoluteX="387dp" />
 
         <ImageButton
             android:id="@+id/imageButton_Delete_Counterparty"
@@ -76,10 +121,9 @@
             android:layout_height="21dp"
             android:background="@color/background_color"
             android:onClick="onClickDeleteCounterparty"
-            app:layout_constraintBottom_toBottomOf="@+id/view3"
+            app:layout_constraintBottom_toTopOf="@+id/TILeditTextSum"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view2"
-            app:layout_constraintVertical_bias="0.94"
+            app:layout_constraintTop_toBottomOf="@+id/textViewValueItem"
             app:srcCompat="@android:drawable/ic_delete" />
 
         <ImageView
@@ -138,18 +182,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewValueItemLabel" />
 
-        <TextView
-            android:id="@+id/textViewSumLabel"
-            style="@style/LabelStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="52dp"
-            android:text="@string/sum_label"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/editTextSum"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewCounterpartyLabel" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewSumLabel"-->
+<!--            style="@style/LabelStyle"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="52dp"-->
+<!--            android:text="@string/sum_label"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintEnd_toStartOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/textViewCounterpartyLabel" />-->
 
         <TextView
             android:id="@+id/textViewValueItem"
@@ -198,24 +242,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageViewType" />
 
-        <TextView
-            android:id="@+id/textViewUserName"
-            style="@style/LabelStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
-            android:text="@string/note_string"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewSumLabel" />
+<!--        <TextView-->
+<!--            android:id="@+id/textViewUserName"-->
+<!--            style="@style/LabelStyle"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="68dp"-->
+<!--            android:text="@string/note_string"-->
+<!--            android:textStyle="bold"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/TILeditTextComment" />-->
 
 
-        <View
-            style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextSum" />
+<!--        <View-->
+<!--            style="@style/BorderStyle"-->
+<!--            android:layout_margin="4dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/TILeditTextSum" />-->
 
         <View
             android:id="@+id/view"
@@ -248,12 +292,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/textViewDate" />
 
-        <View
-            style="@style/BorderStyle"
-            android:layout_margin="4dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/editTextComment" />
+<!--        <View-->
+<!--            style="@style/BorderStyle"-->
+<!--            android:layout_margin="4dp"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@id/TILeditTextComment" />-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
