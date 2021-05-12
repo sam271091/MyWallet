@@ -948,37 +948,41 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void getFiles(){
 
 
-        mDriveServiceHelper.getFiles()
-                .addOnSuccessListener(new OnSuccessListener<ArrayList<File>>() {
-                    @Override
-                    public void onSuccess(ArrayList<File> files) {
+        if (GoogleSignIn.getLastSignedInAccount(this) != null) {
+            mDriveServiceHelper.getFiles()
+                    .addOnSuccessListener(new OnSuccessListener<ArrayList<File>>() {
+                        @Override
+                        public void onSuccess(ArrayList<File> files) {
 
-                        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
-                                MainActivity.this,R.style.BottomSheetDialogTheme);
+                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                                    MainActivity.this,R.style.BottomSheetDialogTheme);
 
-                        View bottomSheetView = LayoutInflater.from(getApplicationContext())
-                                .inflate(R.layout.activity__drive_file_selector,
-                                        (CardView)findViewById(R.id.bottomSheetContainer)
-                                );
+                            View bottomSheetView = LayoutInflater.from(getApplicationContext())
+                                    .inflate(R.layout.activity__drive_file_selector,
+                                            (CardView)findViewById(R.id.bottomSheetContainer)
+                                    );
 
-                        RecyclerView filesListRecyclerView = bottomSheetView.findViewById(R.id.filesListRecyclerView);
+                            RecyclerView filesListRecyclerView = bottomSheetView.findViewById(R.id.filesListRecyclerView);
 
-                        FilesSelectorAdapter filesSelectorAdapter = new FilesSelectorAdapter();
+                            FilesSelectorAdapter filesSelectorAdapter = new FilesSelectorAdapter();
 
-                        filesSelectorAdapter.setFiles(files);
-
-
-                        LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
-                        manager.setOrientation(LinearLayoutManager.VERTICAL);
-                        filesListRecyclerView.setLayoutManager(manager);
-                        filesListRecyclerView.setAdapter(filesSelectorAdapter);
+                            filesSelectorAdapter.setFiles(files);
 
 
-                        bottomSheetDialog.setContentView(bottomSheetView);
-                        bottomSheetDialog.show();
+                            LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
+                            manager.setOrientation(LinearLayoutManager.VERTICAL);
+                            filesListRecyclerView.setLayoutManager(manager);
+                            filesListRecyclerView.setAdapter(filesSelectorAdapter);
 
-                    }
-                });
+
+                            bottomSheetDialog.setContentView(bottomSheetView);
+                            bottomSheetDialog.show();
+
+                        }
+                    });
+        }
+
+
     }
 
 

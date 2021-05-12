@@ -1,6 +1,7 @@
 package com.example.mywallet;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,7 @@ public class ValueItemListActivity extends AppCompatActivity {
     ValueItemsAdapter adapter;
     MainViewModel viewModel;
     boolean notForResult;
+    private Toolbar toolbar;
 
 
 
@@ -27,6 +29,9 @@ public class ValueItemListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_item_list);
+
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         setTitle(getString(R.string.label_value_items));
 

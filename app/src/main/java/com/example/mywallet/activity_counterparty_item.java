@@ -2,6 +2,7 @@ package com.example.mywallet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -18,12 +19,16 @@ public class activity_counterparty_item extends AppCompatActivity {
     private EditText editTextCounterpartyName;
     private EditText editTextCounterpartyComment;
     private Counterparty currCounterparty;
+    private Toolbar toolbar;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_counterparty_item);
+
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         setTitle(getString(R.string.label_counterparty));
 

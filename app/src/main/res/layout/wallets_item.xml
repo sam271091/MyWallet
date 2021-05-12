@@ -25,6 +25,8 @@
             android:background="@android:drawable/ic_delete"
             android:onClick="onClickDeleteWallet"
 
+
+
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textViewWalletName"

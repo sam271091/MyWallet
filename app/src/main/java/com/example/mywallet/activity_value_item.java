@@ -2,6 +2,7 @@ package com.example.mywallet;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -18,11 +19,15 @@ public class activity_value_item extends AppCompatActivity {
     private MainViewModel viewModel;
     private EditText editTextValueItemName;
     private ValueItem currValueItem;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_value_item);
+
+        toolbar = findViewById(R.id.main_toolbar);
+        setSupportActionBar(toolbar);
 
         setTitle(getString(R.string.label_value_item));
 
