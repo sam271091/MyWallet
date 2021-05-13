@@ -52,7 +52,13 @@ public class TransactionConverter {
 
             Double sum          = Double.valueOf(jsonObject.get("sum").toString());
             Double turnoversum  = Double.valueOf(jsonObject.get("turnoversum").toString());
-            String comment      = jsonObject.get("comment").toString();
+
+
+            String comment      = "";
+
+            if (jsonObject.has("comment")){
+                comment      = jsonObject.get("comment").toString();
+            }
 
             Transaction transaction = new Transaction(id,date,type,wallet,valueItem,counterparty,sum,turnoversum,comment);
 
