@@ -16,6 +16,15 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FilesSelectorAdapter extends RecyclerView.Adapter<FilesSelectorAdapter.FilesSelectorViewHolder> {
 
     private ArrayList<File> files;
+    private OnFileClickListener onFileClickListener;
+
+    public interface OnFileClickListener{
+        void onFileClick(int position);
+    }
+
+    public void setOnFileClickListener(OnFileClickListener onFileClickListener) {
+        this.onFileClickListener = onFileClickListener;
+    }
 
     public FilesSelectorAdapter() {
         files = new ArrayList<>();
@@ -58,6 +67,15 @@ public class FilesSelectorAdapter extends RecyclerView.Adapter<FilesSelectorAdap
 
             textViewFileName = itemView.findViewById(R.id.textViewFileName);
             textViewSize     = itemView.findViewById(R.id.textViewSize);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (onFileClickListener != null){
+                       onFileClickListener.onFileClick(getAdapterPosition());
+                    }
+                }
+            });
         }
     }
 

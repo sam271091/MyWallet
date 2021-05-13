@@ -40,6 +40,9 @@ import com.example.mywallet.adapters.FilesSelectorAdapter;
 import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
+import com.example.mywallet.converters.CounterpartyConverter;
+import com.example.mywallet.converters.TransactionConverter;
+import com.example.mywallet.converters.ValueItemConverter;
 import com.example.mywallet.converters.WalletConverter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -83,6 +86,10 @@ import java.util.HashMap;
 import java.util.List;
 import com.google.api.services.drive.Drive;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private  TransactionsAdapter adapter;
     private  RecyclerView recyclerViewWallets;
@@ -123,6 +130,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Calendar calendar;
 
     private String folderId;
+
+    private boolean fileSelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -673,15 +682,114 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                        mFileTitleEditText.setText(name);
 //                        mDocContentEditText.setText(content);
 
-                        setReadWriteMode(fileId);
+                       if (fileSelected != true){
+                           setReadWriteMode(fileId);
 
-                        saveFile();
+                           saveFile();
+                       } else {
+                           fileSelected = false;
+                           readFileContents(content);
+                       }
+
                     })
                     .addOnFailureListener(exception ->
                             Toast.makeText(this, "Couldn't read file.", Toast.LENGTH_SHORT).show());
         }
     }
 
+
+    private void readFileContents(String content){
+        //Wallets
+        try {
+            JSONObject jObject = new JSONObject(content);
+            JSONArray jArraywallets = jObject.getJSONArray("wallets");
+
+            for (int i=0; i < jArraywallets.length(); i++)
+            {
+                try {
+                    JSONObject oneObject = jArraywallets.getJSONObject(i);
+                   Wallet wallet = WalletConverter.StringToWallet(oneObject.toString());
+
+                    viewModel.insertWallet(wallet);
+
+                } catch (JSONException e) {
+                    // Oops
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        //ValueItems
+        try {
+            JSONObject jObject = new JSONObject(content);
+            JSONArray jArrayValueItems = jObject.getJSONArray("valueItems");
+
+            for (int i=0; i < jArrayValueItems.length(); i++)
+            {
+                try {
+                    JSONObject oneObject = jArrayValueItems.getJSONObject(i);
+                    ValueItem valueItem = ValueItemConverter.StringToValueItem(oneObject.toString());
+
+                    viewModel.insertValueItem(valueItem);
+
+                } catch (JSONException e) {
+                    // Oops
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //Counterparties
+        try {
+            JSONObject jObject = new JSONObject(content);
+            JSONArray jArrayCounterparties = jObject.getJSONArray("counterparties");
+
+            for (int i=0; i < jArrayCounterparties.length(); i++)
+            {
+                try {
+                    JSONObject oneObject = jArrayCounterparties.getJSONObject(i);
+                    Counterparty counterparty = CounterpartyConverter.StringToCounterparty(oneObject.toString());
+
+                    viewModel.insertCounterparty(counterparty);
+
+                } catch (JSONException e) {
+                    // Oops
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        //Transactions
+        try {
+            JSONObject jObject = new JSONObject(content);
+            JSONArray jArrayTransactions = jObject.getJSONArray("transactions");
+
+            for (int i=0; i < jArrayTransactions.length(); i++)
+            {
+                try {
+                    JSONObject oneObject = jArrayTransactions.getJSONObject(i);
+                    Transaction transaction = TransactionConverter.StringToTransaction(oneObject.toString());
+
+                    viewModel.insertTransaction(transaction);
+
+                } catch (JSONException e) {
+                    // Oops
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
     /**
@@ -969,6 +1077,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             filesSelectorAdapter.setFiles(files);
 
 
+                            filesSelectorAdapter.setOnFileClickListener(new FilesSelectorAdapter.OnFileClickListener() {
+                                @Override
+                                public void onFileClick(int position) {
+                                  File currentFile =   files.get(position);
+                                    fileSelected = true;
+                                    readFile(currentFile.getId());
+
+
+                                }
+                            });
+
+
                             LinearLayoutManager manager = new LinearLayoutManager(MainActivity.this);
                             manager.setOrientation(LinearLayoutManager.VERTICAL);
                             filesListRecyclerView.setLayoutManager(manager);
@@ -1004,7 +1124,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 map.put("wallets",walletsList);
                 map.put("valueItems",viewModel.getAllValueItems());
                 map.put("counterparties",viewModel.getAllCounterparties());
-                map.put("transactions",viewModel.getAllTransactions());
+                map.put("transactions",TransactionConverter.transactionsToArrayList(viewModel.getAllTransactions()));
 
 
 

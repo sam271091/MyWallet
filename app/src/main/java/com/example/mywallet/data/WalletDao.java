@@ -24,7 +24,7 @@ public interface WalletDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertWallets(List<Wallet> wallets);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertWallet(Wallet wallet);
 
     @Update
@@ -52,7 +52,7 @@ public interface WalletDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertValueItems(List<ValueItem> valueItem);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertValueItem(ValueItem valueItem);
 
     @Update
@@ -78,7 +78,7 @@ public interface WalletDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertCounterparties(List<Counterparty> Counterparty);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertCounterparty(Counterparty counterparty);
 
     @Update
@@ -108,7 +108,7 @@ public interface WalletDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertTransactions(List<Transaction> transaction);
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTransaction(Transaction transaction);
 
     @Update
