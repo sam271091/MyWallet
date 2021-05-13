@@ -37,8 +37,18 @@ public class TransactionConverter {
             Type type = com.example.mywallet.converters.TypeConverter.StringToType(jsonObject.get("type").toString());
 
             Wallet wallet = WalletConverter.StringToWallet(jsonObject.get("wallet").toString());
-            ValueItem valueItem = ValueItemConverter.StringToValueItem(jsonObject.get("valueItem").toString());
-            Counterparty counterparty = CounterpartyConverter.StringToCounterparty(jsonObject.get("counterparty").toString());
+
+            ValueItem valueItem = null;
+            if (jsonObject.has("valueItem")){
+                valueItem = ValueItemConverter.StringToValueItem(jsonObject.get("valueItem").toString());
+            }
+
+            Counterparty counterparty  = null;
+            if (jsonObject.has("counterparty")){
+                counterparty = CounterpartyConverter.StringToCounterparty(jsonObject.get("counterparty").toString());
+            }
+
+
 
             Double sum          = Double.valueOf(jsonObject.get("sum").toString());
             Double turnoversum  = Double.valueOf(jsonObject.get("turnoversum").toString());
@@ -69,6 +79,8 @@ public class TransactionConverter {
             map.put("date",DateConverter.dateToTimestamp(transaction.getDate()));
             map.put("type", transaction.getType());
             map.put("wallet",transaction.getWallet());
+
+
             map.put("valueItem", transaction.getValueItem());
             map.put("counterparty", transaction.getCounterparty());
             map.put("sum", (Double) transaction.getSum());
