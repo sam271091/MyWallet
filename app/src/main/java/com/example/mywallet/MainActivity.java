@@ -1176,12 +1176,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-                if (transactions.size() > 0){
+                if (transactions.size() > 0 ){
                     if (!transactions.get(0).getWallet().getId().equals(currwallet.getId())){
                         updateTransactions = false;
                     }
                 }
 
+                if (currentPos != 0){
+                    updateTransactions = false;
+                }
 
                 if (updateTransactions) {
                     adapter.setTransactions(transactions);
