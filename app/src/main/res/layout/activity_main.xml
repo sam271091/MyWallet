@@ -60,6 +60,43 @@
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
 
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tabDateChooser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="@id/guideline6"
+                    app:layout_constraintBottom_toTopOf="@id/RecyclerViewWallets"
+                    tools:layout_editor_absoluteX="10dp">
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/allTransactionsTab"
+                        android:text="@string/all_Transactions_List" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/dayTab"
+                        android:text="@string/transactions_per_day" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/monthTab"
+                        android:text="@string/transactions_per_month" />
+
+                    <com.google.android.material.tabs.TabItem
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/yearTab"
+                        android:text="@string/transactions_per_year" />
+
+                </com.google.android.material.tabs.TabLayout>
+
+
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/RecyclerViewWallets"
                     android:layout_width="0dp"
@@ -68,7 +105,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/guideline6" />
+                    app:layout_constraintTop_toBottomOf="@id/tabDateChooser" />
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/ViewPagerWallets"

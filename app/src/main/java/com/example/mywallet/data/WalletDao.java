@@ -105,6 +105,10 @@ public interface WalletDao {
     @Query("SELECT*FROM  transactions WHERE wallet == :wallet Order by date")
     LiveData<List<Transaction>> getAllTransactionsByWallet(String wallet);
 
+    @Query("SELECT*FROM  transactions WHERE wallet == :wallet and date >= :from AND date <= :to Order by date")
+    LiveData<List<Transaction>> getAllTransactionsByWalletForThePeriod(String wallet, Long from,Long to);
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void InsertTransactions(List<Transaction> transaction);
 

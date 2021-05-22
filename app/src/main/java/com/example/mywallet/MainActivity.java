@@ -33,6 +33,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +42,7 @@ import com.example.mywallet.adapters.TransactionsAdapter;
 import com.example.mywallet.adapters.WalletsAdapter;
 import com.example.mywallet.adapters.WalletsPagerAdapter;
 import com.example.mywallet.converters.CounterpartyConverter;
+import com.example.mywallet.converters.DateConverter;
 import com.example.mywallet.converters.TransactionConverter;
 import com.example.mywallet.converters.ValueItemConverter;
 import com.example.mywallet.converters.WalletConverter;
@@ -62,6 +64,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
 import com.google.api.client.json.gson.GsonFactory;
@@ -133,6 +136,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private boolean fileSelected;
 
+    private TabLayout tabDateChooser;
+
+    private Date currDate;
+
+    private int currentPos;
+
+    private Date startOfTheDay;
+    private Date endOfTheDay;
+
+    private Date startOfTheMonth;
+    private Date endOfTheMonth;
+
+    private Date startOfTheYear;
+    private Date endOfTheYear;
+
+    private Date startOfThePeriod;
+    private Date endOfThePeriod;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,6 +173,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.closeNavDrawer
         );
 
+
+        tabDateChooser = findViewById(R.id.tabDateChooser);
+
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
@@ -167,6 +191,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setTitle(getString(R.string.MainLabel));
 
         calendar = Calendar.getInstance();
+
+        currDate = calendar.getTime();
+
+        startOfTheDay = getStartOfTheDay(currDate);
+
+        endOfTheDay   = getEndOfTheDay(currDate);
+
+        startOfTheMonth = getStartOfTheMonth(currDate);
+
+        endOfTheMonth = getEndOfTheMonth(currDate);
+
+        startOfTheYear = getStartOfTheYear(currDate);
+
+        endOfTheYear  = getEndOfTheYear(currDate);
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -364,6 +402,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         buttonSignIn.setVisibility(View.VISIBLE);
         buttonSignOut.setVisibility(View.GONE);
+
+
+
+        tabDateChooser.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                currentPos = tab.getPosition();
+
+                setTransactionObserver();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
 
     }
 
@@ -802,7 +861,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            String fileName = mFileTitleEditText.getText().toString();
 //            String fileContent = mDocContentEditText.getText().toString();
 
-            Date currDate = calendar.getTime();
+             currDate = calendar.getTime();
 
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             String date = df.format(currDate);
@@ -990,6 +1049,126 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     void setTransactionObserver(){
+       if (currentPos == 0){
+           setTransactionObserver_All();
+       } else   {
+            setTransactionObserver_By_Date();
+        }
+
+
+
+    }
+
+
+    private Date getStartOfTheDay(Date date){
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+
+
+        Date newDate = calendar.getTime();
+
+        return newDate;
+    }
+
+    private Date getEndOfTheDay(Date date){
+
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        return calendar.getTime();
+    }
+
+    private Date getStartOfTheYear(Date date){
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+
+        calendar.set(Calendar.DAY_OF_YEAR, 1);
+
+        Date newDate = calendar.getTime();
+
+        return newDate;
+    }
+
+    private Date getEndOfTheYear(Date date){
+
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_YEAR, calendar.getActualMaximum(Calendar.DAY_OF_YEAR));
+        return calendar.getTime();
+    }
+
+
+    private Date getStartOfTheMonth(Date date){
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.clear(Calendar.MINUTE);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+
+        Date newDate = calendar.getTime();
+
+        return newDate;
+    }
+
+
+    private Date getEndOfTheMonth(Date date){
+
+        calendar.setTime(date);
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return calendar.getTime();
+    }
+
+
+    void setTransactionObserver_By_Date(){
+
+        switch (currentPos){
+            case 1 :
+                startOfThePeriod = startOfTheDay;
+                endOfThePeriod   = endOfTheDay;
+                break;
+            case 2 :
+                startOfThePeriod = startOfTheMonth;
+                endOfThePeriod   = endOfTheMonth;
+                break;
+            case 3 :
+                startOfThePeriod = startOfTheYear;
+                endOfThePeriod   = endOfTheYear;
+                break;
+        }
+
+
+        viewModel.getTransactionsByWalletForThePeriod(WalletConverter.WalletToString(currwallet), DateConverter.dateToTimestamp(startOfThePeriod),DateConverter.dateToTimestamp(endOfThePeriod)).observe(this, new Observer<List<Transaction>>() {
+            @Override
+            public void onChanged(List<Transaction> transactions) {
+                boolean updateTransactions = true;
+
+
+
+                if (transactions.size() > 0){
+                    if (!transactions.get(0).getWallet().getId().equals(currwallet.getId())){
+                        updateTransactions = false;
+                    }
+                }
+
+
+                if (updateTransactions) {
+                    adapter.setTransactions(transactions);
+                    pagerAdapter.setWallets(walletsList);
+//                pagerAdapter.notifyDataSetChanged();
+                }
+
+            }
+        });
+    }
+
+
+    void setTransactionObserver_All(){
         viewModel.getTransactionsByWallet(WalletConverter.WalletToString(currwallet)).observe(this, new Observer<List<Transaction>>() {
             @Override
             public void onChanged(List<Transaction> transactions) {
@@ -1013,6 +1192,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
+
+
 
 
 

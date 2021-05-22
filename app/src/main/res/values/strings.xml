@@ -40,4 +40,8 @@
     <string name="folder_creation_fail">Failed to create folder</string>
     <string name="totalReceipts_Label">Total receipts</string>
     <string name="total_Expenses_Label">Total Expenses</string>
+    <string name="all_Transactions_List">All</string>
+    <string name="transactions_per_day">Day</string>
+    <string name="transactions_per_month">Month</string>
+    <string name="transactions_per_year">Year</string>
 </resources>

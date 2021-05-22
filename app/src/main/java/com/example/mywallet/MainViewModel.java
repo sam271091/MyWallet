@@ -594,6 +594,47 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public LiveData<List<Transaction>> getTransactionsByWalletForThePeriod(String wallet,Long from,Long to){
+        getTransactionsByWalletForThePeriodTask classObject = new getTransactionsByWalletForThePeriodTask();
+        classObject.setWallet(wallet);
+        classObject.setFrom(from);
+        classObject.setTo(to);
+
+        try {
+            return classObject.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    private static class getTransactionsByWalletForThePeriodTask extends AsyncTask<Void,Void,LiveData<List<Transaction>>>{
+        private String wallet;
+        private Long from;
+        private Long to;
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
+        }
+
+        public void setFrom(Long from) {
+            this.from = from;
+        }
+
+        public void setTo(Long to) {
+            this.to = to;
+        }
+
+        @Override
+        protected LiveData<List<Transaction>> doInBackground(Void... voids) {
+            return database.walletDao().getAllTransactionsByWalletForThePeriod(wallet,from,to);
+        }
+    }
+
+
     private static class getAllTransactionsTask extends AsyncTask<Void,Void,List<Transaction>>{
         @Override
         protected List<Transaction> doInBackground(Void... voids) {
