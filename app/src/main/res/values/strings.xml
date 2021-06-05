@@ -44,4 +44,6 @@
     <string name="transactions_per_day">Day</string>
     <string name="transactions_per_month">Month</string>
     <string name="transactions_per_year">Year</string>
+    <string name="get_started">Get started</string>
+    <string name="label_skip">Skip</string>
 </resources>

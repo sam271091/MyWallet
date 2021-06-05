@@ -16,5 +16,12 @@
     <color name="background_color">#f5f5f5</color>
     <color name="centerColor">#D02F49</color>
     <color name="endColor">#9B27B6</color>
+    
+    <color name="custom_color_primary">#643AE7</color>
+    <color name="custom_color_secondary">#FF8F00</color>
+    <color name="custom_color_secondary_light">#FFD299</color>
+    <color name="custom_color_background">#FFFFFF</color>
+    <color name="custom_color_text_primary">#060906</color>
+    <color name="custom_color_text_secondary">#464747</color>
 
 </resources>

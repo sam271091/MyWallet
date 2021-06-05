@@ -173,6 +173,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.closeNavDrawer
         );
 
+        Intent intent = new Intent(this,walkthrough_screen_activity.class);
+
+        startActivity(intent);
 
         tabDateChooser = findViewById(R.id.tabDateChooser);
 
