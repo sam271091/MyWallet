@@ -37,6 +37,18 @@ public class MainViewModel extends AndroidViewModel  {
 
 
     //Wallets
+
+    public List<Wallet> getListOfWallets(){
+        try {
+            return new getWalletsTask().execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public LiveData<List<Wallet>> getWallets() {
         return wallets;
     }
@@ -190,6 +202,14 @@ public class MainViewModel extends AndroidViewModel  {
         }
 
         return null;
+    }
+
+
+    private static class getWalletsTask extends AsyncTask<Void,Void,List<Wallet>>{
+        @Override
+        protected List<Wallet> doInBackground(Void... voids) {
+            return database.walletDao().getWallets();
+        }
     }
 
 

@@ -18,6 +18,11 @@ import androidx.room.Update;
 
 @Dao
 public interface WalletDao {
+
+    @Query("SELECT * FROM wallets")
+   List<Wallet> getWallets();
+
+
     @Query("SELECT * FROM wallets")
     LiveData<List<Wallet>> getAllWallets();
 

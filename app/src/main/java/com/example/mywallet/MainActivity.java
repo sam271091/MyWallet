@@ -173,9 +173,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 R.string.closeNavDrawer
         );
 
-        Intent intent = new Intent(this,walkthrough_screen_activity.class);
 
-        startActivity(intent);
+
+
+
+//        startActivity(intent);
 
         tabDateChooser = findViewById(R.id.tabDateChooser);
 
@@ -211,16 +213,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        signIn();
-//        Intent intent = new Intent(this, SplashActivity.class);
-//        startActivity(intent);
+        String currUserEmail = preferences.getString("UserEmail","");
 
-//        requestSignIn();
+        if ( currUserEmail != ""){
+            signIn();
+        }
+
+
 
 
         walletsList = new ArrayList<>();
 
         viewModel = new ViewModelProvider(this,ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(MainViewModel.class);
+
+
+
 
 
         walletViewPager = findViewById(R.id.ViewPagerWallets);
@@ -238,26 +245,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 walletsList .addAll(wallets);
                 int pagerPosition = walletViewPager.getCurrentItem();
 
-//                Gson gson = new Gson();
-//                String json = gson.toJson(walletsList);
 //
-//
-//                fileContents = json;
-//
-//                generateData("MyWalletdata.json",json);
 
 
                 setCurrentWallet(pagerPosition);
 
-//                if (currwallet == null){
-//                    setCurrentWallet(0);
-//                } else {
-//                    setCurrentWallet();
-//                }
+//
 
 
             }
         });
+
+
+
+        if (viewModel.getListOfWallets().size() == 0){
+            Intent intent = new Intent(this,walkthrough_screen_activity.class);
+            startActivityForResult(intent,100);
+        }
 
 
 
@@ -272,15 +276,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-//        adapter.setOnWalletDeleteClickListener(new WalletsAdapter.OnWalletDeleteClickListener() {
-//            @Override
-//            public void OnWalletDeleteClick(final int position) {
-//
-//
-//
-//
-//            }
-//        });
+
 
 
         pagerAdapter.setOnWalletClickListener(new WalletsPagerAdapter.OnWalletClickListener() {
@@ -453,16 +449,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         requestSignIn();
     }
 
-    private GoogleSignInClient buildGoogleSignInClient() {
-//        GoogleSignInOptions signInOptions =
-//                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                        .requestScopes(Drive.SCOPE_FILE)
-//                        .requestEmail()
-//                        .build();
-//        return GoogleSignIn.getClient(this, signInOptions);
 
-        return null;
-    }
 
 
     private void setUserInfo(){
@@ -470,38 +457,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         UserEmail.setText("");
         imageView_UserPhoto.setImageResource(R.drawable.user_image);
 //
-//                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
-
-
-
-//        if (mDriveClient != null){
-//            if (GoogleSignIn.getLastSignedInAccount(this) != null){
-//                UserName.setText(GoogleSignIn.getLastSignedInAccount(this).getDisplayName().toString());
 //
-//                buttonSignIn.setVisibility(View.GONE);
-//                buttonSignOut.setVisibility(View.VISIBLE);
-//
-//                if (GoogleSignIn.getLastSignedInAccount(this).getEmail() != null){
-//                    UserEmail.setText(GoogleSignIn.getLastSignedInAccount(this).getEmail().toString());
-//                }
-//
-//                if (GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl() != null){
-//                    Picasso.get().load(GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl()).into(imageView_UserPhoto);
-//                }
-//
-//            }
-//
-//        }
 
         if (currentGoogleAccount != null){
             if (GoogleSignIn.getLastSignedInAccount(this) != null){
                 UserName.setText(currentGoogleAccount.getDisplayName().toString());
+
+
 
                 buttonSignIn.setVisibility(View.GONE);
                 buttonSignOut.setVisibility(View.VISIBLE);
 
                 if (GoogleSignIn.getLastSignedInAccount(this).getEmail() != null){
                     UserEmail.setText(currentGoogleAccount.getEmail().toString());
+                    preferences.edit().putString("UserEmail",currentGoogleAccount.getEmail().toString()).apply();
                 }
 
                 if (GoogleSignIn.getLastSignedInAccount(this).getPhotoUrl() != null){
@@ -520,52 +489,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         switch (requestCode) {
             case REQUEST_CODE_SIGN_IN:
-//                Log.i(TAG, "Sign in request code");
-                // Called after user is signed in.
+
                 if (resultCode == RESULT_OK && data != null ) {
-////                    Log.i(TAG, "Signed in successfully.");
-//                    // Use the last signed in account here since it already have a Drive scope.
-//                    mDriveClient = Drive.getDriveClient(this, GoogleSignIn.getLastSignedInAccount(this));
-//                    // Build a drive resource client.
-//                    mDriveResourceClient =
-//                            Drive.getDriveResourceClient(this, GoogleSignIn.getLastSignedInAccount(this));
-////                    // Start camera.
-////                    startActivityForResult(
-////                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
+
 
                     handleSignInResult(data);
 
-                  setUserInfo();
+                    setUserInfo();
 
 
 
 
-//                    preferences.edit().putString("mDriveClient",mDriveClient.toString()).apply();
+
 
                 }
                 break;
-//            case REQUEST_CODE_CREATOR:
-//                Log.i(TAG, "creator request code");
-//                // Called after a file is saved to Drive.
-//                if (resultCode == RESULT_OK) {
-//                    Log.i(TAG, "Image successfully saved.");
-//                    mBitmapToSave = null;
-//                    // Just start the camera again for another photo.
-//                    startActivityForResult(
-//                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
-//                }
-//                break;
-//            case REQUEST_CODE_CREATOR:
-//                Log.i(TAG, "creator request code");
-//                // Called after a file is saved to Drive.
-//                if (resultCode == RESULT_OK) {
-//                    Log.i(TAG, "Image successfully saved.");
-//                    mBitmapToSave = null;
-//                    // Just start the camera again for another photo.
-//                    startActivityForResult(
-//                            new Intent(MediaStore.ACTION_IMAGE_CAPTURE), REQUEST_CODE_CAPTURE_IMAGE);
-//                }
-//                break;
+            case 100:
+                if (resultCode == RESULT_OK){
+                    signIn();
+                }
+
+                break;
+//
         }
     }
 
@@ -603,16 +548,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    private void openFilePicker() {
-        if (mDriveServiceHelper != null) {
-//            Log.d(TAG, "Opening file picker.");
 
-            Intent pickerIntent = mDriveServiceHelper.createFilePickerIntent();
-
-            // The result of the SAF Intent is handled in onActivityResult.
-            startActivityForResult(pickerIntent, REQUEST_CODE_OPEN_DOCUMENT);
-        }
-    }
 
 
 
@@ -683,13 +619,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (GoogleSignIn.getLastSignedInAccount(this) != null) {
             findFolder();
 
-//            if (folderId==null){
-//                createFolder();
-//            }
-//
-//            if (folderId!= null) {
-//                createFile();
-//            }
+
 
         }
 
@@ -717,15 +647,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Toast.makeText(this, "Couldn't create file.", Toast.LENGTH_SHORT).show());
         }
 
-//            mDriveServiceHelper.createFolder()
-//                    .addOnSuccessListener(new OnSuccessListener<String>() {
-//                        @Override
-//                        public void onSuccess(String s) {
-//
-//                    });
 
-
-//        }
     }
 
 
@@ -741,8 +663,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         String name = nameAndContent.first;
                         String content = nameAndContent.second;
 
-//                        mFileTitleEditText.setText(name);
-//                        mDocContentEditText.setText(content);
+
 
                        if (fileSelected != true){
                            setReadWriteMode(fileId);
@@ -891,83 +812,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mOpenFileId = fileId;
     }
 
-    private void saveFileToDriveDialog(String fileName,String sBody){
-        Task<DriveContents> createContentsTask = mDriveResourceClient.createContents();
-        createContentsTask
-                .continueWithTask(task -> {
-                    DriveContents contents = task.getResult();
-                    OutputStream outputStream = contents.getOutputStream();
-                    try (Writer writer = new OutputStreamWriter(outputStream)) {
-                        writer.write(sBody);
-                    }
 
-                    MetadataChangeSet changeSet = new MetadataChangeSet.Builder()
-                            .setTitle(fileName)
-                            .setMimeType("text/json")
-                            .setStarred(true)
-                            .build();
 
-                    CreateFileActivityOptions createOptions =
-                            new CreateFileActivityOptions.Builder()
-                                    .setInitialDriveContents(contents)
-                                    .setInitialMetadata(changeSet)
-                                    .build();
-                    return mDriveClient.newCreateFileActivityIntentSender(createOptions);
-                })
-                .addOnSuccessListener(this,
-                        intentSender -> {
-                            try {
-                                startIntentSenderForResult(
-                                        intentSender, 2, null, 0, 0, 0);
-                            } catch (IntentSender.SendIntentException e) {
-//                                Log.e(TAG, "Unable to create file", e);
-//                                showMessage(getString(R.string.file_create_error));
-                                finish();
-                            }
-                        })
-                .addOnFailureListener(this, e -> {
-//                    Log.e(TAG, "Unable to create file", e);
-//                    showMessage(getString(R.string.file_create_error));
-                    finish();
-                });
-    }
 
-    private Task<Void> createFileIntentSender(DriveContents driveContents, OutputStreamWriter outputStream) {
-//        Log.i(TAG, "New contents created.");
-        // Get an output stream for the contents.
-//        OutputStream outputStream = driveContents.getOutputStream();
-        // Write the bitmap data from it.
-//        ByteArrayOutputStream bitmapStream = new ByteArrayOutputStream();
-//        image.compress(Bitmap.CompressFormat.PNG, 100, bitmapStream);
-
-//        try {
-//            outputStream.write(File);
-//        } catch (IOException e) {
-////            Log.w(TAG, "Unable to write file contents.", e);
-//        }
-
-        // Create the initial metadata - MIME type and title.
-        // Note that the user will be able to change the title later.
-        MetadataChangeSet metadataChangeSet =
-                new MetadataChangeSet.Builder()
-                        .setMimeType("text/plain")
-                        .setTitle("MyWalletData.json")
-                        .build();
-        // Set up options to configure and display the create file activity.
-        CreateFileActivityOptions createFileActivityOptions =
-                new CreateFileActivityOptions.Builder()
-                        .setInitialMetadata(metadataChangeSet)
-                        .setInitialDriveContents(driveContents)
-                        .build();
-
-        return mDriveClient
-                .newCreateFileActivityIntentSender(createFileActivityOptions)
-                .continueWith(
-                        task -> {
-                            startIntentSenderForResult(task.getResult(), REQUEST_CODE_CREATOR, null, 0, 0, 0);
-                            return null;
-                        });
-    }
 
     public void generateData( String sFileName, String sBody) {
 //        try {
