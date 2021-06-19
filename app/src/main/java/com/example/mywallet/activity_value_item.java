@@ -41,6 +41,8 @@ public class activity_value_item extends AppCompatActivity {
 
         imageViewPicture = findViewById(R.id.imageViewPictureId);
 
+
+
         Intent intent = getIntent();
         if (intent.hasExtra("curr_valueItem")){
             currValueItem = (ValueItem) intent.getSerializableExtra("curr_valueItem");
@@ -79,6 +81,7 @@ public class activity_value_item extends AppCompatActivity {
         if (picStringID != null){
             int pictureId = getResources().getIdentifier(picStringID.toString(),null,null);
             imageViewPicture.setImageResource(pictureId);
+            pictureStringID = picStringID;
         }
 
     }
