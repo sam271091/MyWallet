@@ -19,23 +19,34 @@ public class ValueItem implements Serializable {
     private UUID id;
     private String name;
     private String comment;
+    private String pictureID;
 
     public ValueItem() {
         this.id = UUID.randomUUID();
     }
 
     @Ignore
-    public ValueItem(UUID id, String name, String comment) {
+    public ValueItem(UUID id, String name, String comment,String pictureID) {
         this.id = id;
         this.name = name;
         this.comment = comment;
+        this.pictureID = pictureID;
     }
 
     @Ignore
-    public ValueItem(String name, String comment) {
+    public ValueItem(String name, String comment,String pictureID) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.comment = comment;
+        this.pictureID = pictureID;
+    }
+
+    public String getPictureID() {
+        return pictureID;
+    }
+
+    public void setPictureID(String pictureID) {
+        this.pictureID = pictureID;
     }
 
     public UUID getId() {

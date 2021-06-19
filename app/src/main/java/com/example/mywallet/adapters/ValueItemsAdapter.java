@@ -3,6 +3,7 @@ package com.example.mywallet.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mywallet.R;
@@ -47,6 +48,12 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
         ValueItem valueItem = valueItems.get(position);
         holder.textViewValueItemName.setText(valueItem.getName());
 
+        if (valueItem.getPictureID() != null){
+            int id = holder.imageView_PictureVI.getResources().getIdentifier(valueItem.getPictureID(),null,null);
+            holder.imageView_PictureVI.setImageResource(id);
+        }
+
+
     }
 
     @Override
@@ -56,9 +63,11 @@ public class ValueItemsAdapter extends RecyclerView.Adapter<ValueItemsAdapter.Va
 
     class ValueItemViewHolder extends RecyclerView.ViewHolder{
        TextView textViewValueItemName;
+       ImageView imageView_PictureVI;
        public ValueItemViewHolder(@NonNull View itemView) {
            super(itemView);
            textViewValueItemName = itemView.findViewById(R.id.textViewListDate);
+           imageView_PictureVI   = itemView.findViewById(R.id.imageView_PictureVI);
            itemView.setOnClickListener(new View.OnClickListener() {
                @Override
                public void onClick(View view) {
