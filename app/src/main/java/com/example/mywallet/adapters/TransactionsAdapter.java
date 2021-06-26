@@ -79,9 +79,12 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
         if (valueItem != null){
             holder.textViewListValueItem.setText(valueItem.getName());
+
         } else {
             holder.textViewListValueItem.setText("-");
         }
+
+        holder.fillValueItemPicture(valueItem);
 
         holder.textViewListSum.setText(Double.toString(transaction.getSum()));
 
@@ -95,6 +98,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 
     }
 
+
     @Override
     public int getItemCount() {
         return transactions.size();
@@ -106,6 +110,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
         TextView textViewListValueItem;
         TextView textViewListSum;
         ImageView imageViewListType;
+        ImageView valueItemPictureList;
 //        Button buttonDelete;
 
         public TransactionViewHolder(@NonNull View itemView) {
@@ -115,6 +120,7 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
             textViewListValueItem = itemView.findViewById(R.id.textViewListValueItem);
             textViewListSum = itemView.findViewById(R.id.textViewListSum);
             imageViewListType = itemView.findViewById(R.id.imageViewListType);
+            valueItemPictureList = itemView.findViewById(R.id.valueItemPictureList);
 //            buttonDelete = itemView.findViewById(R.id.buttonDelete);
 
 
@@ -137,6 +143,22 @@ public class TransactionsAdapter extends RecyclerView.Adapter<TransactionsAdapte
 //                   }
 //                }
 //            });
+        }
+
+
+        void fillValueItemPicture(ValueItem valueItem){
+            if (valueItem != null){
+                String picStringID = valueItem.getPictureID();
+
+                if (picStringID != null){
+                    int pictureId = valueItemPictureList.getResources().getIdentifier(picStringID.toString(),null,null);
+                    valueItemPictureList.setImageResource(pictureId);
+                }
+            } else {
+                valueItemPictureList.setImageResource(0);
+            }
+
+
         }
     }
 

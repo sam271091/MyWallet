@@ -27,9 +27,29 @@ public class activity_picture_chooser extends AppCompatActivity {
 
 
         picturesArray = new ArrayList();
-        picturesArray.add(getResources().getResourceName(R.drawable.add));
-        picturesArray.add(getResources().getResourceName(R.drawable.analytics));
-        picturesArray.add(getResources().getResourceName(R.drawable.download_24));
+//        picturesArray.add(getResources().getResourceName(R.drawable.add));
+//        picturesArray.add(getResources().getResourceName(R.drawable.analytics));
+//        picturesArray.add(getResources().getResourceName(R.drawable.download_24));
+        picturesArray.add(getResources().getResourceName(R.drawable.products_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.internetprovider_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.tv_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.water_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.gas_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.central_heating_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.mobile_phone_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.work_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.system_info_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.sports_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.netflix_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.music_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.car_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.taxi_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.birthday_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.christmas_tree_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.friends_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.colleagues_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.income_48));
+        picturesArray.add(getResources().getResourceName(R.drawable.tax_48));
 
         adapter = new PicturesAdapter(picturesArray);
 

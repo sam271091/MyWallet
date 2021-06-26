@@ -27,6 +27,7 @@ public class transaction_item extends AppCompatActivity {
     private MainViewModel viewModel;
     private Wallet wallet;
     private ImageView imageViewType;
+    private ImageView valueItemPic;
     private Type type;
     private TextView textViewDate;
     private TextView textViewWallet;
@@ -73,6 +74,8 @@ public class transaction_item extends AppCompatActivity {
         textViewCounterparty = findViewById(R.id.textViewCounterparty);
         editTextSum = findViewById(R.id.editTextSum);
         editTextComment = findViewById(R.id.editTextComment);
+
+        valueItemPic = findViewById(R.id.valueItemPic);
 
         Intent intent = getIntent();
         if (intent.hasExtra("wallet")){
@@ -170,6 +173,8 @@ public class transaction_item extends AppCompatActivity {
 
         setDateValues();
 
+        fillValueItemPicture();
+
         textViewWallet.setText(wallet.getName().toString());
 
         if (type == Type.receipt){
@@ -192,6 +197,21 @@ public class transaction_item extends AppCompatActivity {
 
     }
 
+    void fillValueItemPicture(){
+        if (valueItem != null){
+            String picStringID = valueItem.getPictureID();
+
+            if (picStringID != null){
+                int pictureId = getResources().getIdentifier(picStringID.toString(),null,null);
+                valueItemPic.setImageResource(pictureId);
+            }
+        } else {
+            valueItemPic.setImageResource(0);
+        }
+
+
+    }
+
     void setDateValues(){
         calendar.setTime(date);
 
@@ -208,6 +228,7 @@ public class transaction_item extends AppCompatActivity {
         if (data != null && data.hasExtra("valueItem" ) && requestCode == 1) {
             valueItem = (ValueItem) data.getSerializableExtra("valueItem");
             textViewValueItem.setText(valueItem.getName().toString());
+            fillValueItemPicture();
         } else if (data != null && data.hasExtra("counterparty" ) && requestCode == 2){
             counterparty = (Counterparty) data.getSerializableExtra("counterparty");
             textViewCounterparty.setText(counterparty.getName().toString());
@@ -259,6 +280,7 @@ public class transaction_item extends AppCompatActivity {
         comment = savedInstanceState.getString("comment");
         if (valueItem != null) {
             textViewValueItem.setText(valueItem.getName());
+            fillValueItemPicture();
         }
 
         if (counterparty != null){
@@ -358,6 +380,7 @@ public class transaction_item extends AppCompatActivity {
 
     public void onClickDeleteValueItem(View view) {
         valueItem = null;
+        fillValueItemPicture();
         textViewValueItem.setText("");
     }
 
