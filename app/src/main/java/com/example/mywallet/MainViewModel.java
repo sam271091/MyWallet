@@ -655,6 +655,62 @@ public class MainViewModel extends AndroidViewModel  {
     }
 
 
+    public List<Transaction> getAllTransactionsByWalletAndValueItemAndTypeForThePeriod(String wallet,String valueItem,String type,Long from,Long to){
+        getAllTransactionsByWalletAndValueItemAndTypeForThePeriodTask classObject = new getAllTransactionsByWalletAndValueItemAndTypeForThePeriodTask();
+        classObject.setWallet(wallet);
+        classObject.setValueItem(valueItem);
+        classObject.setFrom(from);
+        classObject.setTo(to);
+        classObject.setType(type);
+
+        try {
+            return classObject.execute().get();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+    private static class getAllTransactionsByWalletAndValueItemAndTypeForThePeriodTask extends AsyncTask<Void,Void,List<Transaction>>{
+        private String wallet;
+        private String valueItem;
+        private String type;
+        private Long from;
+        private Long to;
+
+        public void setWallet(String wallet) {
+            this.wallet = wallet;
+        }
+
+        public void setValueItem(String valueItem) {
+            this.valueItem = valueItem;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public void setFrom(Long from) {
+            this.from = from;
+        }
+
+        public void setTo(Long to) {
+            this.to = to;
+        }
+
+        @Override
+        protected List<Transaction> doInBackground(Void... voids) {
+            return database.walletDao().getAllTransactionsByWalletAndValueItemAndTypeForThePeriod(wallet,valueItem,type,from,to);
+        }
+    }
+
+
+
+
     private static class getAllTransactionsTask extends AsyncTask<Void,Void,List<Transaction>>{
         @Override
         protected List<Transaction> doInBackground(Void... voids) {

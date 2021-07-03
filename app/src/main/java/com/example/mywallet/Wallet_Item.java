@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -62,6 +63,10 @@ public class Wallet_Item extends AppCompatActivity {
             }
 
             textViewCurrentBalance_Wallet.setText(getString(R.string.label_current_balance) + " :"+ Double.toString(currentBalance));
+
+            if (currentBalance<0){
+                textViewCurrentBalance_Wallet.setTextColor(getResources().getColor(R.color.Red));
+            }
 
             textViewTotalReceipts.setText(getString(R.string.totalReceipts_Label) + " :"+ Double.toString(totalReceipts));
 

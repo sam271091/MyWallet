@@ -173,4 +173,8 @@ public interface WalletDao {
 
     @Query("UPDATE transactions SET counterparty = :newCounterparty WHERE counterparty == :counterparty")
     void updateTransactionsByCounterparty(String counterparty,String newCounterparty);
+
+
+ @Query("SELECT*FROM  transactions WHERE wallet == :wallet and valueItem == :valueItem and type == :type and date >= :from AND date <= :to Order by date")
+ List<Transaction> getAllTransactionsByWalletAndValueItemAndTypeForThePeriod(String wallet,String valueItem, String type,Long from,Long to);
 }

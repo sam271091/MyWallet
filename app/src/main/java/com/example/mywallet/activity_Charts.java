@@ -341,6 +341,8 @@ public class activity_Charts extends AppCompatActivity {
 //
         List<String[]> list = new ArrayList<>();
 
+        List<ValueItem> valueItemslist = new ArrayList<>();
+
 
 
         for ( Transaction transactionVi : transactionsVI){
@@ -353,13 +355,21 @@ public class activity_Charts extends AppCompatActivity {
                    records[0] =  transactionVi.getValueItem().getName();
                }
 
+            valueItemslist.add(transactionVi.getValueItem());
+
                records[1] = Double.toString(transactionVi.getSum());
             list.add(records);
 
 
         }
 
+        fragmentsPagerAdapter.setViewModel(viewModel);
+        fragmentsPagerAdapter.setStartOfThePeriod(dateOfReport);
+        fragmentsPagerAdapter.setEndOfThePeriod(getEndOfTheMonth(dateOfReport));
+        fragmentsPagerAdapter.setType(type);
         fragmentsPagerAdapter.setTableData(list);
+        fragmentsPagerAdapter.setValueItems(valueItemslist);
+        fragmentsPagerAdapter.setWallet(wallet);
 //
     }
 
