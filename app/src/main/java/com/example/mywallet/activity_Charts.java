@@ -116,23 +116,41 @@ public class activity_Charts extends AppCompatActivity {
                 super.onPageSelected(position);
                 currentPos = position;
 
+
                 tabLayoutFragmentChooser.selectTab(tabLayoutFragmentChooser.getTabAt(currentPos));
                 createChart();
+//                chartsViewPager.endFakeDrag();
             }
         });
+
+
+
+
+
+
+
 
 
        tabLayoutFragmentChooser.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
            @Override
            public void onTabSelected(TabLayout.Tab tab) {
                currentPos = tab.getPosition();
+//               chartsViewPager.endFakeDrag();
                chartsViewPager.setCurrentItem(currentPos);
+//               chartsViewPager.fakeDragBy(currentPos);
+
+//               int offset = (int) (3/100)*currentPos;
+//               int dragBy = -1*(offset-currentPos);
+
+//               chartsViewPager.beginFakeDrag();
+//               chartsViewPager.fakeDragBy(50); //offset in pixels.
+//               chartsViewPager.endFakeDrag();
 
            }
 
            @Override
            public void onTabUnselected(TabLayout.Tab tab) {
-
+//               createChart();
            }
 
            @Override

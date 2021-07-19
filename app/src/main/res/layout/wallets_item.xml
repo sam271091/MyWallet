@@ -13,7 +13,8 @@
         android:background="@drawable/rounded_corners"
 
         android:layout_marginTop="15dp"
-        android:elevation="6dp">
+        android:elevation="6dp"
+        >
 
         <Button
             android:id="@+id/buttonDelete"

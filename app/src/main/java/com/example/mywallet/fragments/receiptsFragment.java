@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mywallet.R;
+import com.example.mywallet.adapters.FragmentsPagerAdapter;
+import com.github.mikephil.charting.charts.PieChart;
 
 
 public class receiptsFragment extends Fragment {
@@ -51,6 +53,9 @@ public class receiptsFragment extends Fragment {
                              Bundle savedInstanceState) {
         setRetainInstance(true);
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_receipts, container, false);
+        View view = inflater.inflate(R.layout.fragment_receipts, container, false);
+
+
+        return view;
     }
 }

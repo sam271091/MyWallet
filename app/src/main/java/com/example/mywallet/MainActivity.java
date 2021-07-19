@@ -2,6 +2,7 @@ package com.example.mywallet;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,15 +19,19 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -272,6 +277,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void OnTransactionClick(int position) {
                 List<Transaction> transactions = adapter.getTransactions();
                 Transaction currtransaction = transactions.get(position);
+
+
+
+
                 OpenTransaction(currtransaction);
             }
         });
@@ -863,6 +872,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void openWallet(Wallet wallet){
         Intent intent = new Intent(this,Wallet_Item.class);
         intent.putExtra("wallet",wallet);
+
         startActivity(intent);
     }
 
@@ -1069,10 +1079,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+
     void OpenTransaction(Transaction currTransaction){
         Intent intent = new Intent(this,transaction_item.class);
         intent.putExtra("currTransaction",currTransaction);
-        startActivity(intent);
+
+        ActivityOptions options = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            options = ActivityOptions.makeSceneTransitionAnimation(this
+                    ,new Pair<View,String>(findViewById(R.id.imageViewListType),"imageViewListType"));
+        }
+
+        if (options != null){
+            startActivity(intent,options.toBundle());
+        } else {
+            startActivity(intent);
+        }
     }
 
 

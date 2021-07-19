@@ -77,7 +77,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
         super.onBindViewHolder(holder, position, payloads);
 
         if (position == 0 || position == 1){
-            PieChart pieChart = holder.itemView.findViewById(R.id.pieChart);
+            PieChart pieChart = (PieChart) holder.itemView.findViewById(R.id.pieChart);
 
             if (pieChart != null){
                 createPieChart(pieChart);
@@ -102,7 +102,10 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         if (position == 0 || position == 1){
-            return new receiptsFragment();
+
+            receiptsFragment fragment = new receiptsFragment();
+
+            return fragment;
         } else if (position == 2){
             return new BarChartFragment();
         } else  return null;
