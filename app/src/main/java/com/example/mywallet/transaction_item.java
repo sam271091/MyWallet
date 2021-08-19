@@ -3,11 +3,13 @@ package com.example.mywallet;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.text.Editable;
@@ -203,10 +205,16 @@ public class transaction_item extends AppCompatActivity {
 
             if (picStringID != null){
                 int pictureId = getResources().getIdentifier(picStringID.toString(),null,null);
-                valueItemPic.setImageResource(pictureId);
+                Drawable img = ContextCompat.getDrawable(this,pictureId);
+                img.setBounds(0,0,70,70);
+
+
+//                valueItemPic.setImageResource(pictureId);
+                textViewValueItem.setCompoundDrawables(img,null,null,null);
             }
         } else {
             valueItemPic.setImageResource(0);
+            textViewValueItem.setCompoundDrawables(null,null,null,null);
         }
 
 
