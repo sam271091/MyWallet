@@ -961,7 +961,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_YEAR, calendar.getActualMaximum(Calendar.DAY_OF_YEAR));
-        return calendar.getTime();
+        return getEndOfTheDay(calendar.getTime());
     }
 
 
@@ -984,7 +984,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return calendar.getTime();
+        return getEndOfTheDay(calendar.getTime());
     }
 
 
