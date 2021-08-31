@@ -411,9 +411,19 @@ public class activity_Charts extends AppCompatActivity {
 
         calendar.setTime(date);
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        return calendar.getTime();
+        return getEndOfTheDay(calendar.getTime());
     }
 
+    private Date getEndOfTheDay(Date date){
+
+        calendar.setTime(date);
+        calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+
+        return calendar.getTime();
+    }
 
     private void setDatePresentation(){
         DateFormat df = new SimpleDateFormat("LLLL yyyy");

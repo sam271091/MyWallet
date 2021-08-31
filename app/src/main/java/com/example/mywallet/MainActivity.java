@@ -937,6 +937,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         calendar.setTime(date);
         calendar.set(Calendar.DATE, calendar.getActualMaximum(Calendar.DATE));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
         return calendar.getTime();
     }
 
