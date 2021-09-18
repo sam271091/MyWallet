@@ -21,18 +21,16 @@
         tools:layout_editor_absoluteX="10dp">
 
 
-
-
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButtonPrev"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_height="match_parent"
             android:backgroundTint="@color/colorWhite"
+            android:clickable="true"
             android:onClick="onClickPrev"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+
             app:srcCompat="@drawable/prev" />
 
         <TextView
@@ -46,16 +44,15 @@
             android:textStyle="bold"/>
 
 
-
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButtonNext"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
+            android:layout_height="match_parent"
             android:backgroundTint="@color/colorWhite"
+            android:clickable="true"
             android:onClick="onClickNext"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/next" />
 
     </LinearLayout>
@@ -91,6 +88,7 @@
         android:id="@+id/chartsViewPager"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintBottom_toTopOf="@+id/tabLayoutFragmentChooser"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.526"

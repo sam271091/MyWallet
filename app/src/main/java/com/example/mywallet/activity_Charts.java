@@ -146,6 +146,7 @@ public class activity_Charts extends AppCompatActivity {
 //               chartsViewPager.fakeDragBy(50); //offset in pixels.
 //               chartsViewPager.endFakeDrag();
 
+               createChart();
            }
 
            @Override

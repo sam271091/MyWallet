@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Date startOfThePeriod;
     private Date endOfThePeriod;
 
+    private BottomSheetDialog bottomSheetDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -691,6 +693,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     private void readFileContents(String content){
+        Boolean downloadSuccessful = false;
         //Wallets
         try {
             JSONObject jObject = new JSONObject(content);
@@ -704,12 +707,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     viewModel.insertWallet(wallet);
 
+                    downloadSuccessful = true;
+
                 } catch (JSONException e) {
+                    downloadSuccessful = false;
                     // Oops
                 }
             }
 
         } catch (JSONException e) {
+            downloadSuccessful = false;
             e.printStackTrace();
         }
 
@@ -727,8 +734,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     viewModel.insertValueItem(valueItem);
 
+                    downloadSuccessful = true;
+
                 } catch (JSONException e) {
-                    // Oops
+                    downloadSuccessful = false;
                 }
             }
 
@@ -749,12 +758,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     viewModel.insertCounterparty(counterparty);
 
+                    downloadSuccessful = true;
+
                 } catch (JSONException e) {
-                    // Oops
+                    downloadSuccessful = false;
                 }
             }
 
         } catch (JSONException e) {
+            downloadSuccessful = false;
             e.printStackTrace();
         }
 
@@ -772,13 +784,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     viewModel.insertTransaction(transaction);
 
+                    downloadSuccessful = true;
+
                 } catch (JSONException e) {
-                    // Oops
+                    downloadSuccessful = false;
                 }
             }
 
         } catch (JSONException e) {
+            downloadSuccessful = false;
             e.printStackTrace();
+        }
+
+        if (downloadSuccessful){
+            Toast.makeText(this, R.string.DownloadSuccess, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.DownloadError, Toast.LENGTH_SHORT).show();
+        }
+
+        if (bottomSheetDialog.isShowing()) {
+            bottomSheetDialog.hide();
         }
 
     }
@@ -1121,7 +1146,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onSuccess(ArrayList<File> files) {
 
-                            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(
+                             bottomSheetDialog = new BottomSheetDialog(
                                     MainActivity.this,R.style.BottomSheetDialogTheme);
 
                             View bottomSheetView = LayoutInflater.from(getApplicationContext())

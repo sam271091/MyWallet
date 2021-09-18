@@ -8,6 +8,7 @@ import android.view.View;
 import com.example.mywallet.MainActivity;
 import com.example.mywallet.MainViewModel;
 import com.example.mywallet.R;
+import com.example.mywallet.ReportsGenerator;
 import com.example.mywallet.Transaction;
 import com.example.mywallet.Type;
 import com.example.mywallet.ValueItem;
@@ -58,6 +59,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
     private Type type;
     private MainViewModel viewModel;
     private BottomSheetDialog bottomSheetDialog;
+    private ReportsGenerator reportsGenerator;
 
 
 
@@ -65,6 +67,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
         super(fragmentActivity);
         pieData = new PieData();
         barData = new BarData();
+        reportsGenerator = new ReportsGenerator();
         this.numOfTabs = numOfTabs;
 
 
@@ -104,10 +107,22 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
         if (position == 0 || position == 1){
 
             receiptsFragment fragment = new receiptsFragment();
+            fragment.setReportsGenerator(reportsGenerator);
+            fragment.setEndOfThePeriod(endOfThePeriod);
+            fragment.setStartOfThePeriod(startOfThePeriod);
+            fragment.setWallet(wallet);
+            fragment.setValueItems(valueItems);
+            fragment.setType(type);
+            fragment.setViewModel(viewModel);
+            fragment.setTableData(tableData);
+            fragment.setPieData(pieData);
 
             return fragment;
         } else if (position == 2){
-            return new BarChartFragment();
+            BarChartFragment fragment = new BarChartFragment();
+            fragment.setBarData(barData);
+            fragment.setReportsGenerator(reportsGenerator);
+            return fragment;
         } else  return null;
 
     }
@@ -156,90 +171,100 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
     }
 
     private void createPieChart(PieChart pieChart){
+        reportsGenerator.setEndOfThePeriod(endOfThePeriod);
+        reportsGenerator.setStartOfThePeriod(startOfThePeriod);
+        reportsGenerator.setWallet(wallet);
+        reportsGenerator.setValueItems(valueItems);
+        reportsGenerator.setType(type);
+        reportsGenerator.setViewModel(viewModel);
+        reportsGenerator.setPieData(pieData);
+        reportsGenerator.createPieChart(pieChart);
 
-        pieChart.setData(pieData);
-        pieChart.getDescription().setEnabled(false);
-        pieChart.notifyDataSetChanged();
-        pieChart.invalidate();
     }
 
 
     private void createBarChart(BarChart barChart){
-        barChart.setFitBars(true);
-        barChart.setData(barData);
-        barChart.getDescription().setText("");
-        barChart.animateY(2000);
+        reportsGenerator.setEndOfThePeriod(endOfThePeriod);
+        reportsGenerator.setStartOfThePeriod(startOfThePeriod);
+        reportsGenerator.setWallet(wallet);
+        reportsGenerator.setValueItems(valueItems);
+        reportsGenerator.setType(type);
+        reportsGenerator.setViewModel(viewModel);
+        reportsGenerator.setBarData(barData);
+        reportsGenerator.createBarChart(barChart);
     }
 
 
     public void createTable(TableView tableView, Context context,@NonNull FragmentViewHolder holder){
 
+        reportsGenerator.setTableData(tableData);
+        reportsGenerator.createTable(tableView,context,holder.itemView);
 
-        bottomSheetDialog = new BottomSheetDialog(
-                tableView.getContext(),R.style.BottomSheetDialogTheme);
-
-        tableView.setColumnCount(2);
-
-        tableView.setHeaderBackgroundColor(Color.parseColor("#2ecc71"));
-
-        String[] Columns={context.getString(R.string.value_item_label),context.getString(R.string.sum_label)};
-
-        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(context,Columns));
-        TableDataAdapter tableDataAdapter = new SimpleTableDataAdapter(context, tableData);
-        tableView.setDataAdapter(tableDataAdapter);
-
-
-
-
-
-        tableView.addDataClickListener(new TableDataClickListener() {
-            @Override
-            public void onDataClicked(int rowIndex, Object clickedData) {
-
-
-                ValueItem currValueItem = valueItems.get(rowIndex);
-
-
-
-                if (!bottomSheetDialog.isShowing()){
-                    View bottomSheetView = LayoutInflater.from(tableView.getContext())
-                            .inflate(R.layout.transactions_list,
-                                    (CardView)holder.itemView.findViewById(R.id.bottomSheetContainerTransactions)
-                            );
-
-                    RecyclerView recyclerViewTransactions = bottomSheetView.findViewById(R.id.recyclerViewTransactions);
-
-
-                    TransactionsAdapter adapter = new TransactionsAdapter();
-
-
-
-                    List<Transaction> transactions = viewModel.getAllTransactionsByWalletAndValueItemAndTypeForThePeriod(WalletConverter.WalletToString(wallet),ValueItemConverter.ValueItemToString(currValueItem), TypeConverter.TypeToString(type), DateConverter.dateToTimestamp(startOfThePeriod),DateConverter.dateToTimestamp(endOfThePeriod));
-
-                    adapter.setTransactions(transactions);
-
-                    LinearLayoutManager manager = new LinearLayoutManager(tableView.getContext());
-                    manager.setOrientation(LinearLayoutManager.VERTICAL);
-                    recyclerViewTransactions.setLayoutManager(manager);
-                    recyclerViewTransactions.setAdapter(adapter);
-
-
-                    bottomSheetDialog.setContentView(bottomSheetView);
-
-
-
-                    bottomSheetDialog.show();
-                }
-
-
-
-
-
-
-
-
-            }
-        });
+//        bottomSheetDialog = new BottomSheetDialog(
+//                tableView.getContext(),R.style.BottomSheetDialogTheme);
+//
+//        tableView.setColumnCount(2);
+//
+//        tableView.setHeaderBackgroundColor(Color.parseColor("#2ecc71"));
+//
+//        String[] Columns={context.getString(R.string.value_item_label),context.getString(R.string.sum_label)};
+//
+//        tableView.setHeaderAdapter(new SimpleTableHeaderAdapter(context,Columns));
+//        TableDataAdapter tableDataAdapter = new SimpleTableDataAdapter(context, tableData);
+//        tableView.setDataAdapter(tableDataAdapter);
+//
+//
+//
+//
+//
+//        tableView.addDataClickListener(new TableDataClickListener() {
+//            @Override
+//            public void onDataClicked(int rowIndex, Object clickedData) {
+//
+//
+//                ValueItem currValueItem = valueItems.get(rowIndex);
+//
+//
+//
+//                if (!bottomSheetDialog.isShowing()){
+//                    View bottomSheetView = LayoutInflater.from(tableView.getContext())
+//                            .inflate(R.layout.transactions_list,
+//                                    (CardView)holder.itemView.findViewById(R.id.bottomSheetContainerTransactions)
+//                            );
+//
+//                    RecyclerView recyclerViewTransactions = bottomSheetView.findViewById(R.id.recyclerViewTransactions);
+//
+//
+//                    TransactionsAdapter adapter = new TransactionsAdapter();
+//
+//
+//
+//                    List<Transaction> transactions = viewModel.getAllTransactionsByWalletAndValueItemAndTypeForThePeriod(WalletConverter.WalletToString(wallet),ValueItemConverter.ValueItemToString(currValueItem), TypeConverter.TypeToString(type), DateConverter.dateToTimestamp(startOfThePeriod),DateConverter.dateToTimestamp(endOfThePeriod));
+//
+//                    adapter.setTransactions(transactions);
+//
+//                    LinearLayoutManager manager = new LinearLayoutManager(tableView.getContext());
+//                    manager.setOrientation(LinearLayoutManager.VERTICAL);
+//                    recyclerViewTransactions.setLayoutManager(manager);
+//                    recyclerViewTransactions.setAdapter(adapter);
+//
+//
+//                    bottomSheetDialog.setContentView(bottomSheetView);
+//
+//
+//
+//                    bottomSheetDialog.show();
+//                }
+//
+//
+//
+//
+//
+//
+//
+//
+//            }
+//        });
 
 
 

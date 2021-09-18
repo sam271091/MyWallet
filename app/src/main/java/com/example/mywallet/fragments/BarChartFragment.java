@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.mywallet.R;
+import com.example.mywallet.ReportsGenerator;
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.data.BarData;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +28,9 @@ public class BarChartFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ReportsGenerator reportsGenerator;
+    private BarData barData;
 
     public BarChartFragment() {
         // Required empty public constructor
@@ -61,6 +67,29 @@ public class BarChartFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bar_chart, container, false);
+
+        View view = inflater.inflate(R.layout.fragment_bar_chart, container, false);
+
+        BarChart barChart = view.findViewById(R.id.barChart);
+        if (barChart != null){
+            createBarChart(barChart);
+        }
+
+        return view;
+    }
+
+    private void createBarChart(BarChart barChart){
+        reportsGenerator.setBarData(barData);
+        reportsGenerator.createBarChart(barChart);
+
+    }
+
+
+    public void setReportsGenerator(ReportsGenerator reportsGenerator) {
+        this.reportsGenerator = reportsGenerator;
+    }
+
+    public void setBarData(BarData barData) {
+        this.barData = barData;
     }
 }

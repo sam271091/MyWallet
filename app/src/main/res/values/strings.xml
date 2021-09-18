@@ -46,4 +46,6 @@
     <string name="transactions_per_year">Year</string>
     <string name="get_started">Get started</string>
     <string name="label_skip">Skip</string>
+    <string name="DownloadError">\"Errors occurred during download! \"</string>
+    <string name="DownloadSuccess">Download successful!</string>
 </resources>
