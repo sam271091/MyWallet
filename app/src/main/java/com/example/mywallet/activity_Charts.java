@@ -136,7 +136,7 @@ public class activity_Charts extends AppCompatActivity {
            public void onTabSelected(TabLayout.Tab tab) {
                currentPos = tab.getPosition();
 //               chartsViewPager.endFakeDrag();
-               chartsViewPager.setCurrentItem(currentPos);
+
 //               chartsViewPager.fakeDragBy(currentPos);
 
 //               int offset = (int) (3/100)*currentPos;
@@ -146,7 +146,11 @@ public class activity_Charts extends AppCompatActivity {
 //               chartsViewPager.fakeDragBy(50); //offset in pixels.
 //               chartsViewPager.endFakeDrag();
 
+               chartsViewPager.setCurrentItem(currentPos);
+
                createChart();
+
+
            }
 
            @Override
@@ -249,6 +253,7 @@ public class activity_Charts extends AppCompatActivity {
 
 
 
+        fragmentsPagerAdapter.setCurrentPos(currentPos);
         fragmentsPagerAdapter.setBarData(barData);
 
 
@@ -345,7 +350,7 @@ public class activity_Charts extends AppCompatActivity {
 //        pieChart.getDescription().setEnabled(false);
 //        pieChart.notifyDataSetChanged();
 //        pieChart.invalidate();
-
+        fragmentsPagerAdapter.setCurrentPos(currentPos);
         fragmentsPagerAdapter.setPieData(data);
 
         createTable(type);

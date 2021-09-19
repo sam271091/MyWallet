@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.mywallet.R;
 import com.example.mywallet.ReportsGenerator;
+import com.example.mywallet.Wallet;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.data.BarData;
 
@@ -31,6 +32,7 @@ public class BarChartFragment extends Fragment {
 
     private ReportsGenerator reportsGenerator;
     private BarData barData;
+    private Wallet wallet;
 
     public BarChartFragment() {
         // Required empty public constructor
@@ -66,6 +68,7 @@ public class BarChartFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        setRetainInstance(true);
         // Inflate the layout for this fragment
 
         View view = inflater.inflate(R.layout.fragment_bar_chart, container, false);
@@ -79,11 +82,15 @@ public class BarChartFragment extends Fragment {
     }
 
     private void createBarChart(BarChart barChart){
-        reportsGenerator.setBarData(barData);
-        reportsGenerator.createBarChart(barChart);
-
+        if (wallet != null){
+            reportsGenerator.setBarData(barData);
+            reportsGenerator.createBarChart(barChart);
+        }
     }
 
+    public void setWallet(Wallet wallet) {
+        this.wallet = wallet;
+    }
 
     public void setReportsGenerator(ReportsGenerator reportsGenerator) {
         this.reportsGenerator = reportsGenerator;

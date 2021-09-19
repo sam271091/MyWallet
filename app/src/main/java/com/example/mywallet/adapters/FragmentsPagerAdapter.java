@@ -60,15 +60,17 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
     private MainViewModel viewModel;
     private BottomSheetDialog bottomSheetDialog;
     private ReportsGenerator reportsGenerator;
+    private int currentPos;
 
 
 
     public FragmentsPagerAdapter(@NonNull FragmentActivity fragmentActivity, int numOfTabs) {
         super(fragmentActivity);
+        this.numOfTabs = numOfTabs;
         pieData = new PieData();
         barData = new BarData();
         reportsGenerator = new ReportsGenerator();
-        this.numOfTabs = numOfTabs;
+
 
 
     }
@@ -99,6 +101,7 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
         }
 
 
+
     }
 
     @NonNull
@@ -119,10 +122,12 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
             return fragment;
         } else if (position == 2){
-            BarChartFragment fragment = new BarChartFragment();
-            fragment.setBarData(barData);
-            fragment.setReportsGenerator(reportsGenerator);
-            return fragment;
+            BarChartFragment fragmentBC = new BarChartFragment();
+            fragmentBC.setWallet(wallet);
+            fragmentBC.setReportsGenerator(reportsGenerator);
+            fragmentBC.setBarData(barData);
+
+            return fragmentBC;
         } else  return null;
 
     }
@@ -269,5 +274,9 @@ public class FragmentsPagerAdapter extends FragmentStateAdapter {
 
 
 //        tableView.setDataAdapter(adapter);
+    }
+
+    public void setCurrentPos(int currentPos) {
+        this.currentPos = currentPos;
     }
 }
