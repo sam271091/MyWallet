@@ -161,6 +161,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private BottomSheetDialog bottomSheetDialog;
 
+    private long lastUploadTime;
+
+    private MenuItem backUpMenu;
+
+    private DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,6 +197,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        navigationView.getHeaderView(0).findViewById(R.id.item_backup);
+
+        backUpMenu = navigationView.getMenu().getItem(0).getSubMenu().getItem(0);
 
         UserName = navigationView.getHeaderView(0).findViewById(R.id.textViewUserName);
         UserEmail = navigationView.getHeaderView(0).findViewById(R.id.textViewEmail);
@@ -225,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if ( currUserEmail != ""){
             signIn();
         }
+
 
 
 
@@ -433,6 +444,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             }
         });
+
+        setbackUpMenuLastUploadTime();
 
     }
 
@@ -819,9 +832,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //            String fileName = mFileTitleEditText.getText().toString();
 //            String fileContent = mDocContentEditText.getText().toString();
 
-             currDate = calendar.getTime();
+//             currDate = calendar.getTime();
 
-            DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
             String date = df.format(currDate);
 
             mDriveServiceHelper.saveFile(mOpenFileId, fileName + " " + date.toString(), fileContents)
@@ -829,6 +842,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         @Override
                         public void onSuccess(Void aVoid) {
                             Toast.makeText(MainActivity.this, "File upload success!", Toast.LENGTH_SHORT).show();
+                            preferences.edit().putLong("lastUploadTime",currDate.getTime()).apply();
+                            setbackUpMenuLastUploadTime();
                         }
                     })
                     .addOnFailureListener(exception ->
@@ -1216,7 +1231,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 String json = gson.toJson(map);
 
                 fileContents = json;
-
+                backUpMenu.setEnabled(false);
                 generateData("MyWalletdata.json",json);
                 break;
             case R.id.item_counterparties :
@@ -1239,6 +1254,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
+
+    }
+
+    void setbackUpMenuLastUploadTime(){
+
+        lastUploadTime = preferences.getLong("lastUploadTime",0L);
+
+        if (lastUploadTime != 0L){
+
+            String date = df.format(lastUploadTime);
+
+            backUpMenu.setTitle(getString(R.string.backup_title) + " " + date.toString());
+
+            backUpMenu.setEnabled(true);
+
+
+        }
+
 
     }
 }

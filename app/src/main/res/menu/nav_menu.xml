@@ -3,7 +3,7 @@
 
     <item android:title="STORAGAE">
         <menu>
-            <item android:title="Backup"
+            <item android:title="@string/backup_title"
                 android:id="@+id/item_backup"
                 android:icon="@drawable/ic_baseline_backup_24" />
             <item android:title="Restore"

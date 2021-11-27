@@ -48,4 +48,5 @@
     <string name="label_skip">Skip</string>
     <string name="DownloadError">\"Errors occurred during download! \"</string>
     <string name="DownloadSuccess">Download successful!</string>
+    <string name="backup_title">Backup</string>
 </resources>
